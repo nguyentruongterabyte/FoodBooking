@@ -1,0 +1,44 @@
+<!-- login.html -->
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="UTF-8" />
+	<title>Login Page</title>
+	<link rel="stylesheet" href="/css/globalStyles.css" />
+	<link rel="stylesheet" href="/css/login.css" />
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
+			integrity="sha512-..." crossorigin="anonymous" referrerpolicy="no-referrer" />
+	
+</head>
+
+<body>
+	<form class="form" action="/perform-login" method="post" autocomplete="off">
+		<div id="login-error" style="color: red; display: none;">Bad Credentials!</div>
+		<div class="form-label">
+			<h1>Login</h1>
+		</div>
+		<label for="username">Enter your Account</label>
+		<div class="control">
+			<i class="fa-regular fa-user"></i>
+			<input id="username" required name="username" placeholder="Your Account" type="text" autocomplete="off"/>
+		</div>
+		<label for="password">Enter your Password</label>
+		<div class="control">
+			<i class="fa-solid fa-key"></i>
+			<input id="password" required name="password" placeholder="Your Password" type="password" autocomplete="new-password"/>
+		</div>
+		<button class="btn" type="submit">
+			<div class="text">Log In</div>
+		</button>
+	</form>
+	<script>
+		// Hiện thông báo lỗi nếu URL có ?error=true
+		const params = new URLSearchParams(window.location.search);
+		if (params.has('error')) {
+			document.getElementById('login-error').style.display = 'block';
+		}
+	</script>
+</body>
+
+</html>

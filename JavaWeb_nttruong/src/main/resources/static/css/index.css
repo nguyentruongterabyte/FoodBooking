@@ -1,0 +1,115 @@
+@font-face {
+	font-family: 'SVN-Dumpling';
+	src: url('/assets/fonts/SVN-Dumpling/SVN-Dumpling1.otf');
+}
+
+:root {
+	--header-nav-height: 92px;
+	--header-height: 400px;
+	--search-box-height: 146px;
+}
+
+body {
+	position: relative;
+	min-height: 10000px;
+}
+
+/* Header START */
+header {
+	position: fixed;
+	top: 0;
+	left: 0;
+	right: 0;
+	height: var(--header-height);
+	background-color: white;
+	overflow: hidden;
+	background: url('/assets/images/headerBackground1.png');
+	background-size: 100vw var(--header-height);
+}
+
+
+header nav {
+	width: 100%;
+	height: var(--header-nav-height, 92px);
+	display: flex;
+	justify-content: center;
+	border-bottom: 0.33px solid #CED4DA;
+
+	.nav-wrapper {
+		display: flex;
+		width: 62.5%;
+		justify-content: space-between;
+		align-items: center;
+	}
+}
+
+
+header .question {
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	transform: translate(-50%, -50%);
+
+	h1 {
+		font-family: 'SVN-Dumpling';
+		font-weight: 400;
+		font-style: Regular;
+		font-size: 2.6rem;
+		line-height: 120%;
+		letter-spacing: 0%;
+		text-align: center;
+		color: var(--primary-color);
+
+	}
+}
+
+.fake-header {
+	width: 100%;
+	height: calc(var(--header-height) - var(--search-box-height) / 2);
+}
+
+/* Header END */
+
+/*Search box START*/
+.searching-input-container {
+	position: sticky;
+	top: 0;
+	left: 50%;
+	transform: translateX(-28.5%);
+	width: 62.5%;
+	height: var(--search-box-height);
+	margin-top: var(--header-height);
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+	background-color: white;
+	margin-top: 0;
+	box-shadow: var(--common-box-shadow);
+}
+
+.searching-input-wrapper {
+	width: 80%;
+	height: 56px;
+	display: flex;
+	align-items: center;
+	background-color: #efefef;
+	border-radius: 40px;
+	overflow: hidden;
+}
+
+.searching-input-wrapper i {
+	padding-left: 20px;
+	margin-right: 20px;
+}
+
+#searching-input {
+	flex: 1;
+	height: 100%;
+	background-color: #efefef;
+	outline: none;
+	border: none;
+	font-size: 1.4rem;
+}
+
+/*Search box END*/
