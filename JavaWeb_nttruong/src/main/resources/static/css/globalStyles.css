@@ -10,6 +10,7 @@
 
 :root {
 	--primary-color: #ff6b00;
+	--common-box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;;
 }
 
 * {
@@ -55,3 +56,114 @@ body {
 	background-color: #FAFBFC;
 	border: 1px solid #CED4DA;
 }
+
+.line {
+	width: 100%;
+	border: 1px solid #ccc;
+	margin: 16px 0;		
+}
+
+/* Navigation tab */
+.navigation-tabs {
+	display: flex;
+
+	.navigation-item {
+		flex: 1;
+		display: flex;
+		justify-content: center;
+
+		button {
+			width: 100%;
+			height: 100%;
+			padding: 10px 0;
+			font-size: 1rem;
+			outline: none;
+			border: none;
+			background: transparent;
+
+			&:hover {
+				cursor: pointer;
+			}
+		}
+
+		&.active {
+
+			border-bottom: 2px solid var(--primary-color);
+
+			button {
+				color: var(--primary-color);
+			}
+		}
+	}
+	
+}
+
+.tab-contents {
+		.tab-content-item {
+			display: none;
+			&.show {
+				display: block;
+			}
+		}
+	}
+
+/* Mobile portrait (vertical) */
+@media all and (max-width: 480px) {
+	/* smartphones (vertical + horizontal) */
+	.brand {
+			display: none;
+	}
+	
+	header {
+		background: white;
+	}
+	
+	header nav {
+		.nav-wrapper {
+			width: 100% !important;
+			
+		}
+	}
+
+
+}
+
+/* Tablet portrait (vertical) */
+@media all and (min-width: 481px) and (max-width: 768px) {
+	/* iPad vertical, small tablet */
+
+	header nav {
+		.nav-wrapper {
+			width: 100%;
+			
+		}
+	}
+	
+	.brand {
+		display: none;
+	}
+	
+	.searching-input-container {
+		width: 100%;
+		
+	}
+
+}
+
+/* Tablet landscape (horizontal) */
+@media all and (min-width: 769px) and (max-width: 1024px) {
+
+	/* iPad horizontal, large tablet */
+
+}
+
+/* Small laptop */
+@media all and (min-width: 1025px) and (max-width: 1280px) {
+	/* Ventricular resolution laptop */
+
+	/* iPad horizontal, large tablet */
+
+}
+
+/* Large laptop / desktop */
+@media all and (min-width: 1281px) {}

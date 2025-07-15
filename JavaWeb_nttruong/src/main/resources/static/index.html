@@ -6,7 +6,11 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<!-- JQuery library -->
 	<script src="assets/library/jquery-3.7.1.min.js"></script>
+	<script src="javascript/common.js"></script>
 	<script src="javascript/index.js"></script>
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
+		integrity="sha512-..." crossorigin="anonymous" referrerpolicy="no-referrer" />
+
 	<link rel="stylesheet" href="/css/globalStyles.css">
 	<link rel="stylesheet" href="/css/index.css">
 	<title>Foods Booking</title>
@@ -39,11 +43,142 @@
 			<!-- Searching glass -->
 			<i class="fa-solid fa-magnifying-glass"></i>
 			<!-- Searching input  -->
-			<input autocomplete="off" placeholder="Find your favorite food..." type="text" id="searching-input" />
+			<input data-search-type="food" autocomplete="off" placeholder="Find your favorite food..." type="text"
+				id="searching-input" />
 		</div>
 		<!-- Searching input wrapper END -->
 	</div>
 	<!-- Searching input container END -->
+
+	<!-- Section tab START -->
+	<section id="tabs-section">
+		<div class="sort-btn-wrapper">
+			<select id="sort-by-price-btn" class="sort-btn">
+				<option value="ASC">Price: From low to high</option>
+				<option value="DESC">Price: From high to low</option>
+			</select>
+		</div>
+		<div class="line"></div>
+		<ul class="navigation-tabs">
+			<li class="navigation-item active" data-tab="food-tab">
+				<button>Food</button>
+			</li>
+			<li class="navigation-item" data-tab="drink-tab">
+				<button>Drink</button>
+			</li>
+		</ul>
+	</section>
+	<!-- Section tab END -->
+	<!-- Section list view START -->
+	<section id="list-view-section">
+		<div class="tab-contents">
+			<!-- Food tab START -->
+			<div class="tab-content-item show" id="food-tab">
+				<ul class="list-view">
+					<li class="list-view-item added" data-item-id="1">
+						<div class="item-image-container">
+							<img class="item-image" src="/assets/images/exampleFood.png" />
+						</div>
+						<div class="item-info">
+							<h4 class="item-name">Cơm Gà Đùi Góc Tư Sốt Mắm Tỏi Thơm ngon mời bạn ăn ngay</h4>
+							<p class="item-description">Đùi gà tươi góc 4 xối mỡ + sốt mắm tỏi + Cơm + dưa leo + salad +
+								canh</p>
+							<h3 class="item-price">40.000 đ</h3>
+						</div>
+						<div class="cart-wrapper">
+							<button class="add-item-btn" data-item-id="1"><i class="fa-solid fa-plus"></i></button>
+							<div class="cart-group-btn">
+								<button class="remove-item-btn" data-item-id="1"><i class="fa-solid fa-trash"></i></button>
+								<div class="cart-action-wrapper">
+									<button class="decrease-item-btn"><i class="fa-solid fa-minus"
+											data-item-id="1"></i></button>
+									<input class="quantity-input" type="number" min="1" max="100" value="1" />
+									<button class="increase-item-btn"><i class="fa-solid fa-plus"
+											data-item-id="1"></i></button>
+								</div>
+							</div>
+						</div>
+					</li>
+					<li class="list-view-item" data-item-id="2">
+						<div class="item-image-container">
+							<img class="item-image" src="/assets/images/exampleFood.png" />
+						</div>
+						<div class="item-info">
+							<h4 class="item-name">Cơm Gà Đùi Góc Tư Sốt Mắm Tỏi Thơm ngon mời bạn ăn ngay</h4>
+							<p class="item-description">Đùi gà tươi góc 4 xối mỡ + sốt mắm tỏi + Cơm + dưa leo + salad +
+								canh</p>
+							<h3 class="item-price">40.000 đ</h3>
+						</div>
+						<div class="cart-wrapper">
+							<button class="add-item-btn"><i class="fa-solid fa-plus"></i></button>
+							<div class="cart-group-btn">
+								<button class="remove-item-btn"><i class="fa-solid fa-trash"></i></button>
+								<div class="cart-action-wrapper">
+									<button class="decrease-item-btn"><i class="fa-solid fa-minus"></i></button>
+									<input class="quantity-input" type="number" min="1" max="100" value="1" />
+									<button class="increase-item-btn"><i class="fa-solid fa-plus"></i></button>
+								</div>
+							</div>
+						</div>
+					</li>
+				</ul>
+			</div>
+			<!-- Food tab END -->
+			<!-- Drink tab START -->
+			<div class="tab-content-item" id="drink-tab">
+				<ul class="list-view">
+					<li class="list-view-item">
+						<div class="item-image-container">
+							<img class="item-image" src="/assets/images/exampleDrink.png" />
+						</div>
+						<div class="item-info">
+							<h4 class="item-name">S-Green Tea Macchiato</h4>
+							<p class="item-description">Lục trà Macchiato - Size nhỏ #Dòng thức uống đặc trưng, không
+								thêm topping, không dùng ống hút</p>
+							<h3 class="item-price">51.000 đ</h3>
+						</div>
+						<div class="cart-wrapper">
+							<button class="add-item-btn"><i class="fa-solid fa-plus"></i></button>
+							<div style="display: none;" class="cart-group-btn">
+								<button class="remove-item-btn"><i class="fa-solid fa-trash"></i></button>
+								<div class="cart-action-wrapper">
+									<button class="decrease-item-btn"><i class="fa-solid fa-minus"></i></button>
+									<input class="quantity-input" type="number" min="1" max="100" value="1" />
+									<button class="increase-item-btn"><i class="fa-solid fa-plus"></i></button>
+								</div>
+							</div>
+						</div>
+					</li>
+
+					<li class="list-view-item">
+						<div class="item-image-container">
+							<img class="item-image" src="/assets/images/exampleDrink.png" />
+						</div>
+						<div class="item-info">
+							<h4 class="item-name">S-Green Tea Macchiato</h4>
+							<p class="item-description">Lục trà Macchiato - Size nhỏ #Dòng thức uống đặc trưng, không
+								thêm topping, không dùng ống hút</p>
+							<h3 class="item-price">51.000 đ</h3>
+						</div>
+						<div class="cart-wrapper">
+							<button class="add-item-btn"><i class="fa-solid fa-plus"></i></button>
+							<div style="display: none;" class="cart-group-btn">
+								<button class="remove-item-btn"><i class="fa-solid fa-trash"></i></button>
+								<div class="cart-action-wrapper">
+									<button class="decrease-item-btn"><i class="fa-solid fa-minus"></i></button>
+									<input class="quantity-input" type="number" min="1" max="100" value="1" />
+									<button class="increase-item-btn"><i class="fa-solid fa-plus"></i></button>
+								</div>
+							</div>
+						</div>
+					</li>
+				</ul>
+			</div>
+			<!-- Drink tab END -->
+		</div>
+	</section>
+	<!-- Section list view END -->
+
 
 </body>
 
