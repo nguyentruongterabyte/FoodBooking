@@ -4,13 +4,25 @@
 <head>
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<!-- JQuery library -->
+	<!-- Custom javascript & jquery library -->
 	<script src="assets/library/jquery-3.7.1.min.js"></script>
 	<script src="javascript/common.js"></script>
 	<script src="javascript/index.js"></script>
+	<!-- Bootstrap -->
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css"
+		integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous" />
+	<script src="https://cdn.jsdelivr.net/npm/popper.js@1.12.9/dist/umd/popper.min.js"
+		integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+		crossorigin="anonymous"></script>
+	<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js"
+		integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
+		crossorigin="anonymous"></script>
+
+	<!-- Fontawesome -->
 	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
 		integrity="sha512-..." crossorigin="anonymous" referrerpolicy="no-referrer" />
 
+	<!-- Custom style -->
 	<link rel="stylesheet" href="/css/globalStyles.css">
 	<link rel="stylesheet" href="/css/index.css">
 	<title>Foods Booking</title>
@@ -22,8 +34,13 @@
 		<nav>
 			<div class="nav-wrapper">
 				<div class="brand"></div>
-				<div class="cart-btn-wrapper">
+				<div class="cart-btn-wrapper"> <!-- has-items -->
+					<div class="badge">199</div>
 					<div class="bag-icon"></div>
+					<div class="price-wrapper">
+						<div class="bag-icon-white"></div>
+						<h3 class="price-total" id="total-price">240.000đ</h3>
+					</div>
 				</div>
 			</div>
 		</nav>
@@ -32,9 +49,6 @@
 		</div>
 	</header>
 	<!-- Header END -->
-
-	<!-- Fake header -->
-	<div class="fake-header"></div>
 
 	<!-- Searching input container START -->
 	<div class="searching-input-container">
@@ -88,7 +102,8 @@
 						<div class="cart-wrapper">
 							<button class="add-item-btn" data-item-id="1"><i class="fa-solid fa-plus"></i></button>
 							<div class="cart-group-btn">
-								<button class="remove-item-btn" data-item-id="1"><i class="fa-solid fa-trash"></i></button>
+								<button class="remove-item-btn" data-item-id="1"><i
+										class="fa-solid fa-trash"></i></button>
 								<div class="cart-action-wrapper">
 									<button class="decrease-item-btn"><i class="fa-solid fa-minus"
 											data-item-id="1"></i></button>
@@ -122,10 +137,60 @@
 						</div>
 					</li>
 				</ul>
+				<!-- Pagination navigation START -->
+				<nav aria-label="Page navigation" class="pagination-nav" id="food__pagination-nav">
+					<!--Total items -->
+					<span class="total-items" id="food__total-items">Total 200 items</span>
+
+					<!-- Pagination START -->
+					<ul class="pagination">
+
+						<!-- Previous page -->
+						<li class="page-item prev-page" id="food__prev-page">
+							<button class="page-link" aria-label="Previous">
+								<span aria-hidden="true">&laquo;</span>
+								<span class="sr-only">Previous</span>
+							</button>
+						</li>
+
+						<!-- Pagination items START -->
+						<li class="page-item active" data-page="1" data-page-type="food"><a class="page-link"
+								href="#1">1</a>
+						</li>
+						<li class="page-item" data-page="2" data-page-type="food"><a class="page-link" href="#2">2</a>
+						</li>
+						<li class="page-item" data-page="3" data-page-type="food"><a class="page-link" href="#3">3</a>
+						</li>
+						<!-- Pagination items END -->
+
+						<!-- Next page -->
+						<li class="page-item prev-page" id="food__next-page">
+							<button class="page-link" aria-label="Next">
+								<span aria-hidden="true">&raquo;</span>
+								<span class="sr-only">Next</span>
+							</button>
+						</li>
+					</ul>
+					<!-- Pagination END -->
+
+					<!--Select size page-->
+					<select class="form-control size-page-selector" id="food__size-selector">
+						<option value="10" selected>10/page</option>
+						<option value="20">20/page</option>
+						<option value="30">30/page</option>
+						<option value="40">40/page</option>
+						<option value="50">50/page</option>
+					</select>
+
+				</nav>
+				<!-- Pagination navigation END -->
 			</div>
 			<!-- Food tab END -->
+
 			<!-- Drink tab START -->
 			<div class="tab-content-item" id="drink-tab">
+
+				<!-- List view START-->
 				<ul class="list-view">
 					<li class="list-view-item">
 						<div class="item-image-container">
@@ -139,7 +204,7 @@
 						</div>
 						<div class="cart-wrapper">
 							<button class="add-item-btn"><i class="fa-solid fa-plus"></i></button>
-							<div style="display: none;" class="cart-group-btn">
+							<div class="cart-group-btn">
 								<button class="remove-item-btn"><i class="fa-solid fa-trash"></i></button>
 								<div class="cart-action-wrapper">
 									<button class="decrease-item-btn"><i class="fa-solid fa-minus"></i></button>
@@ -173,12 +238,142 @@
 						</div>
 					</li>
 				</ul>
+				<!-- List view END-->
+
+				<!-- Pagination navigation START -->
+				<nav aria-label="Page navigation" class="pagination-nav" id="drink__pagination-nav">
+					<!--Total items -->
+					<span class="total-items" id="drink__total-items">Total 200 items</span>
+
+					<!-- Pagination START -->
+					<ul class="pagination">
+
+						<!-- Previous page -->
+						<li class="page-item prev-page" id="drink__prev-page">
+							<button class="page-link" aria-label="Previous">
+								<span aria-hidden="true">&laquo;</span>
+								<span class="sr-only">Previous</span>
+							</button>
+						</li>
+
+						<!-- Pagination items START -->
+						<li class="page-item active" data-page="1" data-page-type="drink"><a class="page-link"
+								href="#1">1</a>
+						</li>
+						<li class="page-item" data-page="2" data-page-type="drink"><a class="page-link" href="#2">2</a>
+						</li>
+						<li class="page-item" data-page="3" data-page-type="drink"><a class="page-link" href="#3">3</a>
+						</li>
+						<!-- Pagination items END -->
+
+						<!-- Next page -->
+						<li class="page-item prev-page" id="drink__next-page">
+							<button class="page-link" aria-label="Next">
+								<span aria-hidden="true">&raquo;</span>
+								<span class="sr-only">Next</span>
+							</button>
+						</li>
+					</ul>
+					<!-- Pagination END -->
+
+					<!--Select size page-->
+					<select class="form-control size-page-selector" id="drink__size-selector">
+						<option value="10" selected>10/page</option>
+						<option value="20">20/page</option>
+						<option value="30">30/page</option>
+						<option value="40">40/page</option>
+						<option value="50">50/page</option>
+					</select>
+
+				</nav>
+				<!-- Pagination navigation END -->
 			</div>
 			<!-- Drink tab END -->
 		</div>
 	</section>
 	<!-- Section list view END -->
 
+	<!-- Footer START -->
+	<footer>
+		<div class="footer-container">
+			<div class="brand-wrapper">
+				<div class="large-brand"></div>
+			</div>
+			<div class="company-info">
+				<h1>Contact</h1>
+				<div class="contact-group">
+					<div class="phone-icon"></div>
+					<h2>Hotline:</h2>
+					<h4>1900 1080</h4>
+				</div>
+				<div class="contact-group">
+					<div class="map-icon"></div>
+					<h2>Address:</h2>
+					<h4>19 Hoang Van Thu str. 2 Ward, Tan Binh District, Ho Chi Minh City</h4>
+				</div>
+			</div>
+		</div>
+		<div class="copy-right">Copyright © 2022 Design By Aris</div>
+	</footer>
+	<!-- Footer END -->
+
+	<!-- Button trigger modal -->
+	<button style="display: none" id="show-detail-item-btn" type="button" class="btn btn-primary" data-toggle="modal"
+		data-target="#detail-item">
+		Launch detail modal
+	</button>
+
+	<!-- Modal show detail item START -->
+	<div class="modal fade" id="detail-item" tabindex="-1" role="dialog" aria-labelledby="animal-detail"
+		aria-hidden="true">
+		<div class="modal-dialog modal-lg modal-dialog-centered" role="document">
+			<form class="modal-content" id="information-form">
+				<div class="modal-header">
+					<h5 class="modal-title">Basket</h5>
+					<button id="close-btn" type="button" class="close" data-dismiss="modal" aria-label="Close">
+						<span aria-hidden="true">&times;</span>
+					</button>
+				</div>
+				<div class="modal-body">
+					<!-- Detail view -->
+					<div class="list-view-item">
+						<div class="item-image-container">
+							<img class="item-image" src="/assets/images/exampleDrink.png" />
+						</div>
+						<div class="item-info">
+							<div class="info-group">
+								<h4 class="item-name"> S-Green Tea Macchiato
+								</h4>
+								<p class="item-description">Lục trà Macchiato - Size nhỏ #Dòng thức uống đặc trưng,
+									không
+									thêm topping, không dùng ống hút
+								</p>
+							</div>
+							<h3 class="item-price">51.000 đ</h3>
+						</div>
+					</div>
+				</div>
+				<div class="modal-footer">
+					<div class="footer-button-group">
+						<div class="cart-wrapper">
+							<div class="cart-group-btn">
+								<div class="cart-action-wrapper">
+									<button class="decrease-item-btn" data-item-id="1"><i
+											class="fa-solid fa-minus"></i></button>
+									<input class="quantity-input" id="item-detail-quantity" type="number" min="1" max="100" value="1"
+										data-item-id="1" />
+									<button class="increase-item-btn"><i class="fa-solid fa-plus"
+											data-item-id="1"></i></button>
+								</div>
+							</div>
+						</div>
+						<button class="add-cart-btn" id="add-cart-btn">Add to Basket - 60000đ</button>
+					</div>
+				</div>
+			</form>
+		</div>
+	</div>
+	<!-- Modal show detail item END -->
 
 </body>
 
