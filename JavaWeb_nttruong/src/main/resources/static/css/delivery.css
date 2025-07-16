@@ -1,0 +1,102 @@
+header {
+	display: flex;
+	align-items: center;
+	padding-left: 24px;
+}
+
+/* Delivery Board START */
+.delivery-information-board {
+	margin-top: calc(var(--header-nav-height) + 64px);
+	width: var(--section-container-width);
+	margin-left: auto;
+	margin-right: auto;
+	display: flex;
+	gap: 40px;
+	padding: 64px 0;
+	border-radius: 24px;
+	flex-direction: column;
+	background-color: white;
+
+	&>h1 {
+		width: 100%;
+		text-align: center;
+		font-weight: 700;
+		font-size: 48px;
+		line-height: 120%;
+	}
+
+	.list-view-item {
+		background-color: transparent !important;
+	}
+
+	.delivery-information {
+		width: 872px;
+		margin-left: auto;
+		margin-right: auto;
+		display: flex;
+		flex-direction: column;
+		gap: 10px;
+	}
+
+	.location {
+		width: 100%;
+		height: 253px;
+	}
+
+	.info-group {
+		position: relative;
+	}
+
+	.item-quantity-wrapper {
+		position: absolute;
+		bottom: 0;
+		right: 0;
+		display: flex;
+		justify-content: flex-end;
+		align-items: center;
+		gap: 8px;
+
+		.title {
+			font-weight: 500;
+			font-size: 1rem;
+			line-height: 150%;
+			letter-spacing: 0%;
+
+		}
+
+
+		.item-quantity {
+			width: 34px;
+			height: 34px;
+			border-radius: 50%;
+			font-size: 1rem;
+			text-align: center;
+			align-content: center;
+			background-color: var(--primary-color);
+			color: white;
+		}
+	}
+
+	.detail-fee-line {
+		display: flex;
+		justify-content: space-between;
+		h6 {
+			font-weight: 500;
+			font-size: 1rem;
+			line-height: 120%;
+			color: rgba(124, 124, 124, 1);
+		}
+		
+		h6:nth-child(2) {
+			color: rgba(41, 41, 41, 1);
+		}
+		
+	}
+
+	#total-price {
+		font-size: 2rem;
+	}
+
+}
+
+/* Delivery Board END */

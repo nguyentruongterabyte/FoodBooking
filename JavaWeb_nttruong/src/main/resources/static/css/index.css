@@ -4,13 +4,12 @@
 }
 
 :root {
-	--header-nav-height: 92px;
 	--header-height: 308px;
 	--search-box-height: 132px;
-	--section-container-width: 1200px;
 	--tabs-section-height: 124px;
 	--list-view-items-per-row: 2;
 	--list-view-item-gap: 24px;
+	
 }
 
 body {
@@ -20,19 +19,10 @@ body {
 
 /* Header START */
 header {
-	position: fixed;
-	top: 0;
-	left: 0;
-	right: 0;
-	z-index: 1;
-	height: var(--header-height);
-	background-color: white;
-	overflow: hidden;
 	background: url('/assets/images/headerBackground1.png');
 	background-repeat: no-repeat;
+	height: var(--header-height);
 	background-size: 100vw calc(var(--header-height) + 38px);
-	transition: all 2s ease;
-
 	&.scrolled {
 		background: #fff !important;
 		transition: background 1s ease;
@@ -257,103 +247,6 @@ header .question {
 	width: var(--section-container-width);
 }
 
-/* List view START */
-.list-view {
-	width: 100%;
-	display: flex;
-	flex-wrap: wrap;
-	gap: var(--list-view-item-gap);
-	margin-bottom: 64px;
-}
-
-/* List view item */
-.list-view-item {
-	position: relative;
-	width: calc((100% - (var(--list-view-items-per-row) - 1) * var(--list-view-item-gap)) / var(--list-view-items-per-row));
-	padding: 24px;
-	border-radius: 16px;
-	display: flex;
-	align-items: center;
-	background-color: #fff;
-
-	&:hover {
-		cursor: pointer;
-	}
-
-	/* Item was added to cart */
-	&.added {
-		border-right: 8px solid var(--primary-color);
-		box-shadow: 0px 0px 0px 1px rgba(255, 107, 0, 1);
-
-		.add-item-btn {
-			display: none;
-		}
-
-		.cart-group-btn {
-			display: flex !important;
-		}
-	}
-
-	/* Image */
-	.item-image-container {
-		width: 130px;
-		height: 130px;
-		border-radius: 8px;
-		overflow: hidden;
-
-		.item-image {
-			width: 100%;
-			height: 100%;
-			object-fit: cover;
-		}
-	}
-
-	/* Item information */
-	.item-info {
-		flex: 1;
-		margin-left: 16px;
-
-		/* Name */
-		.item-name {
-			font-weight: 600;
-			font-size: 1.125rem;
-			height: 3rem;
-			display: -webkit-box;
-			line-height: 1.5rem;
-			overflow: hidden;
-			text-overflow: ellipsis;
-			-webkit-box-orient: vertical;
-			-webkit-line-clamp: 2;
-			line-clamp: 2;
-
-		}
-
-		/* Description */
-		.item-description {
-			font-weight: 400;
-			font-size: 1rem;
-			height: 4.5rem;
-			color: rgba(82, 82, 82, 1);
-			display: -webkit-box;
-			line-height: 1.5rem;
-			overflow: hidden;
-			text-overflow: ellipsis;
-			-webkit-box-orient: vertical;
-			-webkit-line-clamp: 3;
-			line-clamp: 3;
-
-		}
-
-		/* Price */
-		.item-price {
-			font-weight: 700;
-			font-size: 20px;
-			line-height: 1.25rem;
-			padding: 12px 0;
-		}
-	}
-}
-
 /* Cart buttons */
 .cart-wrapper {
 	position: absolute;
@@ -549,114 +442,3 @@ footer {
 
 /* Footer section END */
 
-/* Modal detail item START */
-#detail-item {
-	.modal-content {
-		height: 800px;
-		padding-bottom: 32px;
-	}
-
-	.list-view-item {
-		width: 100%;
-		background-color: rgba(249, 249, 249, 1);
-
-		.item-info {
-
-			display: flex;
-			gap: 16px;
-
-			.info-group {
-				flex: 1
-			}
-
-			.item-price {
-				width: 124px;
-				text-align: center;
-				align-content: center;
-			}
-
-			.item-name {
-				height: unset;
-				display: -webkit-box;
-				line-height: unset;
-				overflow: unset;
-				text-overflow: unset;
-				-webkit-box-orient: unset;
-				-webkit-line-clamp: unset;
-				line-clamp: unset;
-			}
-
-			.item-description {
-				display: unset;
-				line-height: unset;
-				overflow: unset;
-				text-overflow: unset;
-				-webkit-box-orient: unset;
-				-webkit-line-clamp: unset;
-				line-clamp: unset;
-			}
-		}
-	}
-
-	.cart-wrapper {
-		position: unset;
-
-		.cart-group-btn {
-			display: flex;
-
-			.cart-action-wrapper {
-				border: none;
-				overflow: unset;
-
-				.quantity-input {
-
-					font-weight: 400;
-					font-size: 1.7775rem;
-					line-height: 150%;
-
-				}
-
-				.decrease-item-btn,
-				.increase-item-btn {
-					border-radius: 50%;
-					background-color: rgba(239, 239, 239, 1);
-					width: 42px;
-					height: 42px;
-				}
-			}
-		}
-	}
-
-	.modal-footer {
-		padding: 0 32px;
-	}
-	
-	.footer-button-group {
-		width: 100%;
-		display: flex;
-		gap: 24px;
-		padding: 24px 0;
-		flex-wrap: nowrap;
-		align-items: center;
-
-		.add-cart-btn {
-			flex: 1;
-			padding: 25px 0;
-			font-weight: 700;
-			font-size: 1.125rem;
-			line-height: 150%;
-			border: none;
-			outline: none;
-			color: white;
-			background-color: var(--primary-color);
-			border-radius: 4px;
-			&:hover {
-				cursor: pointer;
-			}
-		}
-	}
-
-}
-
-
-/* Modal detail item END */

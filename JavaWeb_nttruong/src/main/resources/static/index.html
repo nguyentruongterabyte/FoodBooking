@@ -33,8 +33,8 @@
 	<header>
 		<nav>
 			<div class="nav-wrapper">
-				<div class="brand"></div>
-				<div class="cart-btn-wrapper"> <!-- has-items -->
+				<a class="brand"></a>
+				<div class="cart-btn-wrapper" id="cart-btn"> <!-- has-items -->
 					<div class="badge">199</div>
 					<div class="bag-icon"></div>
 					<div class="price-wrapper">
@@ -127,7 +127,8 @@
 						<div class="cart-wrapper">
 							<button class="add-item-btn"><i class="fa-solid fa-plus"></i></button>
 							<div class="cart-group-btn">
-								<button class="remove-item-btn"><i class="fa-solid fa-trash"></i></button>
+								<button class="remove-item-btn" data-item-id="1"><i
+										class="fa-solid fa-trash"></i></button>
 								<div class="cart-action-wrapper">
 									<button class="decrease-item-btn"><i class="fa-solid fa-minus"></i></button>
 									<input class="quantity-input" type="number" min="1" max="100" value="1" />
@@ -319,18 +320,19 @@
 
 	<!-- Button trigger modal -->
 	<button style="display: none" id="show-detail-item-btn" type="button" class="btn btn-primary" data-toggle="modal"
-		data-target="#detail-item">
+		data-target="#detail-item-modal">
 		Launch detail modal
 	</button>
 
 	<!-- Modal show detail item START -->
-	<div class="modal fade" id="detail-item" tabindex="-1" role="dialog" aria-labelledby="animal-detail"
+	<div class="modal fade" id="detail-item-modal" tabindex="-1" role="dialog" aria-labelledby="item-detail"
 		aria-hidden="true">
 		<div class="modal-dialog modal-lg modal-dialog-centered" role="document">
-			<form class="modal-content" id="information-form">
+			<div class="modal-content">
 				<div class="modal-header">
 					<h5 class="modal-title">Basket</h5>
-					<button id="close-btn" type="button" class="close" data-dismiss="modal" aria-label="Close">
+					<button id="close-detail-item-btn" type="button" class="close" data-dismiss="modal"
+						aria-label="Close">
 						<span aria-hidden="true">&times;</span>
 					</button>
 				</div>
@@ -358,22 +360,93 @@
 						<div class="cart-wrapper">
 							<div class="cart-group-btn">
 								<div class="cart-action-wrapper">
-									<button class="decrease-item-btn" data-item-id="1"><i
+									<button type="button" class="decrease-item-btn" data-item-id="1"><i
 											class="fa-solid fa-minus"></i></button>
-									<input class="quantity-input" id="item-detail-quantity" type="number" min="1" max="100" value="1"
-										data-item-id="1" />
-									<button class="increase-item-btn"><i class="fa-solid fa-plus"
+									<input class="quantity-input" id="item-detail-quantity" type="number" min="1"
+										max="100" value="1" data-item-id="1" />
+									<button type="button" class="increase-item-btn"><i class="fa-solid fa-plus"
 											data-item-id="1"></i></button>
 								</div>
 							</div>
 						</div>
-						<button class="add-cart-btn" id="add-cart-btn">Add to Basket - 60000đ</button>
+						<button type="button" class="custom-btn primary" id="add-cart-btn">Add to Basket - 60000đ</button>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<!-- Modal show detail item END -->
+
+	<!-- Button trigger modal -->
+	<button style="display: none" id="show-cart-btn" type="button" class="btn btn-primary" data-toggle="modal"
+		data-target="#cart-modal">
+		Launch Basket modal
+	</button>
+
+	<!-- Modal show cart items START -->
+	<div class="modal fade" id="cart-modal" tabindex="-1" role="dialog" aria-labelledby="cart" aria-hidden="true">
+		<div class="modal-dialog modal-lg modal-dialog-centered" role="document">
+			<form class="modal-content" action="/delivery" method="get">
+				<div class="modal-header">
+					<h5 class="modal-title">Basket</h5>
+					<button id="close-cart-modal-btn" type="button" class="close" data-dismiss="modal"
+						aria-label="Close">
+						<span aria-hidden="true">&times;</span>
+					</button>
+				</div>
+				<div class="modal-body">
+					<!-- Cart list view -->
+					<ul class="list">
+						<li class="list-view-item">
+							<button class="remove-item-btn" type="button"><i
+									class="fa-regular fa-circle-xmark"></i></button>
+							<div class="item-image-container">
+								<img class="item-image" src="/assets/images/exampleDrink.png" />
+							</div>
+							<div class="item-info">
+								<div class="info-group">
+									<h4 class="item-name"> S-Green Tea Macchiato
+									</h4>
+									<p class="item-description">Lục trà Macchiato - Size nhỏ #Dòng thức uống đặc trưng,
+										không
+										thêm topping, không dùng ống hút
+									</p>
+								</div>
+								<div class="info-group">
+									<h3 class="item-price">51.000 đ</h3>
+									<div class="cart-wrapper">
+										<div class="cart-group-btn">
+											<div class="cart-action-wrapper">
+												<button type="button" class="decrease-item-btn" data-item-id="1"><i
+														class="fa-solid fa-minus"></i></button>
+												<input class="quantity-input" type="number" min="1" max="100" value="1"
+													data-item-id="1" />
+												<button type="button" class="increase-item-btn"><i
+														class="fa-solid fa-plus" data-item-id="1"></i></button>
+											</div>
+										</div>
+									</div>
+									<h3 class="item-price primary item-total-price" data-item-id="1">51.000 đ</h3>
+								</div>
+							</div>
+
+						</li>
+
+					</ul>
+				</div>
+				<div class="modal-footer">
+					<div class="total-price">
+						<h3>Total</h3>
+						<h3 class="item-price primary" id="cart-total-price">0 đ</h3>
+					</div>
+					<div class="footer-button-group">
+						<button class="custom-btn primary" id="place-order-btn">Place Order</button>
 					</div>
 				</div>
 			</form>
 		</div>
 	</div>
-	<!-- Modal show detail item END -->
+	<!-- Modal show cart items END -->
 
 </body>
 

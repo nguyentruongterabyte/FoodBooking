@@ -64,10 +64,13 @@ $(document).ready(function() {
 		e.stopPropagation();
 
 		const itemId = Number($(this).attr('data-item-id')); // Get item id
-		const itemPrice = Number($(this).attr('data-item-price'));
+
+		// Find the item from food/drink list
+		const item =
+			foodObject.items.find(food => food.id === itemId) || drinkObject.items.find(drink => drink.id === itemId);
 
 		// Add item into carts
-		carts = [...carts, { id: itemId, quantity: 1, price: itemPrice }];
+		carts = [...carts, { ...item, quantity: 1 }];
 
 		// Add class for parrent (li tag)
 		$(this).parents('.list-view-item').addClass('added');
@@ -183,9 +186,283 @@ $(document).ready(function() {
 			renderDetailItem(item);
 		}
 	});
+
+
+	// Handle decrease button in detail item click 
+	$('#detail-item-modal .decrease-item-btn').on('click', function() {
+		// Get quantity of quantity input
+		const quantity = Number($(this).siblings('.quantity-input').val());
+
+		// User do enter nothing (quantity will be equals 0)
+		if (quantity === 0 || quantity <= 1) {// When quantity equals 1, then do nothing			
+			$(this).siblings('.quantity-input').val(1); // reset 1
+			return;
+		}
+		// Set input decrease 1 unit
+		$(this).siblings('.quantity-input').val(quantity - 1);
+	});
+
+	// Handle increase button in detail item click
+	$('#detail-item-modal .increase-item-btn').on('click', function() {
+		// Get quantity of quantity input
+		const quantity = Number($(this).siblings('.quantity-input').val());
+
+		// User do enter nothing (quantity will be equals 0)
+		if (quantity === 0) {
+			$(this).siblings('.quantity-input').val(1);
+		}
+
+		// When user enter max quantity of item per order 
+		// Set the quantity input equals MAX_ORDER_PER_ITEM
+		if (quantity >= MAX_ORDER_PER_ITEM) {
+			$(this).siblings('.quantity-input').val(MAX_ORDER_PER_ITEM);
+			return;
+		}
+
+		// Set input increase 1 unit
+		$(this).siblings('.quantity-input').val(quantity + 1);
+	});
+
+	// Handle quantity input in detail item blur
+	$('#detail-item-modal .quantity-input').on('blur', function() {
+		// Get quantity of input
+		let quantity = Number($(this).val());
+
+
+		// Allowed less than max item per order
+		if (quantity > MAX_ORDER_PER_ITEM) {
+			quantity = MAX_ORDER_PER_ITEM;
+			$(this).val(MAX_ORDER_PER_ITEM);
+		}
+
+		// Allow more than or equals 1
+		if (quantity < 1) {
+			quantity = 1;
+			$(this).val(1);
+		}
+	});
+
+	// Handle add to cart in detail item click
+	$('#add-cart-btn').on('click', function() {
+		const itemId = Number($(this).attr('data-item-id')); // Get item id
+
+
+
+		// Get value of quantity input
+		const quantity = Number($('#item-detail-quantity').val());
+
+		if (quantity === 0)
+			return;
+
+		// If item has already in cart
+		// Find and replace quantity
+		if (carts.some(cartItem => cartItem.id === itemId)) {
+			carts = carts.map(cartItem => cartItem.id === itemId ? { ...cartItem, quantity } : cartItem);
+
+
+		} else { // If item has not existed yet, then add to cart
+			// Find item in drink or food list
+			const item =
+				foodObject.items.find(food => food.id === itemId) || drinkObject.items.find(drink => drink.id === itemId);
+			carts = [...carts, { ...item, quantity }];
+
+		}
+
+		// Add class for parrent (li tag)
+		$(`.list-view-item[data-item-id="${itemId}"]`).addClass('added');
+
+		$(`.list-view .quantity-input[data-item-id="${itemId}"]`).val(quantity); // set input quantity
+
+		// re-render cart button
+		renderCartButton();
+
+		// Close detail modal
+		$('#close-detail-item-btn').click();
+
+	});
+
+	// Handle show cart when cart button click
+	$('#cart-btn').on('click', function() {
+		$('#show-cart-btn').click();
+		renderListOfCart();
+	});
+
+	// Handle when user click on remove item in cart modal
+	$('#cart-modal .list').on('click', '.remove-item-btn', function() {
+		const itemId = Number($(this).attr('data-item-id')); // Get item id
+
+		// Remove item in cart
+		carts = carts.filter(cartItem => cartItem.id !== itemId);
+
+		// Remove element in DOM
+		$(`#cart-modal .list-view-item[data-item-id="${itemId}"]`).fadeOut('slow', () => $(this).remove());
+
+		/* Re-render */
+		renderTotalPriceOfCart();
+		updateListViewItemWhenCartChanged(itemId);
+		renderCartButton();
+	});
+
+	// Handle decrease button in cart modal click 
+	$('#cart-modal .list').on('click', '.decrease-item-btn', function() {
+		// Get quantity of quantity input
+		const quantity = Number($(this).siblings('.quantity-input').val());
+
+
+		// User do enter nothing (quantity will be equals 0)
+		if (quantity === 0 || quantity <= 1) {// When quantity equals 1, then do nothing			
+			$(this).siblings('.quantity-input').val(1); // reset 1
+			return;
+		}
+
+		const itemId = Number($(this).attr('data-item-id')); // Get item id
+
+		const newQuantity = quantity - 1; // New quantity
+
+		// Update cart
+		carts = carts.map(cartItem => cartItem.id === itemId ? { ...cartItem, quantity: newQuantity } : cartItem);
+
+		// Set input decrease 1 unit
+		$(this).siblings('.quantity-input').val(newQuantity);
+
+		// re-render total price of this item
+		const foundItem = carts.find(cartItem => cartItem.id === itemId);
+		const totalPriceOfItem = newQuantity * foundItem.price;
+		$(this).parents('.info-group').find('.item-total-price').text(totalPriceOfItem.toLocaleString() + " đ");
+
+		// re-render cart button
+		// re-render total price of cart
+		// re-render list view
+		renderCartButton();
+		updateListViewItemWhenCartChanged(itemId);
+		renderTotalPriceOfCart();
+
+	});
+
+	// Handle increase button in cart modal click
+	$('#cart-modal .list').on('click', '.increase-item-btn', function() {
+		// Get quantity of quantity input
+		const quantity = Number($(this).siblings('.quantity-input').val());
+
+		// User do enter nothing (quantity will be equals 0)
+		if (quantity === 0) {
+			$(this).siblings('.quantity-input').val(1);
+		}
+
+		// When user enter max quantity of item per order 
+		// Set the quantity input equals MAX_ORDER_PER_ITEM
+		if (quantity >= MAX_ORDER_PER_ITEM) {
+			$(this).siblings('.quantity-input').val(MAX_ORDER_PER_ITEM);
+			return;
+		}
+
+		const itemId = Number($(this).attr('data-item-id')); // Get item id
+
+		const newQuantity = quantity + 1; // New quantity
+
+		// Update cart
+		carts = carts.map(cartItem => cartItem.id === itemId ? { ...cartItem, quantity: newQuantity } : cartItem);
+
+
+		// Set input increase 1 unit
+		$(this).siblings('.quantity-input').val(newQuantity);
+
+		// re-render total price of this item
+		const foundItem = carts.find(cartItem => cartItem.id === itemId);
+		const totalPriceOfItem = newQuantity * foundItem.price;
+		$(this).parents('.info-group').find('.item-total-price').text(totalPriceOfItem.toLocaleString() + " đ");
+
+		// re-render cart button
+		// re-render total price of cart
+		// re-render list view
+		renderCartButton();
+		updateListViewItemWhenCartChanged(itemId);
+		renderTotalPriceOfCart();
+	});
+
+	// Handle quantity input in cart modal blur
+	$('#cart-modal .list').on('blur', '.quantity-input', function() {
+
+		const itemId = Number($(this).attr('data-item-id')); // Get item id
+
+		// Get quantity of input
+		let quantity = Number($(this).val());
+
+		// Allowed less than max item per order
+		if (quantity > MAX_ORDER_PER_ITEM) {
+			quantity = MAX_ORDER_PER_ITEM;
+			$(this).val(MAX_ORDER_PER_ITEM);
+		}
+
+		// Allow more than or equals 1
+		if (quantity < 1) {
+			quantity = 1;
+			$(this).val(1);
+		}
+
+		// Update carts
+		carts.map(cartItem => cartItem.id === itemId ? { ...cartItem, quantity } : cartItem);
+
+		// re-render cart button
+		// re-render total price of cart
+		// re-render list view
+		renderCartButton();
+		updateListViewItemWhenCartChanged(itemId);
+		renderTotalPriceOfCart();
+	});
+
+
+	// Handle place order button click
+	$('#place-order-btn').on('click', function() {
+		saveCartToLocalStorage(carts);
+	})
 });
 
 const MAX_ORDER_PER_ITEM = 3;
+
+
+/* Generate cart item html */
+function generateCartItemHTML(data = {
+	id: 1, name: "Cơm Đùi Gà Góc Tư Sốt Mắm Tỏi Chua Cay phơi phới",
+	description: "Đùi gà tươi góc 4 xối mỡ + sốt mắm tỏi + Cơm + dưa leo + salad + canh",
+	price: 40000,
+	imageUrl: '/assets/images/exampleFood.png',
+	quantity: 1
+}) {
+	const totalItemPrice = data.price * data.quantity;
+
+	return `
+			<li class="list-view-item" data-item-id="${data.id}">
+				<button class="remove-item-btn" type="button" data-item-id="${data.id}"><i
+						class="fa-regular fa-circle-xmark"></i></button>
+				<div class="item-image-container">
+					<img class="item-image" src="${data.imageUrl}" />
+				</div>
+				<div class="item-info">
+					<div class="info-group">
+						<h4 class="item-name">${data.name}
+						</h4>
+						<p class="item-description">${data.description}</p>
+					</div>
+					<div class="info-group">
+						<h3 class="item-price">${data.price.toLocaleString()} đ</h3>
+						<div class="cart-wrapper">
+							<div class="cart-group-btn">
+								<div class="cart-action-wrapper">
+									<button type="button" class="decrease-item-btn" data-item-id="${data.id}"><i
+											class="fa-solid fa-minus"></i></button>
+									<input class="quantity-input" type="number" min="1" max="${MAX_ORDER_PER_ITEM}" value="${data.quantity}"
+										data-item-id="${data.id}" />
+									<button type="button" class="increase-item-btn" data-item-id="${data.id}"><i
+											class="fa-solid fa-plus"></i></button>
+								</div>
+							</div>
+						</div>
+						<h3 class="item-price primary item-total-price" data-item-id="${data.id}">${totalItemPrice.toLocaleString()} đ</h3>
+					</div>
+				</div>
+			</li>`;
+}
 
 /* Render detail item in detail item modal */
 function renderDetailItem(data = {
@@ -197,11 +474,11 @@ function renderDetailItem(data = {
 
 	// Set quantity to input tag
 	const itemQuantity = carts.find(cartItem => cartItem.id === data.id)?.quantity || 1;
-	$('#item-detail-quantity').attr('data-item-id', data.id).val(itemQuantity);
+	$('#item-detail-quantity').val(itemQuantity);
 
 	// Render button add to cart
 	const totalItemPrice = data.price * itemQuantity;
-	$('#add-cart-btn').text(`Add to Basket - ${totalItemPrice.toLocaleString()} đ`);
+	$('#add-cart-btn').attr('data-item-id', data.id).text(`Add to Basket - ${totalItemPrice.toLocaleString()} đ`);
 
 	// Render detailItem
 	const detailItemHtml = `
@@ -221,8 +498,8 @@ function renderDetailItem(data = {
 						<h3 class="item-price">${data.price.toLocaleString()} đ</h3>
 					</div>
 				</div>`;
-				
-	$('#detail-item .modal-body').html(detailItemHtml);
+
+	$('#detail-item-modal .modal-body').html(detailItemHtml);
 }
 
 /* Render List View */
@@ -257,9 +534,7 @@ function removeItemInCarts(itemId) {
 	// Remove item from carts
 	carts = carts.filter(cartItem => cartItem.id !== itemId);
 
-	// Remove class for parrent (li tag)
-	$(`.list-view-item[data-item-id="${itemId}"]`).removeClass('added');
-	$(`.quantity-input[data-item-id="${itemId}"]`).val('1'); // reset input quantity
+	updateListViewItemWhenCartChanged(itemId);
 	renderCartButton();
 }
 
@@ -283,16 +558,28 @@ function renderCartButton() {
 
 }
 
-/* Calculate total price of carts */
-function calculateTotalPrice(carts = [{ id: 1, quantity: 3, price: 30000 }]) {
-	const totalPrice = carts.reduce((prev, next) => prev + (next.quantity * next.price), 0);
-	return totalPrice;
-}
-
 /* Calculate total item of carts */
 function calculateTotalItems(carts = [{ id: 1, quantity: 3, price: 30000 }]) {
 	const totalItems = carts.reduce((prev, next) => prev + next.quantity, 0);
 	return totalItems;
+}
+
+/* update list view item when cart changed*/
+function updateListViewItemWhenCartChanged(itemId) {
+
+	// find item in cart
+	const foundItemInCart = carts.find(cartItem => cartItem.id === itemId);
+
+	if (foundItemInCart) {// Exist item in cart
+		// add class added into item
+		$(`.list-view .list-view-item[data-item-id="${itemId}"]`).addClass('added');
+		$(`.quantity-input[data-item-id="${itemId}"]`).val(foundItemInCart.quantity); // reset input quantity
+	} else {
+		// Remove class for parrent (li tag)
+		$(`.list-view .list-view-item[data-item-id="${itemId}"]`).removeClass('added');
+		$(`.quantity-input[data-item-id="${itemId}"]`).val('1'); // reset input quantity
+	}
+
 }
 
 /* Generate Item HTML */
@@ -311,7 +598,7 @@ function generateItemHTML(data = {
 	return `
 			<li class="list-view-item ${existsCart ? 'added' : ''}" data-item-id="${data.id}">
 				<div class="item-image-container">
-					<img class="item-image" src="/assets/images/exampleFood.png" />
+					<img class="item-image" src="${data.imageUrl}" />
 				</div>
 				<div class="item-info">
 					<h4 class="item-name">${data.name}</h4>
@@ -405,6 +692,4 @@ let drinkObject = {
 	]
 }
 
-let carts = [
-	//{ id: 1, quantity: 2, price: 40000 }
-];
+let carts = getCartFromLocalStorage();
