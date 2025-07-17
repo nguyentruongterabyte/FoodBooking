@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.foodbooking.mapper.OrderMapper">
+	<resultMap id="orderResultMap" type="com.foodbooking.entity.Order">
+		<id property="id" column="id"/>
+		<result property="detailAddress" column="detail_address"/>
+		<result property="message" column="message"/>
+		<result property="name" column="name"/>
+		<result property="phone" column="phone"/>
+		<result property="shippingFee" column="shipping_fee"/>
+		<result property="totalPrice" column="total_price"/>
+		<result property="createdAt" column="created_at"/>
+		
+		<!-- Province -->
+		<association property="province" javaType="com.foodbooking.entity.Province">
+			<id column="province_id" property="id"/>
+			<result column="province_name" property="name"/>
+		</association>
+		
+		<!-- Ward -->
+		<association property="ward" javaType="com.foodbooking.entity.Ward">
+			<id column="ward_id" property="id"/>
+			<result column="ward_name" property="name"/>
+		</association>
+		
+		<!-- Order status -->
+		<association property="orderStatus" javaType="com.foodbooking.entity.OrderStatus">
+			 <id column="order_status_id" property="id"/>
+			 <result column="order_status_name" property="name"/>
+		</association>
+		
+		<!-- Booking Products -->
+		<collection property="bookingProducts" ofType="com.foodbooking.entity.OrderDetail">
+			<result column="booking_product_id" property="bookingProductId"/>
+			<result column="quantity" property="quantity"/>
+			<result column="item_price" property="itemPrice"/>
+			<result column="booking_product_name" property="name"/>
+			<result column="description" property="description"/>
+		</collection>
+		
+	</resultMap>
+	
+	<sql id="orderDetailInfoSubquery">
+		SELECT 
+			o.id
+			, o.detail_address
+			, o.message
+			, o.name
+			, o.phone
+			, o.shipping_fee
+			, o.total_price
+			, o.created_at
+			, os.id AS order_status_id
+			, os.name AS order_status_name
+			, p.id AS province_id
+			, p.name AS province_name
+			, w.id AS ward_id
+			, w.name AS ward_name
+			, od.booking_product_id
+			, od.quantity
+			, od.item_price
+			, bp.name AS booking_product_name
+			, bp.description
+		FROM orders o
+		LEFT JOIN provinces p ON o.province_id = p.id
+		LEFT JOIN wards w ON o.ward_id = w.id
+		LEFT JOIN order_statuses os ON o.order_status_id = os.id
+		LEFT JOIN order_details od ON o.id = od.order_id
+		LEFT JOIN booking_products bp ON od.booking_product_id = bp.id
+	</sql>
+	
+	<!-- Create new order -->
+	<insert id="saveOrder"
+			useGeneratedKeys="true"
+			keyProperty="id"
+			parameterType="com.foodbooking.dto.request.OrderRequestDTO"
+	>
+		INSERT INTO orders (
+			name
+			, detail_address
+			, message
+			, phone
+			, shipping_fee
+			, total_price
+			, province_id
+			, ward_id
+			, order_status_id
+			, created_at
+		) VALUES (
+			#{name}
+			, #{detailAddress}
+			, #{message}
+			, #{phone}
+			, #{shippingFee}
+			, #{totalPrice}
+			, #{provinceId}
+			, #{wardId}
+			, #{orderStatusId}
+			, #{createdAt}
+		)
+	</insert>
+	
+	<!-- Find by order by id -->
+	<select id="findByOrderId"
+			resultMap="orderResultMap"
+	>
+		<include refid="orderDetailInfoSubquery" />
+		WHERE 
+			o.id = #{id}
+	</select>
+	
+	<!-- Save order details -->
+	<insert id="saveOrderDetails" 
+			parameterType="map"
+	>
+		INSERT INTO order_details (
+			order_id
+			, booking_product_id
+			, quantity
+			, item_price
+		) VALUES 
+		<foreach collection="bookingProducts" item="bp" separator=",">
+			(
+				#{orderId}
+				, #{bp.bookingProductId}
+				, #{bp.quantity}
+				, #{bp.itemPrice}
+			)
+		</foreach>
+	</insert>
+</mapper> 

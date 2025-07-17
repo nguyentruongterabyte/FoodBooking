@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.foodbooking.mapper.WardMapper">
+	<!-- Create new ward -->
+	<insert id="saveWard" 
+			useGeneratedKeys="true"
+			keyProperty="id"
+			parameterType="com.foodbooking.entity.Ward"
+	>
+		INSERT INTO wards (
+			name
+			, shipping_fee
+			, province_id
+		) VALUES (
+			#{name}
+			, #{shippingFee}
+			, #{provinceId}
+		)
+	</insert>
+	
+	<!-- Get wards by province id -->
+	<select id="findWardsByProvinceId"
+			parameterType="java.lang.Long"
+			resultType="com.foodbooking.entity.Ward"
+	>
+		SELECT
+			w.id
+			, w.name
+			, w.shipping_fee AS shippingFee
+		FROM wards w
+		WHERE 
+			1 = 1
+			<if test="provinceId != null">
+				AND w.province_id = #{provinceId}
+			</if>
+	</select>
+	
+	<!-- Get count item of wards -->
+	<select id="getCount" resultType="int">
+		SELECT 
+			count(1)
+		FROM wards
+	</select>
+	
+	<!-- Find by ward id -->
+	<select id="findByWardId"
+			resultType="com.foodbooking.entity.Ward"
+			parameterType="java.lang.Long"
+	>
+		SELECT
+			w.id
+			, w.name
+			, w.shipping_fee AS shippingFee
+		FROM wards w
+		WHERE
+			w.id = #{id}
+	</select>
+	
+	<!-- Delete by ward id -->
+	<delete id="deleteByWardId"
+			parameterType="java.lang.Long"
+	>
+		DELETE FROM wards
+		WHERE
+			id=#{id}
+	</delete>
+</mapper> 

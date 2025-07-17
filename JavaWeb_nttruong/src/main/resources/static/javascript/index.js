@@ -1,11 +1,20 @@
 
 $(document).ready(function() {
+
+	if (foodObject.totalItems === null) {
+		getAndRenderTotalItems('food');
+	}
+
+	if (drinkObject.totalItems === null) {
+		getAndRenderTotalItems('drink');
+	}
 	// Header height
 	/*const headerHeight = parseInt(getComputedStyle(document.documentElement).getPropertyValue('--header-height')) || 408;
 	*/
 	// Search box height
 	let activedTab = 'food-tab'
 
+	// handle tab item click
 	handleTabItemClick();
 
 	// Handle event scroll
@@ -20,13 +29,6 @@ $(document).ready(function() {
 			$('header').removeClass('scrolled');
 			$('.searching-input-container').removeClass('shrink');
 		}
-		// push tab into header when search box was moved
-		/*if (scrollY >= searchBoxHeight) {
-			$('#tabs-section').addClass('scrolled');
-		} else {
-			$('#tabs-section').removeClass('scrolled');
-
-		}*/
 	});
 
 	// Init list view
@@ -77,6 +79,8 @@ $(document).ready(function() {
 
 		$(this).parents('.cart-wrapper').find('.quantity-input').val('1'); // reset input quantity
 		renderCartButton();
+
+		showSuccessToast({ text: 'Item added to your cart', headerTitle: 'Add item to cart' });
 	});
 
 
@@ -246,8 +250,6 @@ $(document).ready(function() {
 	$('#add-cart-btn').on('click', function() {
 		const itemId = Number($(this).attr('data-item-id')); // Get item id
 
-
-
 		// Get value of quantity input
 		const quantity = Number($('#item-detail-quantity').val());
 
@@ -267,6 +269,8 @@ $(document).ready(function() {
 			carts = [...carts, { ...item, quantity }];
 
 		}
+
+		showSuccessToast({ text: 'Item added to your cart', headerTitle: 'Add item to cart' });
 
 		// Add class for parrent (li tag)
 		$(`.list-view-item[data-item-id="${itemId}"]`).addClass('added');
@@ -415,11 +419,458 @@ $(document).ready(function() {
 	// Handle place order button click
 	$('#place-order-btn').on('click', function() {
 		saveCartToLocalStorage(carts);
-	})
+	});
+
+	// Handle food size selector change
+	$('#food__size-selector').on('change', function() {
+		const size = Number($(this).val());
+		
+		// If size is greater than total items, then do nothing
+		if (size >= foodObject.totalItems)
+			return;
+		
+		foodObject.size = size;
+
+		// Get and render first page booking products
+		getBookingProducts(
+			{
+				keyword: getKeywordFromSearchingInput(),
+				type: 'food',
+				page: 1,
+				size: foodObject.size,
+				includeTotal: true,
+				isDeleted: false
+			}
+		);
+	});
+
+	// Handle drink size selector change
+	$('#drink__size-selector').on('change', function() {
+		const size = Number($(this).val());
+		
+		// If size is greater than total items, then do nothing
+		if (size >= drinkObject.totalItems)
+			return;
+		
+		drinkObject.size = size;
+
+		// Get and render first page booking products
+		getBookingProducts(
+			{
+				keyword: getKeywordFromSearchingInput(),
+				type: 'drink',
+				page: 1,
+				size: drinkObject.size,
+				includeTotal: true,
+				isDeleted: false
+			}
+		);
+	});
+
+
+	// Handle pagination item click
+	handlePaginationItemClick('#drink__pagination-nav .pagination', 'drink');
+	handlePaginationItemClick('#food__pagination-nav .pagination', 'food');
+
+	// Handle previous button and next button on pagination click
+	handlePrevNextPaginationClick('#drink__pagination-nav .pagination', 'drink');
+	handlePrevNextPaginationClick('#food__pagination-nav .pagination', 'food');
+
+	// Handle searching input on search
+	handleSearchingInputOnSearch('#searching-input', function() {
+
+		const searchType = $('#searching-input').attr('data-search-type') || 'food';
+		getAndRenderTotalItems(searchType);
+
+	});
+
+	// Handle sort by price change
+	$('#sort-by-price-btn').on('change', function() {
+		getBookingProducts(
+			{
+				includeTotal: false,
+				isDeleted: false,
+				keyword: getKeywordFromSearchingInput(),
+				page: foodObject.currentPage,
+				size: foodObject.size,
+				type: 'food'
+			}
+		);
+
+		getBookingProducts(
+			{
+				includeTotal: false,
+				isDeleted: false,
+				keyword: getKeywordFromSearchingInput(),
+				page: drinkObject.currentPage,
+				size: drinkObject.size,
+				type: 'drink'
+			}
+		);
+	});
 });
 
 const MAX_ORDER_PER_ITEM = 3;
 
+/* Handle previous button and next button on pagination click */
+function handlePrevNextPaginationClick(root = '#drink__pagination-nav .pagination', type = 'drink') {
+	switch (type) {
+		case 'food':
+			// previous page button click
+			$(root).on('click', '.prev-page', function() {
+				let currentPage = foodObject.currentPage; // Get current page
+
+				// If current page is the first page, then do nothing
+				if (currentPage <= 1)
+					return;
+
+				currentPage--; // Decrease 1 unit
+				foodObject.currentPage = currentPage; // set current page food object
+
+				// remove active class
+				$(root).find('.page-item-number').removeClass('active');
+				$(root).find(`.page-item-number[data-page="${currentPage}"]`).addClass('active');
+				// Get and render item
+				getBookingProducts(
+					{
+						keyword: getKeywordFromSearchingInput(),
+						type,
+						page: foodObject.currentPage,
+						size: foodObject.size,
+						includeTotal: false,
+						isDeleted: null
+					}
+				);
+			});
+
+			// Next page button click
+			$(root).on('click', '.next-page', function() {
+				let currentPage = foodObject.currentPage; // Get current page
+
+				// If current page is the last page, then do nothing
+				if (currentPage >= foodObject.totalPages)
+					return;
+
+				currentPage++; // Increase 1 unit
+				foodObject.currentPage = currentPage; // set current page food object
+				// remove active class
+				$(root).find('.page-item-number').removeClass('active');
+				$(root).find(`.page-item-number[data-page="${currentPage}"]`).addClass('active');
+
+				// Get and render item
+				getBookingProducts(
+					{
+						keyword: getKeywordFromSearchingInput(),
+						type,
+						page: foodObject.currentPage,
+						size: foodObject.size,
+						includeTotal: false,
+						isDeleted: null
+					}
+				);
+			});
+			break;
+		case 'drink':
+			// previous page button click
+			$(root).on('click', '.prev-page', function() {
+				let currentPage = drinkObject.currentPage; // Get current page
+
+				// If current page is the first page, then do nothing
+				if (currentPage <= 1)
+					return;
+
+				currentPage--; // Decrease 1 unit
+				drinkObject.currentPage = currentPage; // set current page drink object
+				// remove active class
+				$(root).find('.page-item-number').removeClass('active');
+				$(root).find(`.page-item-number[data-page="${currentPage}"]`).addClass('active');
+
+				// Get and render item
+				getBookingProducts(
+					{
+						keyword: getKeywordFromSearchingInput(),
+						type,
+						page: drinkObject.currentPage,
+						size: drinkObject.size,
+						includeTotal: false,
+						isDeleted: null
+					}
+				);
+			});
+
+			// Next page button click
+			$(root).on('click', '.next-page', function() {
+				let currentPage = drinkObject.currentPage; // Get current page
+
+				// If current page is the last page, then do nothing
+				if (currentPage >= drinkObject.totalPages)
+					return;
+
+				currentPage++; // Increase 1 unit
+				drinkObject.currentPage = currentPage; // set current page drink object
+				// remove active class
+				$(root).find('.page-item-number').removeClass('active');
+				$(root).find(`.page-item-number[data-page="${currentPage}"]`).addClass('active');
+
+				// Get and render item
+				getBookingProducts(
+					{
+						keyword: getKeywordFromSearchingInput(),
+						type,
+						page: drinkObject.currentPage,
+						size: drinkObject.size,
+						includeTotal: false,
+						isDeleted: null
+					}
+				);
+			});
+			break;
+		default:
+			alert('Invalid type');
+	}
+}
+
+/* Handle pagination item click */
+function handlePaginationItemClick(root = '#drink__pagination-nav .pagination', type = 'drink') {
+	$(root).on('click', '.page-item-number', function() {
+
+		// If click '...' item or click on active page, return function
+		if ($(this).text() === '...' || $(this).hasClass('active'))
+			return;
+
+		// Remove active in other item
+		$(root).find('.page-item-number').removeClass('active');
+
+		// Add active class in current item
+		$(this).addClass('active');
+
+		const page = Number($(this).text()); // Get item page number
+
+		// Get 
+		switch (type) {
+			case 'food':
+				foodObject.currentPage = page;
+
+				// Re-render paging
+				customRenderPaging(
+					{
+						root: '#food__pagination-nav .pagination',
+						currentPage: page,
+						size: foodObject.size,
+						totalPages: foodObject.totalPages
+					});
+				getBookingProducts(
+					{
+						keyword: getKeywordFromSearchingInput(),
+						type,
+						page: foodObject.currentPage,
+						size: foodObject.size,
+						includeTotal: false,
+						inisDeleted: null
+					}
+				);
+				break;
+			case 'drink':
+				drinkObject.currentPage = page;
+				// Re-render paging
+				customRenderPaging(
+					{
+						root: '#food__pagination-nav .pagination',
+						currentPage: page,
+						size: drinkObject.size,
+						totalPages: drinkObject.totalPages
+					});
+				getBookingProducts(
+					{
+						keyword: getKeywordFromSearchingInput(),
+						type,
+						page: drinkObject.currentPage,
+						size: drinkObject.size,
+						includeTotal: false,
+						inisDeleted: null
+					}
+				);
+				break;
+			default:
+				alert('Invalid type.')
+		}
+	});
+}
+
+
+/* Get keyword from searching input */
+function getKeywordFromSearchingInput(root = '#searching-input') {
+	return $(root).val() || '';
+}
+
+/* Custom render paging */
+function customRenderPaging({ root = '#food__pagination-nav .pagination', size = 10, currentPage = 1, totalPages = 1 }) {
+	const pagination = getPagination(
+		{
+			currentPage,
+			totalPages,
+			delta: 2
+		});
+	renderPaging(
+		{
+			root,
+			pagination,
+			size,
+			currentPage
+		});
+}
+
+/* Is price DESC */
+function isPriceDESC() {
+	return $('#sort-by-price-btn').val() === 'DESC';
+}
+
+/* Get booking product */
+function getBookingProducts(
+	{
+		keyword = '',
+		type = 'food',
+		page = 1,
+		size = 10,
+		includeTotal = false,
+		isDeleted = false
+	}
+) {
+	bookingProductService.getBookingProductsPage(
+		{ keyword, type, page, size, includeTotal, isDeleted, priceDESC: isPriceDESC() }
+	)
+		.then(pagedResponse => {
+			// Toggle skeleton
+			setTimeout(() => {
+				hideSkeletonContainer(false);
+			}, 3000)
+			switch (type) {
+				case 'food': {
+					if (pagedResponse.totalPages) {
+						foodObject.totalPages = pagedResponse.totalPages;
+						foodObject.currentPage = pagedResponse.page;
+						// Render pagination
+						customRenderPaging(
+							{
+								root: '#food__pagination-nav .pagination',
+								size: foodObject.size,
+								currentPage: foodObject.currentPage,
+								totalPages: foodObject.totalPages
+							}
+						);
+					}
+					foodObject.items = pagedResponse.items;
+					// Render list view
+					renderListView({ data: foodObject.items, type: 'food' });
+
+					break;
+				}
+				case 'drink': {
+
+					if (pagedResponse.totalPages) {
+						drinkObject.totalPages = pagedResponse.totalPages;
+						drinkObject.currentPage = pagedResponse.page;
+						// Render pagination
+						customRenderPaging(
+							{
+								root: '#drink__pagination-nav .pagination',
+								size: drinkObject.size,
+								currentPage: drinkObject.currentPage,
+								totalPages: drinkObject.totalPages
+							}
+						);
+
+						// Render list view
+						renderListView({ data: drinkObject.items, type: 'drink' });
+
+
+					}
+					drinkObject.items = pagedResponse.items;
+					break;
+				}
+				default:
+					alert('Invalid type');
+			}
+			renderListView({ data: pagedResponse.items, type });
+
+		})
+		.catch(message => showOtherToast({ text: message, headerTitle: 'Retrieve issues', autoClose: 10000 }))
+}
+
+
+/* Get and render total items */
+function getAndRenderTotalItems(type = 'food') {
+	switch (type) {
+		case 'food': {
+			// Init food object
+			bookingProductService.getTotalItems(
+				{
+					keyword: getKeywordFromSearchingInput('#searching-input'),
+					type: 'food',
+					isDeleted: false
+				})
+				.then(totalItems => {
+					foodObject.totalItems = totalItems;
+					// Render total items
+					$('#food__total-items').text(`Total ${totalItems} items`);
+					if (totalItems > 0) {
+						$('#food__pagination-nav .pagination').show();
+						// Render first page items
+						getBookingProducts(
+							{
+								keyword: getKeywordFromSearchingInput('#searching-input'),
+								type: 'food',
+								page: foodObject.currentPage,
+								size: foodObject.size,
+								includeTotal: true,
+								isDeleted: false
+							}
+						);
+					} else {
+						$('#food__pagination-nav .pagination').hide();
+						showOtherToast({ text: 'There is nothing to show!', headerTitle: 'Empty list' });
+					}
+				})
+				.catch(message => showOtherToast({ text: message, headerTitle: 'Get total food items failed' }));
+			break;
+		}
+		case 'drink': {
+			// Init drink object
+			bookingProductService.getTotalItems(
+				{
+					keyword: getKeywordFromSearchingInput(),
+					type: 'drink',
+					isDeleted: false
+				})
+				.then(totalItems => {
+					drinkObject.totalItems = totalItems;
+					// Render total items
+					$('#drink__total-items').text(`Total ${totalItems} items`);
+
+					if (totalItems > 0) {
+						$('#drink__pagination-nav .pagination').show();
+						// Render first page items
+						getBookingProducts({
+							keyword: getKeywordFromSearchingInput(),
+							type: 'drink',
+							page: drinkObject.currentPage,
+							size: drinkObject.size,
+							includeTotal: true,
+							isDeleted: false
+						});
+					} else {
+						$('#drink__pagination-nav .pagination').hide();
+						showOtherToast({ text: 'There is nothing to show!', headerTitle: 'Empty list' });
+
+					}
+				})
+				.catch(message => showOtherToast({ text: message, headerTitle: 'Get total drink items failed' }));
+			break;
+		}
+		default:
+			alert('Invalid total items type');
+	}
+}
 
 /* Generate cart item html */
 function generateCartItemHTML(data = {
@@ -620,9 +1071,9 @@ function generateItemHTML(data = {
 }
 
 let foodObject = {
-	totalItems: 27,
+	totalItems: null,
 	size: 10,
-	totalPages: 3,
+	totalPages: 0,
 	currentPage: 1,
 	items: [
 		{
@@ -631,7 +1082,8 @@ let foodObject = {
 			description: "Đùi gà tươi góc 4 xối mỡ + sốt mắm tỏi + Cơm + dưa leo + salad + canh",
 			price: 40000,
 			imageUrl: '/assets/images/exampleFood.png',
-			type: 'food'
+			type: 'food',
+			isDeleted: false,
 		},
 		{
 			id: 10,
@@ -639,7 +1091,8 @@ let foodObject = {
 			description: "Đùi gà tươi góc 4 xối mỡ + sốt mắm tỏi + Cơm + dưa leo + salad + canh",
 			price: 40000,
 			imageUrl: '/assets/images/exampleFood.png',
-			type: 'food'
+			type: 'food',
+			isDeleted: false,
 		},
 		{
 			id: 11,
@@ -647,7 +1100,8 @@ let foodObject = {
 			description: "Đùi gà tươi góc 4 xối mỡ + sốt mắm tỏi + Cơm + dưa leo + salad + canh",
 			price: 40000,
 			imageUrl: '/assets/images/exampleFood.png',
-			type: 'food'
+			type: 'food',
+			isDeleted: false,
 		},
 		{
 			id: 14,
@@ -655,7 +1109,8 @@ let foodObject = {
 			description: "Đùi gà tươi góc 4 xối mỡ + sốt mắm tỏi + Cơm + dưa leo + salad + canh",
 			price: 40000,
 			imageUrl: '/assets/images/exampleFood.png',
-			type: 'food'
+			type: 'food',
+			isDeleted: false,
 		},
 		{
 			id: 17,
@@ -663,7 +1118,9 @@ let foodObject = {
 			description: "Đùi gà tươi góc 4 xối mỡ + sốt mắm tỏi + Cơm + dưa leo + salad + canh",
 			price: 40000,
 			imageUrl: '/assets/images/exampleFood.png',
-			type: 'food'
+			type: 'food',
+			isDeleted: false,
+
 		},
 		{
 			id: 19,
@@ -671,15 +1128,17 @@ let foodObject = {
 			description: "Đùi gà tươi góc 4 xối mỡ + sốt mắm tỏi + Cơm + dưa leo + salad + canh",
 			price: 40000,
 			imageUrl: '/assets/images/exampleFood.png',
-			type: 'food'
+			type: 'food',
+			isDeleted: false,
 		}
 	]
 };
 
 let drinkObject = {
-	size: 11,
-	totalPages: 2,
-	currentPage: 2,
+	totalItems: null,
+	size: 10,
+	totalPages: 0,
+	currentPage: 1,
 	items: [
 		{
 			id: 5,
@@ -687,7 +1146,8 @@ let drinkObject = {
 			description: "Lục Trà Macchiato - Size nh #Dòng thức uống đặc trưng, không thêm topping, không dùng ống hút nhựa",
 			price: 60000,
 			imageUrl: '/assets/images/exampleDrink.png',
-			type: 'drink'
+			type: 'drink',
+			isDeleted: false,
 		}
 	]
 }

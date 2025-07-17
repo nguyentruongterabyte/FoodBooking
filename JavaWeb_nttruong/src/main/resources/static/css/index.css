@@ -15,6 +15,7 @@
 body {
 	margin-left: auto;
 	margin-right: auto;
+	position: relative;
 }
 
 /* Header START */
@@ -147,62 +148,6 @@ header .question {
 
 /* Header END */
 
-/*Search box START*/
-.searching-input-container {
-	position: sticky;
-	top: 0;
-	z-index: 2;
-	margin-left: auto;
-	margin-right: auto;
-	width: var(--section-container-width);
-	height: var(--search-box-height);
-	margin-top: var(--header-height);
-	display: flex;
-	transform: translateY(-50%);
-	flex-direction: column;
-	justify-content: center;
-	align-items: center;
-	background-color: white;
-	box-shadow: var(--common-box-shadow);
-
-	&.shrink {
-		height: var(--header-nav-height);
-		width: 48%;
-		background: transparent;
-		transform: none;
-		transition: all 0.3s ease;
-		box-shadow: none;
-	}
-
-	.searching-input-wrapper {
-		width: 80%;
-		height: 56px;
-		display: flex;
-		align-items: center;
-		background-color: #efefef;
-		border-radius: 40px;
-		overflow: hidden;
-		box-shadow: rgba(38, 91, 154, 0.15);
-
-		i {
-			padding-left: 20px;
-			margin-right: 20px;
-		}
-	}
-}
-
-#searching-input {
-	flex: 1;
-	height: 100%;
-	font-size: 1rem;
-	outline: none;
-	border: none;
-	background-color: #efefef;
-	color: rgba(82, 82, 82, 1);
-}
-
-/*Search box END*/
-
 /* Tabs section START */
 #tabs-section {
 	position: sticky;
@@ -331,47 +276,7 @@ header .question {
 		}
 	}
 }
-
-
 /* List view END */
-
-/* Pagination START */
-.pagination-nav {
-	display: flex;
-	justify-content: center;
-	gap: 8px;
-
-	.total-items {
-		padding-top: 12px;
-		font-size: 0.875rem;
-		font-weight: 400;
-		text-align: center;
-	}
-
-	.pagination {
-
-		.page-item {
-			&.active {
-				.page-link {
-					background-color: var(--primary-color);
-					border-color: var(--primary-color);
-					color: white;
-				}
-			}
-		}
-
-		.page-link {
-			color: rgb(70, 70, 70);
-		}
-	}
-
-	.size-page-selector {
-		width: unset;
-	}
-}
-
-/* Pagination END */
-
 /* List view section END */
 
 /* Footer section START */
@@ -441,4 +346,11 @@ footer {
 }
 
 /* Footer section END */
+
+/* Skeleton Container START */
+.skeleton-container {
+	margin-top: calc(-1 * var(--header-height));
+}
+
+/* Skeleton Container END */
 

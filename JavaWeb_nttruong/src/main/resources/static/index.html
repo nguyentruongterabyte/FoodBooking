@@ -5,7 +5,10 @@
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<!-- Custom javascript & jquery library -->
+	<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
 	<script src="assets/library/jquery-3.7.1.min.js"></script>
+	<script src="assets/library/my-toast/notification.js"></script>
+	<script src="javascript/ajaxService.js"></script>
 	<script src="javascript/common.js"></script>
 	<script src="javascript/index.js"></script>
 	<!-- Bootstrap -->
@@ -25,6 +28,8 @@
 	<!-- Custom style -->
 	<link rel="stylesheet" href="/css/globalStyles.css">
 	<link rel="stylesheet" href="/css/index.css">
+	<link rel="stylesheet" href="/assets/library/my-toast/notification.css" />
+	<link rel="stylesheet" href="/css/skeletonLoading.css" />
 	<title>Foods Booking</title>
 </head>
 
@@ -328,7 +333,7 @@
 	<div class="modal fade" id="detail-item-modal" tabindex="-1" role="dialog" aria-labelledby="item-detail"
 		aria-hidden="true">
 		<div class="modal-dialog modal-lg modal-dialog-centered" role="document">
-			<div class="modal-content">
+			<div class="modal-content custom-modal-content">
 				<div class="modal-header">
 					<h5 class="modal-title">Basket</h5>
 					<button id="close-detail-item-btn" type="button" class="close" data-dismiss="modal"
@@ -369,7 +374,8 @@
 								</div>
 							</div>
 						</div>
-						<button type="button" class="custom-btn primary" id="add-cart-btn">Add to Basket - 60000đ</button>
+						<button type="button" class="custom-btn primary" id="add-cart-btn">Add to Basket -
+							60000đ</button>
 					</div>
 				</div>
 			</div>
@@ -386,7 +392,7 @@
 	<!-- Modal show cart items START -->
 	<div class="modal fade" id="cart-modal" tabindex="-1" role="dialog" aria-labelledby="cart" aria-hidden="true">
 		<div class="modal-dialog modal-lg modal-dialog-centered" role="document">
-			<form class="modal-content" action="/delivery" method="get">
+			<form class="modal-content custom-modal-content" action="/delivery" method="get">
 				<div class="modal-header">
 					<h5 class="modal-title">Basket</h5>
 					<button id="close-cart-modal-btn" type="button" class="close" data-dismiss="modal"
@@ -448,6 +454,222 @@
 	</div>
 	<!-- Modal show cart items END -->
 
+	<!-- Skeleton Loading START -->
+	<div class="skeleton-container">
+
+		<!-- Brand skeleton START -->
+		<div class="skeleton w75">
+			<div class="skeleton-left">
+				<div class="line w25 h50 r50"></div>
+			</div>
+			<div class="skeleton-right">
+				<div class="square circle s25"></div>
+			</div>
+		</div>
+		<!-- Brand skeleton END -->
+
+		<!-- Cart button skeleton START -->
+		<div class="skeleton w75">
+			<div class="skeleton-center">
+				<div class="line w50 h50 r50"></div>
+			</div>
+		</div>
+		<!-- Cart button skeleton END -->
+
+		<!-- Search box skeleton START -->
+		<div class="skeleton w75 shadow h150">
+			<div class="skeleton-center">
+				<div class="line w75 h50 r50">
+					<div class="skeleton-left">
+						<div class="square circle s25 ml10"></div>
+						<div class="line w50 h15 ml10"></div>
+					</div>
+
+				</div>
+			</div>
+		</div>
+		<!-- Search box skeleton END -->
+
+		<!-- Sort button skeleton START -->
+		<div class="skeleton w75">
+			<div class="skeleton-right">
+				<div class="line w25 h15 ml10"></div>
+			</div>
+		</div>
+		<!-- Sort button skeleton END -->
+
+		<!-- Tab section skeleton START -->
+		<div class="skeleton w75 g10">
+			<div class="skeleton-left">
+				<div class="line h40 r50"></div>
+			</div>
+			<div class="skeleton-right">
+				<div class="line h40 r50"></div>
+			</div>
+		</div>
+		<!-- Tab section skeleton END -->
+
+		<!-- List view skeleton START -->
+		<div class="skeleton w75 g10">
+			<div class="skeleton w50 flex1 shadow">
+				<div class="skeleton-left">
+					<div class="square s130"></div>
+				</div>
+				<div class="skeleton-left g10">
+					<div class="line w50 h15"></div>
+					<div class="line w25 h15"></div>
+					<div class="line w25 h15"></div>
+					<div class="line w50 h15"></div>
+					<div class="skeleton-right">
+						<div class="square circle s50"></div>
+					</div>
+				</div>
+			</div>
+			<div class="skeleton w50 flex1 shadow">
+				<div class="skeleton-left">
+					<div class="square s130"></div>
+				</div>
+				<div class="skeleton-left g10">
+					<div class="line w50 h15"></div>
+					<div class="line w25 h15"></div>
+					<div class="line w25 h15"></div>
+					<div class="line w50 h15"></div>
+					<div class="skeleton-right">
+						<div class="square circle s50"></div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="skeleton w75 g10">
+			<div class="skeleton w50 flex1 shadow">
+				<div class="skeleton-left">
+					<div class="square s130"></div>
+				</div>
+				<div class="skeleton-left g10">
+					<div class="line w50 h15"></div>
+					<div class="line w25 h15"></div>
+					<div class="line w25 h15"></div>
+					<div class="line w50 h15"></div>
+					<div class="skeleton-right">
+						<div class="square circle s50"></div>
+					</div>
+				</div>
+			</div>
+			<div class="skeleton w50 flex1 shadow">
+				<div class="skeleton-left">
+					<div class="square s130"></div>
+				</div>
+				<div class="skeleton-left g10">
+					<div class="line w50 h15"></div>
+					<div class="line w25 h15"></div>
+					<div class="line w25 h15"></div>
+					<div class="line w50 h15"></div>
+					<div class="skeleton-right">
+						<div class="square circle s50"></div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="skeleton w75 g10">
+			<div class="skeleton w50 flex1 shadow">
+				<div class="skeleton-left">
+					<div class="square s130"></div>
+				</div>
+				<div class="skeleton-left g10">
+					<div class="line w50 h15"></div>
+					<div class="line w25 h15"></div>
+					<div class="line w25 h15"></div>
+					<div class="line w50 h15"></div>
+					<div class="skeleton-right">
+						<div class="square circle s50"></div>
+					</div>
+				</div>
+			</div>
+			<div class="skeleton w50 flex1 shadow">
+				<div class="skeleton-left">
+					<div class="square s130"></div>
+				</div>
+				<div class="skeleton-left g10">
+					<div class="line w50 h15"></div>
+					<div class="line w25 h15"></div>
+					<div class="line w25 h15"></div>
+					<div class="line w50 h15"></div>
+					<div class="skeleton-right">
+						<div class="square circle s50"></div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="skeleton w75 g10">
+			<div class="skeleton w50 flex1 shadow">
+				<div class="skeleton-left">
+					<div class="square s130"></div>
+				</div>
+				<div class="skeleton-left g10">
+					<div class="line w50 h15"></div>
+					<div class="line w25 h15"></div>
+					<div class="line w25 h15"></div>
+					<div class="line w50 h15"></div>
+					<div class="skeleton-right">
+						<div class="square circle s50"></div>
+					</div>
+				</div>
+			</div>
+			<div class="skeleton w50 flex1 shadow">
+				<div class="skeleton-left">
+					<div class="square s130"></div>
+				</div>
+				<div class="skeleton-left g10">
+					<div class="line w50 h15"></div>
+					<div class="line w25 h15"></div>
+					<div class="line w25 h15"></div>
+					<div class="line w50 h15"></div>
+					<div class="skeleton-right">
+						<div class="square circle s50"></div>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<!-- List view skeleton END -->
+
+		<!-- Pagination skeleton START -->
+		<div class="skeleton w50">
+			<div class="skeleton-center w75 g10">
+				<div class="line w50 h15"></div>
+				<div class="line w25 h15"></div>
+				<div class="line w25 h15"></div>
+				<div class="line w50 h15"></div>
+				<div class="line w100 h15"></div>
+			</div>
+		</div>
+		<!-- Pagination skeleton END -->
+
+		<!-- Footer skeleton START -->
+		<div class="skeleton w100 shadow">
+			<div class="skeleton w75">
+
+				<div class="skeleton-left">
+					<div class="line w50 h100 r50"></div>
+				</div>
+				<div class="skeleton-right g10">
+					<div class="line w50 h15"></div>
+					<div class="line w25 h15"></div>
+					<div class="line w25 h15"></div>
+					<div class="line w50 h15"></div>
+					<div class="line w100 h15"></div>
+					<div class="line w50 h15"></div>
+					<div class="line w25 h15"></div>
+
+					<div class="line w50 h15"></div>
+					<div class="line w100 h15"></div>
+				</div>
+			</div>
+
+		</div>
+		<!-- Footer skeleton END -->
+	</div>
+	<!-- Skeleton Loading END -->
 </body>
 
 </html>

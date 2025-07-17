@@ -5,7 +5,10 @@
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<!-- Custom javascript & jquery library -->
+	<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
 	<script src="assets/library/jquery-3.7.1.min.js"></script>
+	<script src="/assets/library/my-toast/notification.js"></script>
+	<script src="javascript/ajaxService.js"></script>
 	<script src="javascript/common.js"></script>
 	<script src="javascript/delivery.js"></script>
 	<!-- Bootstrap -->
@@ -25,6 +28,8 @@
 	<!-- Custom style -->
 	<link rel="stylesheet" href="/css/globalStyles.css">
 	<link rel="stylesheet" href="/css/delivery.css">
+	<link rel="stylesheet" href="/assets/library/my-toast/notification.css">
+
 	<title>Delivery</title>
 </head>
 
@@ -40,19 +45,25 @@
 		<h1>Delivery Information</h1>
 
 		<!-- Delivery infomation wrapper START -->
-		<form class="delivery-information">
+		<form id="delivery-form" class="delivery-information">
 			<div class="form-row">
 
 				<!-- Name -->
 				<div class="col form-group">
 					<label for="name" class="label-up-to">Your Full Name</label>
 					<input type="text" id="name" name="name" class="form-control" />
+					<div class="invalid-feedback">
+						Please provide a name
+					</div>
 				</div>
 
 				<!-- Phone number -->
 				<div class="col form-group">
 					<label for="phone" class="label-up-to">Your Phone Name</label>
 					<input type="number" id="phone" name="phone" class="form-control" />
+					<div class="invalid-feedback">
+						Please provide your phone
+					</div>
 				</div>
 			</div>
 			<div class="form-row">
@@ -60,7 +71,7 @@
 				<!-- City -->
 				<div class="col form-group">
 					<label for="city" class="label-up-to">City</label>
-					<select id="city" name="cityId" class="form-control">
+					<select id="city" name="provinceId" class="form-control">
 						<option value="" hidden></option>
 						<option value="1">Ho Chi Minh City</option>
 						<option value="2">Can Tho</option>
@@ -68,6 +79,9 @@
 						<option value="4">Thua Thien Hue</option>
 						<option value="5">Ha Noi</option>
 					</select>
+					<div class="invalid-feedback">
+						Please select city
+					</div>
 				</div>
 
 				<!-- Ward -->
@@ -75,27 +89,12 @@
 					<label for="ward" class="label-up-to">Ward</label>
 					<select id="ward" name="wardId" class="form-control">
 						<option value="" hidden></option>
-						<option value="1">Ho Chi Minh City</option>
-						<option value="2">Can Tho</option>
-						<option value="3">Da Nang</option>
-						<option value="4">Thua Thien Hue</option>
-						<option value="5">Ha Noi</option>
-						<option value="6">Ho Chi Minh City</option>
-						<option value="7">Can Tho</option>
-						<option value="8">Da Nang</option>
-						<option value="9">Thua Thien Hue</option>
-						<option value="10">Ha Noi</option>
-						<option value="11">Ho Chi Minh City</option>
-						<option value="12">Can Tho</option>
-						<option value="13">Da Nang</option>
-						<option value="14">Thua Thien Hue</option>
-						<option value="15">Ha Noi</option>
-						<option value="16">Ho Chi Minh City</option>
-						<option value="17">Can Tho</option>
-						<option value="18">Da Nang</option>
-						<option value="19">Thua Thien Hue</option>
-						<option value="20">Ha Noi</option>
+						<option value="1">Ward A</option>
+						<option value="2">Ward B</option>
 					</select>
+					<div class="invalid-feedback">
+						Please select ward
+					</div>
 				</div>
 			</div>
 			<div class="form-row">
@@ -104,6 +103,9 @@
 				<div class="col form-group">
 					<label for="detail-address" class="label-up-to">Street Name, Building, House No.</label>
 					<input type="text" id="detail-address" name="detailAddress" class="form-control" />
+					<div class="invalid-feedback">
+						Please enter your address
+					</div>
 				</div>
 			</div>
 
@@ -116,6 +118,9 @@
 			<div class="form-group form-row">
 				<label for="message">Message</label>
 				<textarea class="form-control" id="message" name="message" placeholder="Your message"></textarea>
+				<div class="invalid-feedback">
+					Write something...
+				</div>
 			</div>
 
 			<div class="dashed-line"></div>
@@ -164,7 +169,7 @@
 			</div>
 			<div class="footer-button-group">
 				<button type="button" class="custom-btn" id="cancel-btn">Cancel</button>
-				<button type="button" class="custom-btn primary" id="place-order-btn">Place Order</button>
+				<button class="custom-btn primary" id="place-order-btn">Place Order</button>
 			</div>
 		</form>
 		<!-- Delivery infomation wrapper END -->

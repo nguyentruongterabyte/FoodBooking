@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.foodbooking.mapper.AccountMapper">
+	<!-- Find account by username -->
+	<select id="findByUsername" 
+			resultType="com.foodbooking.entity.Account"
+		>
+		SELECT 
+			id
+			, a.username
+			, a.password
+			, a.role
+		FROM accounts a
+		WHERE 
+			a.username = #{username}
+	</select>
+	
+	<!-- Update password -->
+	<update id="updatePassword">
+		UPDATE accounts
+		SET
+			password = #{password}
+		WHERE 
+			username = #{username}
+	</update>
+</mapper>

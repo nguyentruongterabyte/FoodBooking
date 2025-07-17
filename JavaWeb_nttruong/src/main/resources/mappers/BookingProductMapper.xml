@@ -1,0 +1,165 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.foodbooking.mapper.BookingProductMapper">
+
+	<!-- Base result map -->
+	<resultMap id="bookingProductResultMap"
+		type="com.foodbooking.entity.BookingProduct">
+		<id property="id" column="id" />
+		<result property="type" column="type"/>
+		<result property="description" column="description"/>
+		<result property="imageUrl" column="image_url"/>
+		<result property="name" column="name"/>
+		<result property="price" column="price" />
+		<result property="isDeleted" column="is_deleted" />
+	</resultMap>
+
+	<!-- Booking Product information subquery -->
+	<sql id="bookingProductInfoSubquery">
+		SELECT
+			bp.id
+			, bp.type
+			, bp.name
+			, bp.image_url
+			, bp.description
+			, bp.price
+			, bp.is_deleted
+		FROM booking_products bp
+	</sql>
+
+	<!-- Check exists by name in a type -->
+	<select id="existsByNameInType"
+		resultType="boolean"
+	>
+		SELECT
+		COUNT(1) > 0
+		FROM booking_products bp
+		WHERE
+		bp.name = #{name}
+		AND bp.type = #{type}
+	</select>
+
+	<!-- Create new Booking Product -->
+	<insert id="saveBookingProduct"
+		useGeneratedKeys="true"
+		keyProperty="id"
+		parameterType="com.foodbooking.entity.BookingProduct">
+		INSERT INTO booking_products (
+			type
+			, description
+			, image_url
+			, name
+			, price
+			, is_deleted
+		) VALUES (
+			#{type}
+			, #{description}
+			, #{imageUrl}
+			, #{name}
+			, #{price}
+			, 0
+		)
+	</insert>
+
+	<!-- Find booking products pagination -->
+	<select id="findBookingProductsPage"
+			resultMap="bookingProductResultMap"
+	>
+		<include refid="bookingProductInfoSubquery" /> 
+		WHERE 1 = 1 
+		<if test="isDeleted != null">
+			AND 
+				bp.is_deleted = #{isDeleted}
+		</if>
+		<if test="type != null">
+			AND 
+				bp.type = #{type}
+		</if>
+		<if test="keyword != null">
+			AND 
+				bp.name LIKE CONCAT('%', #{keyword}, '%')
+		</if>
+			<choose>
+				<!-- When priceDESC is null, order by id -->
+				<when test="priceDESC == null">
+					ORDER BY 
+						bp.id DESC
+				</when>
+				
+				<!-- Otherwise, order by price DESC, ASC -->
+				<otherwise>
+					<choose>
+						<when test="priceDESC == true">
+							ORDER BY 
+								bp.price DESC
+						</when>
+						<otherwise>
+							ORDER BY
+								bp.price ASC
+						</otherwise>
+					</choose>				
+				</otherwise>
+			</choose>
+		LIMIT #{limit} 
+		OFFSET #{offset}
+	</select>
+
+	<!-- Check exist by id-->
+	<select 
+		id="existsById"
+		parameterType="java.lang.Long"
+	>
+		SELECT 
+			COUNT(1) > 0
+		FROM booking_products 
+		WHERE 
+			id = #{id}
+	</select>
+
+	<!-- Get total of Booking Products -->
+	<select id="getCount" resultType="int">
+		SELECT COUNT(1)
+		FROM booking_products bp
+		WHERE
+			1 = 1
+			<if test="isDeleted != null">
+				AND 
+					bp.is_deleted = #{isDeleted} 
+			</if>
+			<if test="type != null">
+				AND
+					bp.type = #{type}
+			</if>
+			<if test="keyword != null">
+				AND 
+					bp.name LIKE CONCAT('%', #{keyword}, '%')
+			</if>
+	</select>
+
+	<!-- Update booking product -->
+	<update id="updateBookingProduct"
+			parameterType="map"
+	>
+		UPDATE booking_products
+		SET 
+			type = #{type}
+			, description = #{description}
+			, image_url = #{imageUrl}
+			, name = #{name}
+			, price = #{price}
+			, is_deleted = #{isDeleted}
+		WHERE
+			id = #{id}
+	</update>
+	
+	<!-- Find booking product by id -->
+	<select id="findByBookingProductId" 
+			parameterType="java.lang.Long"
+			resultMap="bookingProductResultMap"
+	>
+		<include refid="bookingProductInfoSubquery" />
+		WHERE 
+			bp.id = #{id}
+	</select>
+</mapper> 

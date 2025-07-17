@@ -1,0 +1,172 @@
+#manage-item-tab {
+	padding: 24px;
+
+	/* Navigation tab */
+
+
+	/* Tab content START */
+	.tab-contents {
+
+		#food-tab,
+		#drink-tab {
+			background-color: white;
+			border-radius: 16px;
+			padding: 16px;
+		}
+
+		/* Item table */
+		table {
+
+			/* Item column */
+			td {
+				margin-top: auto;
+				margin-bottom: auto;
+				align-content: center;
+				font-size: 1rem;
+
+				/* wrapper column */
+				.wrapper {
+					display: flex;
+					align-items: center;
+					gap: 8px;
+
+					/*Item image */
+					img {
+						width: 64px;
+						height: 64px;
+					}
+
+
+				}
+
+				/* Action buttons */
+				button {
+					font-weight: 400;
+					line-height: 150%;
+					color: #658280;
+					border: none;
+					outline: none;
+					padding: 0 8px;
+					border-radius: 2px;
+					background-color: transparent;
+					user-select: none;
+
+					&+button {
+						border-left: 1px solid #658280;
+					}
+
+					&:hover {
+						cursor: pointer;
+					}
+
+					&.edit-btn {
+						color: #0D6EFD;
+					}
+
+					&.remove-btn[disabled],
+					&.edit-btn[disabled] {
+						cursor: not-allowed;
+					}
+				}
+
+			}
+		}
+	}
+
+	/* Tab content END */
+}
+
+.navigation-tabs-wrapper {
+	padding: 8px 0;
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	user-select: none;
+
+	/* navigation tab */
+	.navigation-tabs {
+		margin-bottom: unset;
+		padding: 6px;
+		border-radius: 12px;
+		background-color: #EFEFEF;
+
+		.navigation-item {
+			padding: 8px;
+			border-radius: 6px;
+
+			&:hover {
+				cursor: pointer;
+			}
+
+			&.active {
+				background-color: white;
+			}
+		}
+	}
+
+	/* Create new item button */
+	.create-btn {
+		height: 40px;
+		padding: 24px 16px;
+		border-radius: 1px;
+		font-size: .875rem;
+		display: flex;
+		align-items: center;
+		gap: 8px;
+		background-color: var(--primary-color);
+		color: white;
+		outline: none;
+		border: none;
+	}
+}
+
+/* Modal show detail item (edit, create) START */
+#info-form {
+	.form-wrapper {
+		display: flex;
+		align-items: flex-start;
+		gap: 16px;
+	}
+
+	.demo-image-wrapper {
+		position: relative;
+
+		.demo-image {
+			width: 130px;
+			height: 130px;
+			border-radius: 6px;
+		}
+
+		.remove-image-btn {
+			display: none;
+			position: absolute;
+			top: -12px;
+			right: -12px;
+			outline: none;
+			border: none;
+			border-radius: 50%;
+			width: 24px;
+			height: 24px;
+			color: #989898;
+		}
+	}
+
+	.image-upload-btn-wrapper {
+		display: flex;
+		flex-direction: column;
+		justify-content: flex-end;
+		flex: 1;
+		gap: 16px;
+		height: 100%;
+
+		.image-upload-btn {
+			width: 100%;
+		}
+	}
+
+	.navigation-tabs-wrapper {
+		width: 128px;
+	}
+}
+
+/* Modal show detail item (edit, create) END */

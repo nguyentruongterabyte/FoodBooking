@@ -1,4 +1,4 @@
-package com.foodbooking.controller.view;
+package com.foodbooking.controller;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;

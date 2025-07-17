@@ -1,0 +1,93 @@
+<!doctype html>
+<html>
+
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+	<title>LocalNotification.js Library Examples</title>
+	<!-- Fontawesome -->
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
+		integrity="sha512-..." crossorigin="anonymous" referrerpolicy="no-referrer" />
+	<link rel="stylesheet" href="notification.css" />
+</head>
+
+<body>
+	<div class="container">
+		<p><button id="info">Info</button> <button id="success">Success</button> <button id="error">Error</button></p>
+	</div>
+	<script src="notification.js"></script>
+	<script>
+		document.getElementById('info').addEventListener('click', () => {
+			new LocalNotification({
+				text: 'A system error occurred. Please try again later',
+				autoClose: 6000,
+				position: 'top-right',
+				headerStyle: {
+					background: '#fff6da',
+				},
+				icon: '<i class="fa-solid fa-gear"></i>',
+				headerIconStyle: {
+					color: '#ffc107'
+				},
+				headerTitle: 'Add item to cart',
+				style: {
+					background: '#ffc107',
+					color: '#fff',
+					transition: 'all 350ms linear',
+				},
+				closeButtonColor: '#000',
+				progressBarColor: '#FFD700',
+			});
+		});
+		document.getElementById('success').addEventListener('click', () => {
+			new LocalNotification({
+				text: 'Item added to your cart',
+				autoClose: 6000,
+				position: 'top-right',
+				headerStyle: {
+					background: '#ffffffd9',
+				},
+				icon: '<i class="fa-regular fa-circle-check"></i>',
+				headerIconStyle: {
+					color: '#17ae30'
+				},
+				headerTitle: 'Add item to cart',
+				style: {
+					background: '#17ae30',
+					color: '#fff',
+					transition: 'all 350ms linear',
+				},
+				closeButtonColor: '#000',
+				progressBarColor: '#FFD700',
+			});
+		});
+		document.getElementById('error').addEventListener('click', () => {
+			new LocalNotification({
+				text: 'Order placement failed. Please try again',
+				autoClose: 6000,
+				position: 'top-right',
+				headerStyle: {
+					background: '#fbdce3',
+				},
+				icon: '<i class="fa-solid fa-circle-exclamation"></i>',
+				headerIconStyle: {
+					color: '#e31844'
+				},
+				headerTitle: 'Order placement failed',
+				style: {
+					background: '#e31844',
+					color: '#fff',
+					transition: 'all 350ms linear',
+				},
+				closeButtonColor: '#000',
+				progressBarColor: '#FFD700',
+			});
+		});
+	</script>
+	<script>
+	</script>
+
+</body>
+
+</html>
