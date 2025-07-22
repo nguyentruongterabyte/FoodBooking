@@ -9,7 +9,7 @@
 	--tabs-section-height: 124px;
 	--list-view-items-per-row: 2;
 	--list-view-item-gap: 24px;
-	
+
 }
 
 body {
@@ -24,6 +24,7 @@ header {
 	background-repeat: no-repeat;
 	height: var(--header-height);
 	background-size: 100vw calc(var(--header-height) + 38px);
+
 	&.scrolled {
 		background: #fff !important;
 		transition: background 1s ease;
@@ -41,7 +42,30 @@ header {
 			width: var(--section-container-width);
 			justify-content: space-between;
 			align-items: center;
+
+			.action-btn-wrapper {
+				display: flex;
+				gap: 16px;
+				padding: 0 16px;
+			}
 		}
+	}
+}
+
+.your-order-btn {
+	display: flex;
+	align-items: center;
+	gap: 8px;
+	padding: 0 10px;
+	font-size: 1rem;
+	color: var(--primary-color);
+	outline: none;
+	border: 1px solid var(--primary-color);
+	border-radius: 4px;
+	background-color: white;
+
+	&:hover {
+		cursor: pointer;
 	}
 }
 
@@ -276,6 +300,7 @@ header .question {
 		}
 	}
 }
+
 /* List view END */
 /* List view section END */
 
@@ -347,10 +372,215 @@ footer {
 
 /* Footer section END */
 
+/* Your order modal START */
+
+#your-order-modal {
+
+	.modal-content {
+		height: unset;
+		max-height: 90vh;
+		overflow-y: hidden;
+
+	}
+
+	.modal-body {
+		display: flex;
+		flex-direction: column;
+		gap: 32px;
+	}
+
+	#order-id {
+		font-weight: 900;
+	}
+
+	.list-view-item {
+		padding: 16px 16px !important;
+	}
+
+	.item-quantity-wrapper {
+		right: 16px;
+		bottom: 16px;
+	}
+}
+
+
+/*Icon progressbar*/
+#progressbar {
+	margin-bottom: 30px;
+	color: #455A64;
+	padding-left: 0px;
+	margin-top: 30px;
+	margin-bottom: 48px;
+}
+
+#progressbar li {
+	list-style-type: none;
+	font-size: 13px;
+	width: 25%;
+	float: left;
+	position: relative;
+	font-weight: 400;
+}
+
+#progressbar li.in-progress {
+	color: #17AE30;
+}
+
+#progressbar li span {
+	font-size: 0.75rem;
+	position: absolute;
+	bottom: 0px;
+	left: 0;
+	right: 0;
+	transform: translateY(100%);
+
+}
+
+#progressbar .step0:before {
+	font-family: FontAwesome;
+	content: "\f10c";
+	color: #fff;
+}
+
+#progressbar li:before {
+	position: relative;
+	z-index: 2;
+	width: 1.5rem;
+	height: 1.5rem;
+	line-height: 1.5rem;
+	display: block;
+	font-size: 0.8rem;
+	background: #C5CAE9;
+	border-radius: 50%;
+	margin: auto;
+	padding: 0px;
+}
+
+/*ProgressBar connectors*/
+#progressbar li:after {
+	content: '';
+	width: 100%;
+	height: 2px;
+	background: #C5CAE9;
+	position: absolute;
+	left: 0;
+	top: 50%;
+	transform: translateY(-50%);
+
+}
+
+#progressbar li:last-child:after {
+	border-top-right-radius: 10px;
+	border-bottom-right-radius: 10px;
+	position: absolute;
+	left: -50%;
+}
+
+#progressbar li:nth-child(2):after,
+#progressbar li:nth-child(3):after {
+	left: -50%;
+}
+
+#progressbar li:first-child:after {
+	border-top-left-radius: 10px;
+	border-bottom-left-radius: 10px;
+	position: absolute;
+	left: 50%;
+}
+
+#progressbar li:last-child:after {
+	border-top-right-radius: 10px;
+	border-bottom-right-radius: 10px;
+}
+
+#progressbar li:first-child:after {
+	border-top-left-radius: 10px;
+	border-bottom-left-radius: 10px;
+}
+
+/*Color number of the step and the connector before it*/
+#progressbar li.active:before,
+#progressbar li.active:after {
+	background: #17AE30;
+}
+
+#progressbar li.in-progress:before {
+	border: 6.5px solid #17AE30;
+	font-size: 0;
+	background: white;
+	font-weight: 900;
+	line-height: 1rem;
+}
+
+#progressbar li.cancelled:before {
+	border: 6.5px solid rgb(255, 0, 0);
+	font-size: 0;
+	background: white;
+	font-weight: 900;
+	line-height: 1rem;
+}
+
+#progressbar li.in-progress:after {
+	background-color: #17AE30;
+}
+
+#progressbar li.cancelled:after {
+	background-color: rgb(255, 0, 0);
+}
+
+#progressbar li.active:before {
+	content: "\f00c";
+}
+
+#progressbar li.cancelled:before {
+	content: "\f10c";
+}
+
+/* Order detail */
+.order-details {
+/*	overflow-y: scroll;*/
+
+	summary {
+		list-style: none;
+		margin-bottom: 22px;
+
+		&::-webkit-details-marker {
+			display: none;
+		}
+
+		position: relative;
+	}
+
+	.custom-icon {
+		display: inline-block;
+		position: absolute;
+		z-index: 1;
+		bottom: 0;
+		left: 50%;
+		width: 72px;
+		height: 24px;
+		margin-right: 8px;
+		transform: translate(-50%, 50%);
+		transition: transform 0.3s ease;
+		border-radius: 20px;
+		box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
+		background: url(/assets/icons/detailArrow.svg);
+		background-size: 1.2rem;
+		background-position: center;
+		background-repeat: no-repeat;
+		background-color: #fff;
+	}
+}
+
+.order-details[open] .custom-icon {
+	transform: translate(-50%, 50%) rotateX(180deg);
+}
+
+/* Your order modal END */
+
 /* Skeleton Container START */
 .skeleton-container {
 	margin-top: calc(-1 * var(--header-height));
 }
 
 /* Skeleton Container END */
-

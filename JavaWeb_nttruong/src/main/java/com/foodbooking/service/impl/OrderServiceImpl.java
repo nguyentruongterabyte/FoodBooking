@@ -13,6 +13,7 @@ import com.foodbooking.dto.response.ErrorResponse;
 import com.foodbooking.entity.BookingProduct;
 import com.foodbooking.entity.Order;
 import com.foodbooking.entity.OrderDetail;
+import com.foodbooking.entity.OrderStatusEnum;
 import com.foodbooking.entity.Ward;
 import com.foodbooking.repository.BookingProductRepository;
 import com.foodbooking.repository.OrderRepository;
@@ -82,7 +83,7 @@ public class OrderServiceImpl implements OrderService {
 			// Set created at now
 			order.setCreatedAt(LocalDateTime.now());
 
-			order.setOrderStatusId(1); // New status 
+			order.setOrderStatusId(OrderStatusEnum.NEW.getId()); // New status 
 			
 			orderRepository.saveOrder(order);
 

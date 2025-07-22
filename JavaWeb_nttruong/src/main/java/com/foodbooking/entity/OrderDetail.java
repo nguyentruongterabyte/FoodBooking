@@ -13,4 +13,5 @@ public class OrderDetail {
 	private Long itemPrice;
 	private String name;
 	private String description;
+	private String imageUrl;
 }

@@ -29,6 +29,8 @@ public class Order {
 	private List<OrderDetail> bookingProducts;
 
 	private OrderStatus orderStatus;
+	
+	private OrderStatus cancelledAtStatus;
 
 	private LocalDateTime createdAt;
 	

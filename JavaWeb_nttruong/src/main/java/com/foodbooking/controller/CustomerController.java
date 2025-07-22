@@ -10,4 +10,9 @@ public class CustomerController {
 	public String getDeliveryPage() {
 		return "delivery";
 	}
+	
+	@GetMapping("/order-successfully")
+	public String getOrderSuccessfullyPage() {
+		return "orderSuccessfullyPage";
+	}
 }

@@ -47,52 +47,6 @@ header {
 		position: relative;
 	}
 
-	.item-quantity-wrapper {
-		position: absolute;
-		bottom: 0;
-		right: 0;
-		display: flex;
-		justify-content: flex-end;
-		align-items: center;
-		gap: 8px;
-
-		.title {
-			font-weight: 500;
-			font-size: 1rem;
-			line-height: 150%;
-			letter-spacing: 0%;
-
-		}
-
-
-		.item-quantity {
-			width: 34px;
-			height: 34px;
-			border-radius: 50%;
-			font-size: 1rem;
-			text-align: center;
-			align-content: center;
-			background-color: var(--primary-color);
-			color: white;
-		}
-	}
-
-	.detail-fee-line {
-		display: flex;
-		justify-content: space-between;
-		h6 {
-			font-weight: 500;
-			font-size: 1rem;
-			line-height: 120%;
-			color: rgba(124, 124, 124, 1);
-		}
-		
-		h6:nth-child(2) {
-			color: rgba(41, 41, 41, 1);
-		}
-		
-	}
-
 	#total-price {
 		font-size: 2rem;
 	}

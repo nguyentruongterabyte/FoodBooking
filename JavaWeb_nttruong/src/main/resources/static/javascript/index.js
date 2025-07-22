@@ -424,11 +424,11 @@ $(document).ready(function() {
 	// Handle food size selector change
 	$('#food__size-selector').on('change', function() {
 		const size = Number($(this).val());
-		
+
 		// If size is greater than total items, then do nothing
 		if (size >= foodObject.totalItems)
 			return;
-		
+
 		foodObject.size = size;
 
 		// Get and render first page booking products
@@ -447,11 +447,11 @@ $(document).ready(function() {
 	// Handle drink size selector change
 	$('#drink__size-selector').on('change', function() {
 		const size = Number($(this).val());
-		
+
 		// If size is greater than total items, then do nothing
 		if (size >= drinkObject.totalItems)
 			return;
-		
+
 		drinkObject.size = size;
 
 		// Get and render first page booking products
@@ -508,9 +508,206 @@ $(document).ready(function() {
 			}
 		);
 	});
+
+	/* Handle show your order modal */
+	$('#your-order-btn').on('click', function() {
+		const order = getOrderFromLocalStorage();
+
+		// Check if the user not yet ordered
+		if (order === null) {
+			showOtherToast({ text: 'Please perform the first order', headerTitle: 'Order requirement' });
+			return;
+		}
+
+		const orderId = order.id; // Get order id
+
+		// Call API find by id
+		orderService.getByOrderId(orderId)
+			.then(fetchedOrder => {
+
+				// Render order information
+				renderOrderDetail(fetchedOrder);
+			})
+			.catch(message => {
+				showErrorToast({ text: message, headerTitle: "Fetch data failed" })
+			}
+			);
+
+		$('#show-your-order-btn').click();
+	})
 });
 
 const MAX_ORDER_PER_ITEM = 3;
+
+/* Render order detail */
+function renderOrderDetail(data = {
+	id: 7,
+	name: "Nguyễn Thái Trưởng",
+	phone: "0948915051",
+	detailAddress: "30 thôn Tân Lập, xã Chư Kbô, huyện Krông Búk, tỉnh Đắk Lắk",
+	message: "",
+	shippingFee: 29000,
+	totalPrice: 59000,
+	ward: {
+		id: 7,
+		name: "Hoa Thang"
+	},
+	province: {
+		id: 3,
+		name: "Dak Lak"
+	},
+	bookingProducts: [
+		{
+			bookingProductId: 14,
+			quantity: 1,
+			itemPrice: 23000,
+			name: "Cơm Gà Đùi Góc Tư Xối Mỡ 1",
+			description: "Đùi gà tươi góc 4 xối mỡ + Cơm + dưa leo + salad + canh"
+		},
+		{
+			bookingProductId: 9,
+			quantity: 1,
+			itemPrice: 36000,
+			name: "Cơm Gà Đùi Rút Xương Chiên Nước Mắm 3",
+			description: "Đùi gà tươi góc 4 xối mỡ + Cơm + dưa leo + salad + canh"
+		}
+	],
+	orderStatus: {
+		id: 1,
+		name: "New"
+	},
+	cancelledAtStatus: {
+		id: 1,
+		name: "New"
+	},
+	createdAt: "2025-07-23T08:33:18",
+	createdAtStr: "23 Jul 2025"
+}) {
+	// Render status bar
+	$('#progressbar li')
+		.removeClass('active')
+		.removeClass('in-progress')
+		.removeClass('cancelled');
+	switch (data.orderStatus.id) {
+		case ORDER_STATUSES.NEW:
+			// New -> Order place successfully
+			$('#progressbar li.new-status').addClass('active');
+			// New -> Preparing your order
+			$('#progressbar li.preparing').addClass('in-progress');
+			break;
+		case ORDER_STATUSES.SHIPPING:
+			// Shipping -> Shipping
+			$('#progressbar li.new-status').addClass('active');
+			$('#progressbar li.preparing').addClass('active');
+			$('#progressbar li.shipping').addClass('in-progress');
+			break;
+		case ORDER_STATUSES.CANCELLED: {
+			const cancelledAtStatusId = data.cancelledAtStatus?.id;
+
+			// If exist status before order was cancelled 
+			if (cancelledAtStatusId) {
+				if (cancelledAtStatusId === ORDER_STATUSES.NEW) {
+					// Cancelled at preparing stage
+					$('#progressbar li.new-status').addClass('active');
+					$('#progressbar li.preparing').addClass('cancelled');
+				} else if (cancelledAtStatusId === ORDER_STATUSES.SHIPPING) {
+					// Cancelled at shipping stage
+					$('#progressbar li.new-status').addClass('active');
+					$('#progressbar li.preparing').addClass('active');
+					$('#progressbar li.shipping').addClass('cancelled');
+				}
+			} else {
+				// Otherwise Default the order was cancelled at preparing stage 
+				$('#progressbar li.new-status').addClass('active');
+				$('#progressbar li.preparing').addClass('cancelled');
+			}
+			break;
+		}
+		case ORDER_STATUSES.COMPLETED:
+			// Completed -> Completed
+			$('#progressbar li.new-status').addClass('active');
+			$('#progressbar li.preparing').addClass('active');
+			$('#progressbar li.shipping').addClass('active');
+			$('#progressbar li.completed').addClass('active')
+			break;
+		default:
+			alert("May be database has changed statuses");
+	}
+
+	// Render order id
+	const orderIdStr = "#" + String(data.id).padStart(6, '0') || "NaN";
+	$('#order-id').text(orderIdStr);
+
+	// Render booking product list
+	// if only one item, render it and hide see more item button
+	$('.custom-icon').show();
+	if (data.bookingProducts.length == 1) {
+		$('.list.list-summary').empty();
+		$('.list.list-summary').html(generateItemHTMl(data.bookingProducts[0]));
+		
+		$('.custom-icon').hide();
+		
+	} else {
+		$('.list.list-summary').empty();
+		$('.list.list-summary').html(generateItemHTMl(data.bookingProducts[0]));
+
+		$('.list.list-details').empty();
+		$('.list.list-details').html(
+			data.bookingProducts.slice(1)
+				.map(bookingProduct => generateItemHTMl(bookingProduct))
+				.join('')
+		)
+	}
+	
+	// Render total items price
+	const totalItemsPrice = Number(data.totalPrice);
+	const shippingFee = Number(data.shippingFee);
+	$('#order-items-total-price').text(totalItemsPrice.toLocaleString() + ' đ');
+	$('#shipping-fee').text(shippingFee.toLocaleString() + ' đ');
+	$('#order-total-price').text(Number(totalItemsPrice + shippingFee).toLocaleString() + ' đ');
+
+
+	// generate item html
+	function generateItemHTMl(data = {
+		bookingProductId: 14,
+		quantity: 1,
+		itemPrice: 23000,
+		name: "Cơm Gà Đùi Góc Tư Xối Mỡ 1",
+		description: "Đùi gà tươi góc 4 xối mỡ + Cơm + dưa leo + salad + canh",
+		imageUrl: "http://localhost:8080/api/files/ade4fd9c-248b-4ee0-94c5-752054d9162c_f93227e6005185bd347971839a569488ab0a347a%20(1).png"
+	}) {
+		return `
+		<li class="list-view-item">
+			<div class="item-image-container">
+				<img class="item-image" src="${data.imageUrl}" />
+			</div>
+			<div class="item-info">
+				<div class="info-group">
+					<h4 class="item-name">${data.name}
+					</h4>
+					<p class="item-description">${data.description}
+					</p>
+				</div>
+				<div class="info-group">
+					<h3 class="item-price">${data.itemPrice.toLocaleString()} đ</h3>
+					<div class="item-quantity-wrapper">
+						<span class="title">Quantity: </span>
+						<span class="item-quantity">${data.quantity}</span>
+					</div>
+				</div>
+			</div>
+		</li>
+		`
+	}
+}
+
+/* Order statuses constaints*/
+const ORDER_STATUSES = {
+	NEW: 1,
+	SHIPPING: 2,
+	CANCELLED: 3,
+	COMPLETED: 4
+};
 
 /* Handle previous button and next button on pagination click */
 function handlePrevNextPaginationClick(root = '#drink__pagination-nav .pagination', type = 'drink') {
@@ -743,7 +940,7 @@ function getBookingProducts(
 			// Toggle skeleton
 			setTimeout(() => {
 				hideSkeletonContainer(false);
-			}, 3000)
+			}, 0)
 			switch (type) {
 				case 'food': {
 					if (pagedResponse.totalPages) {

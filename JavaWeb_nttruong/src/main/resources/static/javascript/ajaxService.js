@@ -35,6 +35,23 @@ const orderService = {
 		url: 'api/orders',
 		type: METHOD.POST
 	},
+	
+	getById: {
+		url: 'api/orders/',
+		type: METHOD.GET
+	},
+	
+	/*Get by order id*/
+	getByOrderId: function(id) {
+		return new Promise((resolve, reject) => {
+			myAjax({
+				url: `${this.getById.url}${id}`,
+				type: this.getById.type,
+				success: (res) => resolve(res.data),
+				error: (err) => reject(err.responseJSON.message)
+			});
+		});
+	},
 
 	/* Create new order */
 	createOrder: function(data = {

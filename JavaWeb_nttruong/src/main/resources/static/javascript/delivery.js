@@ -71,6 +71,9 @@ $(document).ready(function() {
 		orderService.createOrder(JSON.stringify(formObj))
 			.then(newOrder => {
 				saveOrderToLocalStorage(newOrder);
+				saveCartToLocalStorage();// Reset card
+				// Redirect to order successfully page
+				window.location.replace('/order-successfully');
 			})
 			.catch(err => {
 				const errors = err.errors;

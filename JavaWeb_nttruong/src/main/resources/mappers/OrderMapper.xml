@@ -30,6 +30,12 @@
 			 <result column="order_status_name" property="name"/>
 		</association>
 		
+		<!-- Cancelled at status (status before the order was cancelled) -->
+		<association property="cancelledAtStatus" javaType="com.foodbooking.entity.OrderStatus">
+			<id column="cancelled_at_status_id" property="id"/>
+			<result column="cancelled_at_status_name" property="name"/>
+		</association>
+		
 		<!-- Booking Products -->
 		<collection property="bookingProducts" ofType="com.foodbooking.entity.OrderDetail">
 			<result column="booking_product_id" property="bookingProductId"/>
@@ -37,6 +43,7 @@
 			<result column="item_price" property="itemPrice"/>
 			<result column="booking_product_name" property="name"/>
 			<result column="description" property="description"/>
+			<result column="image_url" property="imageUrl"/>
 		</collection>
 		
 	</resultMap>
@@ -53,6 +60,8 @@
 			, o.created_at
 			, os.id AS order_status_id
 			, os.name AS order_status_name
+			, osc.id AS cancelled_at_status_id
+			, osc.name AS cancelled_at_status_name
 			, p.id AS province_id
 			, p.name AS province_name
 			, w.id AS ward_id
@@ -62,10 +71,12 @@
 			, od.item_price
 			, bp.name AS booking_product_name
 			, bp.description
+			, bp.image_url
 		FROM orders o
 		LEFT JOIN provinces p ON o.province_id = p.id
 		LEFT JOIN wards w ON o.ward_id = w.id
 		LEFT JOIN order_statuses os ON o.order_status_id = os.id
+		LEFT JOIN order_statuses osc ON o.cancelled_at_status_id = osc.id
 		LEFT JOIN order_details od ON o.id = od.order_id
 		LEFT JOIN booking_products bp ON od.booking_product_id = bp.id
 	</sql>

@@ -1,0 +1,97 @@
+#dashboard-tab {
+	
+	.dashboard-container {
+		padding: 24px;
+	}
+	
+	.statistic-wrapper {
+		width: 100%;
+		display: flex;
+		flex-wrap: wrap;
+		margin-bottom: 24px;
+		.statistic {
+			display: flex;
+			flex-direction: column;
+			gap: 24px;
+			width: 512px;
+		}
+
+		.chart-wrapper {
+			flex: 1;
+		}
+	}
+	
+	.statistic-card-list {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 32px;
+		margin-bottom: 0;
+		padding-left: 0;
+	}
+	.statistic-card {
+		display: flex;
+		flex: 1;
+		gap: 16px;
+		padding: 32px 24px;
+		border-radius: 16px;
+		background-color: white;
+
+		.card-icon {
+			list-style: none;
+			width: 64px;
+			height: 64px;
+		}
+		
+		.card-title {
+			color: rgba(41, 41, 41, 1);
+		}
+		
+		.card-content {
+			font-weight: 700;
+			font-size: 1.5rem;
+			line-height: 32px;
+		}
+
+	}
+
+	#today-sales {
+		.card-icon {
+			background: url('/assets/icons/todaySaleIcon.svg');
+		}
+		
+		.card-content {
+
+			font-size: 2.5rem;
+			letter-spacing: 0px;
+
+		}
+	}
+
+	#total-orders-counter {
+		.card-icon {
+			background: url('/assets/icons/statisticIcon.svg');
+		}
+	}
+
+	#shipping-orders-counter {
+		.card-icon {
+			background: url('/assets/icons/shippingIcon.svg');
+		}
+	}
+
+	#completed-orders-counter {
+		.card-icon {
+			background: url('/assets/icons/completeIcon.svg');
+		}
+	}
+	
+	#cancelled-orders-counter {
+		.card-icon {
+			background: url('/assets/icons/cancelledIcon.svg');
+		}		
+	}
+	
+	.group-action-btn {
+		padding: 16px 0;
+	}
+}
