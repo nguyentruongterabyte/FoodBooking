@@ -1,5 +1,6 @@
 package com.foodbooking.repository.impl;
 
+import java.time.LocalDate;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,6 +32,27 @@ public class OrderRepositoryImpl implements OrderRepository {
 	@Override
 	public Order findByOrderId(Long id) {
 		return orderMapper.findByOrderId(id);
+	}
+
+	@Override
+	public Long getTodaySales() {
+		return orderMapper.getTodaySales();
+	}
+
+	@Override
+	public Integer getCountToday(Long orderStatusId) {
+		return orderMapper.getCountToday(orderStatusId);
+	}
+
+	@Override
+	public List<Order> findOrdersPage(LocalDate startDay, LocalDate endDay, List<Long> orderStatusIds, String keyword,
+			Integer limit, Integer offset) {
+		return orderMapper.findOrdersPage(startDay, endDay, orderStatusIds, keyword, limit, offset);
+	}
+
+	@Override
+	public Integer getCount(LocalDate startDay, LocalDate endDay, List<Long> orderStatusIds, String keyword) {
+		return orderMapper.getCount(startDay, endDay, orderStatusIds, keyword);
 	}
 
 }

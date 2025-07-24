@@ -35,13 +35,112 @@ const orderService = {
 		url: 'api/orders',
 		type: METHOD.POST
 	},
-	
+
 	getById: {
 		url: 'api/orders/',
 		type: METHOD.GET
 	},
-	
-	/*Get by order id*/
+
+	todaySales: {
+		url: 'api/orders/today-sales',
+		type: METHOD.GET
+	},
+
+	countToday: {
+		url: 'api/orders/count-today',
+		type: METHOD.GET
+	},
+
+	count: {
+		url: 'api/orders/count',
+		type: METHOD.GET
+	},
+
+	orderPaged: {
+		url: 'api/orders/',
+		type: METHOD.GET
+	},
+
+	/* Get count */
+	getCount: function(
+		{
+			dateType = 'today',
+			orderStatusIds = [1, 2, 3, 4],
+			keyword = ''
+		}
+	) {
+
+		const orderStatusIdParams = orderStatusIds.map(orderStatusId => `orderStatusIds=${orderStatusId}`);
+
+		return new Promise((resolve, reject) => {
+			myAjax({
+				url: `${this.count.url}?keyword=${keyword}&dateType=${dateType}&${orderStatusIdParams.join('&')}`,
+				type: this.count.type,
+				success: (res) => resolve(res.data),
+				error: (err) => reject(err.responseJSON.message)
+			});
+		});
+	},
+
+	/* Get orders pagination */
+	getOrdersPage: function(
+		{
+			dateType = 'today',
+			orderStatusIds = [1, 2, 3, 4],
+			keyword = '',
+			page = 1,
+			size = 20,
+			includeTotal = false
+		}
+	) {
+		return new Promise((resolve, reject) => {
+			const orderStatusIdParams = orderStatusIds.map(orderStatusId => `orderStatusIds=${orderStatusId}`);
+
+			myAjax({
+				url: `
+				${this.orderPaged.url}${page}/${size}
+				?keyword=${keyword}
+				&dateType=${encodeURIComponent(dateType)}
+				&includeTotal=${includeTotal}
+				&${orderStatusIdParams.join('&')}`,
+				type: this.orderPaged.type,
+				success: (res) => resolve(res.data),
+				error: (err) => reject(err.responseJSON.message)
+			});
+		});
+	},
+
+	/* Get today's sales */
+	getTodaySales: function() {
+		return new Promise((resolve, reject) => {
+			myAjax({
+				url: this.todaySales.url,
+				type: this.todaySales.type,
+				success: (res) => resolve(res.data),
+				error: (err) => reject(err.responseJSON.message)
+			});
+		});
+	},
+
+	/* Get quantity of order today by order status
+		* NULL: get all
+		* NEW (1): get new order quantity
+		* SHIPPING (2): get shipping order quantity
+		* CANCELLED (3): get cancelled order quantity
+		* COMPLETED (4): get completed order quantity
+	 */
+	getTodayCount: function(orderStatusId = null) {
+		return new Promise((resolve, reject) => {
+			myAjax({
+				url: this.countToday.url + (orderStatusId !== null ? `?orderStatusId=${orderStatusId}` : ''),
+				type: this.countToday.type,
+				success: (res) => resolve(res.data),
+				error: (err) => reject(err.responseJSON.message)
+			})
+		})
+	},
+
+	/* Get by order id */
 	getByOrderId: function(id) {
 		return new Promise((resolve, reject) => {
 			myAjax({
@@ -52,6 +151,8 @@ const orderService = {
 			});
 		});
 	},
+
+	/*  */
 
 	/* Create new order */
 	createOrder: function(data = {

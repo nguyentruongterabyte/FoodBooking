@@ -644,9 +644,9 @@ function renderOrderDetail(data = {
 	if (data.bookingProducts.length == 1) {
 		$('.list.list-summary').empty();
 		$('.list.list-summary').html(generateItemHTMl(data.bookingProducts[0]));
-		
+
 		$('.custom-icon').hide();
-		
+
 	} else {
 		$('.list.list-summary').empty();
 		$('.list.list-summary').html(generateItemHTMl(data.bookingProducts[0]));
@@ -658,7 +658,7 @@ function renderOrderDetail(data = {
 				.join('')
 		)
 	}
-	
+
 	// Render total items price
 	const totalItemsPrice = Number(data.totalPrice);
 	const shippingFee = Number(data.shippingFee);
@@ -701,13 +701,6 @@ function renderOrderDetail(data = {
 	}
 }
 
-/* Order statuses constaints*/
-const ORDER_STATUSES = {
-	NEW: 1,
-	SHIPPING: 2,
-	CANCELLED: 3,
-	COMPLETED: 4
-};
 
 /* Handle previous button and next button on pagination click */
 function handlePrevNextPaginationClick(root = '#drink__pagination-nav .pagination', type = 'drink') {
@@ -738,6 +731,7 @@ function handlePrevNextPaginationClick(root = '#drink__pagination-nav .paginatio
 						isDeleted: null
 					}
 				);
+
 			});
 
 			// Next page button click
@@ -765,6 +759,7 @@ function handlePrevNextPaginationClick(root = '#drink__pagination-nav .paginatio
 						isDeleted: null
 					}
 				);
+				
 			});
 			break;
 		case 'drink':
@@ -847,15 +842,6 @@ function handlePaginationItemClick(root = '#drink__pagination-nav .pagination', 
 		switch (type) {
 			case 'food':
 				foodObject.currentPage = page;
-
-				// Re-render paging
-				customRenderPaging(
-					{
-						root: '#food__pagination-nav .pagination',
-						currentPage: page,
-						size: foodObject.size,
-						totalPages: foodObject.totalPages
-					});
 				getBookingProducts(
 					{
 						keyword: getKeywordFromSearchingInput(),
@@ -863,20 +849,12 @@ function handlePaginationItemClick(root = '#drink__pagination-nav .pagination', 
 						page: foodObject.currentPage,
 						size: foodObject.size,
 						includeTotal: false,
-						inisDeleted: null
+						isDeleted: null
 					}
 				);
 				break;
 			case 'drink':
 				drinkObject.currentPage = page;
-				// Re-render paging
-				customRenderPaging(
-					{
-						root: '#food__pagination-nav .pagination',
-						currentPage: page,
-						size: drinkObject.size,
-						totalPages: drinkObject.totalPages
-					});
 				getBookingProducts(
 					{
 						keyword: getKeywordFromSearchingInput(),
@@ -884,7 +862,7 @@ function handlePaginationItemClick(root = '#drink__pagination-nav .pagination', 
 						page: drinkObject.currentPage,
 						size: drinkObject.size,
 						includeTotal: false,
-						inisDeleted: null
+						isDeleted: null
 					}
 				);
 				break;

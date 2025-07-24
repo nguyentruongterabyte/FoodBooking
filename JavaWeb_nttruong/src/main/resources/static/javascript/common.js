@@ -1,4 +1,10 @@
-
+/* Order statuses constaints*/
+const ORDER_STATUSES = {
+	NEW: 1,
+	SHIPPING: 2,
+	CANCELLED: 3,
+	COMPLETED: 4
+};
 
 // Toggle skeleton
 function hideSkeletonContainer() {

@@ -6,6 +6,23 @@ $(document).ready(function() {
 	handleTabItemClick('#booking-product-type-navigation');
 
 	handleTabItemClick('#type-selector');
+	
+	// Handle searching input on search
+	handleSearchingInputOnSearch('#searching-input', function() {
+		// Get data search for
+		const searchingFor = $('#searching-input').attr('data-search-for');
+		switch (searchingFor) {
+			case 'dashboard':
+				getAndRenderTotalOrderItems();
+				break;
+			case 'manage-item':
+				const searchType = $('#searching-input').attr('data-search-type') || 'food';
+				getAndRenderTotalItems(searchType);
+				break;
+			default:
+				alert('Invalid data searching for');
+		}
+	});
 
 	// Handle collapse navigation button click
 	$('.collapse-navigation-btn').on('click', function() {
@@ -56,3 +73,20 @@ $(document).ready(function() {
 		}
 	});
 });
+
+/* Custom render paging */
+function customRenderPaging({ root = '#food__pagination-nav .pagination', size = 10, currentPage = 1, totalPages = 1 }) {
+	const pagination = getPagination(
+		{
+			currentPage,
+			totalPages,
+			delta: 2
+		});
+	renderPaging(
+		{
+			root,
+			pagination,
+			size,
+			currentPage
+		});
+}

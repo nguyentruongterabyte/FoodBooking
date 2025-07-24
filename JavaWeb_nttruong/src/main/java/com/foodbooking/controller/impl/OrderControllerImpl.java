@@ -1,6 +1,7 @@
 package com.foodbooking.controller.impl;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -9,11 +10,13 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.foodbooking.controller.OrderController;
 import com.foodbooking.dto.request.OrderRequestDTO;
 import com.foodbooking.dto.response.ApiResponse;
+import com.foodbooking.dto.response.PagedResponse;
 import com.foodbooking.entity.Order;
 import com.foodbooking.service.OrderService;
 
@@ -21,7 +24,7 @@ import jakarta.validation.Valid;
 
 @RestController
 @RequestMapping("api/orders")
-public class OrderControllerImpl implements OrderController{
+public class OrderControllerImpl implements OrderController {
 	private final OrderService orderService;
 
 	public OrderControllerImpl(OrderService orderService) {
@@ -77,5 +80,126 @@ public class OrderControllerImpl implements OrderController{
 						.build()
 				);
 	}
+
 	
+	/**
+	 * API Get today's sale
+	 * 
+	 * @return (totalPrice + shipping fee)
+	 */
+	@Override
+	@GetMapping("/today-sales")
+	public ResponseEntity<?> getTodaySales() {
+		Long todaySales = orderService.getTodaySales();
+		
+		// Return response
+		return ResponseEntity
+				.status(HttpStatus.OK)
+				.body(ApiResponse.builder()
+						.status(HttpStatus.OK.value())
+						.timestamp(LocalDateTime.now())
+						.message("Retrieve successfully!")
+						.data(todaySales)
+						.build()
+				);
+	}
+
+	/**
+	 * API Get quantity of order today
+	 * 
+	 * @param orderStatusId NEW 1, SHIPPING 2, COMPLETED 4, CANCELLED 3
+	 * @return
+	 */
+	@Override
+	@GetMapping("/count-today")
+	public ResponseEntity<?> getCountToday(@RequestParam(required = false) Long orderStatusId) {
+		Integer countToday = orderService.getCountToday(orderStatusId);
+		// Return response
+		return ResponseEntity
+				.status(HttpStatus.OK)
+				.body(ApiResponse.builder()
+						.status(HttpStatus.OK.value())
+						.timestamp(LocalDateTime.now())
+						.message("Retrieve successfully!")
+						.data(countToday)
+						.build()
+				);
+	}
+
+	/**
+	 * API Get list of orders pagination
+	 * 
+	 * @param dateType ALL, TODAY, WEEK, MONTH
+	 * @param orderStatusIds order statuses [1, 2]
+	 * @param keyword search by booking product name
+	 * @param limit item per page
+	 * @param offset offset
+	 * @return list of orders
+	 */
+	@Override
+	@GetMapping("/{page}/{size}")
+	public ResponseEntity<?> getOrdersPage(
+			@RequestParam(defaultValue = "today", required = false) String dateType, 
+			@RequestParam(required = false) List<Long> orderStatusIds,
+			@RequestParam(required = false) String keyword, 
+			@RequestParam(required = false) Boolean includeTotal,
+			@PathVariable Integer size,
+			@PathVariable Integer page
+	) {
+		
+		List<Order> orders = orderService.findOrdersPage(dateType, orderStatusIds, keyword, size, (page - 1) * size);
+		
+		PagedResponse<Order> pagedResponse = new PagedResponse<>();
+		
+		// Set current page
+		pagedResponse.setPage(page);
+		
+		// Set items
+		pagedResponse.setItems(orders);
+		
+		// Include total pages
+		if (includeTotal != null && includeTotal) {
+			int totalItems = orderService.getCount(dateType, orderStatusIds, keyword);
+			int totalPages = (int) Math.ceil((double) totalItems / (double) size);
+			pagedResponse.setTotalPages(totalPages);
+		}
+		
+		return ResponseEntity
+				.status(HttpStatus.OK)
+				.body(ApiResponse.builder()
+						.status(HttpStatus.OK.value())
+						.timestamp(LocalDateTime.now())
+						.message("Retrieve successfully!")
+						.data(pagedResponse)
+						.build()
+				);
+	}
+
+	/**
+	 * API Get count of orders
+	 * 
+	 * @param dateType ALL, TODAY, WEEK, MONTH
+	 * @param orderStatusIds order statuses [1, 2]
+	 * @param keyword search by booking product name
+	 * @return count of order
+	 */
+	@Override
+	@GetMapping("/count")
+	public ResponseEntity<?> getCount(
+			@RequestParam(defaultValue = "today", required = false) String dateType, 
+			@RequestParam(required = false) List<Long> orderStatusIds,
+			@RequestParam(required = false) String keyword
+	) {
+		int count = orderService.getCount(dateType, orderStatusIds, keyword);
+		return ResponseEntity
+				.status(HttpStatus.OK)
+				.body(ApiResponse.builder()
+						.status(HttpStatus.OK.value())
+						.timestamp(LocalDateTime.now())
+						.message("Retrieve successfully!")
+						.data(count)
+						.build()
+				);
+	}
+
 }

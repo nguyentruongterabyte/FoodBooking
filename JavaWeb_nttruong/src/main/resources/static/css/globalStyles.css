@@ -244,29 +244,6 @@ header {
 
 /* Pagination END */
 
-
-/* Mobile portrait (vertical) */
-@media all and (max-width: 480px) {
-
-	/* smartphones (vertical + horizontal) */
-	.brand {
-		display: none;
-	}
-
-	header {
-		background: white;
-	}
-
-	header nav {
-		.nav-wrapper {
-			width: 100% !important;
-
-		}
-	}
-
-
-}
-
 p {
 	margin-bottom: 0;
 }
@@ -720,6 +697,25 @@ p {
 
 /*Search box END*/
 
+/* Mobile portrait (vertical) */
+@media all and (max-width: 480px) {
+
+	/* smartphones (vertical + horizontal) */
+	.brand {
+		display: none;
+	}
+
+	header {
+		background: white;
+	}
+
+	header nav {
+		.nav-wrapper {
+			width: 100% !important;
+
+		}
+	}
+}
 
 /* Tablet landscape (horizontal) */
 @media all and (min-width: 769px) and (max-width: 1024px) {

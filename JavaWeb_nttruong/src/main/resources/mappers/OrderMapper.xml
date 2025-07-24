@@ -140,4 +140,82 @@
 			)
 		</foreach>
 	</insert>
+	
+	<!-- Get today's sales -->
+	<select id="getTodaySales" resultType="java.lang.Long">
+		SELECT 
+			SUM(
+				o.total_price 
+				+ o.shipping_fee
+				) AS today_sales
+		FROM orders o 
+		WHERE 
+			DATE(o.created_at) >= CURDATE()
+	</select>
+	
+	<!-- Get Count Today -->
+	<select id="getCountToday" parameterType="java.lang.Long">
+		SELECT 
+			COUNT(1)
+		FROM orders o
+		WHERE 
+			DATE(o.created_at) >= CURDATE()
+			<if test="orderStatusId != null">
+				AND o.order_status_id = #{orderStatusId}
+			</if>
+	</select>
+	
+	<!-- Find Orders Pagination -->
+	<select id="findOrdersPage"
+			resultMap="orderResultMap"
+			parameterType="map"
+	>
+		<include refid="orderDetailInfoSubquery" />
+		WHERE 1 = 1
+		<if test="startDay != null and endDay != null">
+			AND o.created_at BETWEEN #{startDay} AND #{endDay}
+		</if>
+		<if test="orderStatusIds != null">
+			AND o.order_status_id IN 
+				<foreach collection="orderStatusIds" item="orderStatusId" open="(" separator="," close=")">
+					#{orderStatusId}
+				</foreach>
+		</if>
+		<if test="keyword != null">
+			AND 
+				bp.name LIKE CONCAT('%', #{keyword}, '%')
+		</if>
+		ORDER BY
+			o.created_at DESC
+		
+		LIMIT #{limit}
+		OFFSET #{offset}
+	</select>
+	
+	<!-- Get count order item -->
+	<select id="getCount"
+			resultType="int"
+			parameterType="map"
+	>
+		SELECT COUNT(DISTINCT(o.id))
+		FROM orders o
+		LEFT JOIN order_details od ON o.id = od.order_id
+		LEFT JOIN booking_products bp ON od.booking_product_id = bp.id
+		WHERE 1 = 1
+		<if test="startDay != null and endDay != null">
+			AND o.created_at BETWEEN #{startDay} AND #{endDay}
+		</if>
+		<if test="orderStatusIds != null">
+			AND o.order_status_id IN 
+				<foreach collection="orderStatusIds" item="orderStatusId" open="(" separator="," close=")">
+					#{orderStatusId}
+				</foreach>
+		</if>
+		<if test="keyword != null">
+			AND 
+				bp.name LIKE CONCAT('%', #{keyword}, '%')
+		</if>
+		ORDER BY
+			o.created_at DESC
+	</select>
 </mapper> 

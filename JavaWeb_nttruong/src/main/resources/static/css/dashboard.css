@@ -1,14 +1,20 @@
+:root {
+	--order-item-per-row: 4;
+	--order-list-gap: 24px;
+}
+
 #dashboard-tab {
-	
+
 	.dashboard-container {
 		padding: 24px;
 	}
-	
+
 	.statistic-wrapper {
 		width: 100%;
 		display: flex;
 		flex-wrap: wrap;
 		margin-bottom: 24px;
+
 		.statistic {
 			display: flex;
 			flex-direction: column;
@@ -20,7 +26,7 @@
 			flex: 1;
 		}
 	}
-	
+
 	.statistic-card-list {
 		display: flex;
 		flex-wrap: wrap;
@@ -28,6 +34,7 @@
 		margin-bottom: 0;
 		padding-left: 0;
 	}
+
 	.statistic-card {
 		display: flex;
 		flex: 1;
@@ -41,11 +48,11 @@
 			width: 64px;
 			height: 64px;
 		}
-		
+
 		.card-title {
 			color: rgba(41, 41, 41, 1);
 		}
-		
+
 		.card-content {
 			font-weight: 700;
 			font-size: 1.5rem;
@@ -54,11 +61,12 @@
 
 	}
 
+
 	#today-sales {
 		.card-icon {
 			background: url('/assets/icons/todaySaleIcon.svg');
 		}
-		
+
 		.card-content {
 
 			font-size: 2.5rem;
@@ -84,14 +92,302 @@
 			background: url('/assets/icons/completeIcon.svg');
 		}
 	}
-	
+
 	#cancelled-orders-counter {
 		.card-icon {
 			background: url('/assets/icons/cancelledIcon.svg');
-		}		
+		}
 	}
-	
+
+	/* Filter buttons */
 	.group-action-btn {
 		padding: 16px 0;
+		display: flex;
+		flex-wrap: wrap;
+		align-items: center;
+		justify-content: space-between;
+
+		.statuses-selector,
+		.times-selector,
+		.selected-order-status-item .btn {
+			border: 1px solid #ccc;
+		}
+
+		.statuses-filter {
+			display: flex;
+			align-items: center;
+			gap: 32px;
+
+			.selected-statuses-filter {
+				display: flex;
+				flex-wrap: wrap;
+				gap: 8px;
+				padding-left: 0;
+				margin-bottom: 0;
+				list-style: none;
+
+				.selected-order-status-item .btn {
+					background-color: white;
+					padding: 0 0 0 10px;
+
+					.remove-filter {
+						padding: 8px 6px;
+						padding-right: 10px;
+					}
+				}
+			}
+		}
+	}
+
+
+	/* List Orders START */
+
+	.order-list {
+		display: flex;
+		flex-wrap: wrap;
+		gap: var(--order-list-gap);
+		width: 100%;
+		list-style: none;
+		padding: 24px 0;
+		margin-bottom: 0;
+	}
+
+	.order-list .order-item {
+		display: flex;
+		flex-direction: column;
+		gap: 8px;
+		width: calc((100% - (var(--order-item-per-row) - 1) * var(--order-list-gap)) / var(--order-item-per-row));
+		padding: 24px;
+		border-radius: 16px;
+		background-color: white;
+
+		.order-id-wrapper {
+			display: flex;
+			flex-wrap: wrap;
+			justify-content: space-between;
+
+			.order-id {
+				margin-bottom: 0;
+				font-weight: 500;
+				font-size: 1rem;
+				line-height: 100%;
+				letter-spacing: 0%;
+				align-content: center;
+			}
+
+			.created-at {
+				font-weight: 400;
+				font-size: 0.875rem;
+				line-height: 100%;
+				letter-spacing: 0%;
+				color: rgba(121, 123, 126, 1);
+			}
+		}
+
+		.first-item-wrapper {
+			display: flex;
+			flex-wrap: nowrap;
+			padding: 16px 0;
+			gap: 16px;
+
+			.item-image-wrapper {
+				display: flex;
+				flex-direction: column;
+				justify-content: flex-start;
+				width: 64px;
+
+				img {
+					width: 64px;
+					height: 64px;
+					border-radius: 4px;
+				}
+			}
+
+			.item-info-wrapper {
+				.item-name {
+					font-weight: 600;
+					font-size: 1rem;
+					display: -webkit-box;
+					height: 2rem;
+					line-height: 1rem;
+					overflow: hidden;
+					text-overflow: ellipsis;
+					-webkit-box-orient: vertical;
+					-webkit-line-clamp: 2;
+					line-clamp: 2;
+				}
+
+				.item-description {
+					font-weight: 400;
+					font-size: 0.75rem;
+					letter-spacing: 0%;
+					display: -webkit-box;
+					line-height: 0.8rem;
+					height: 0.8rem;
+					overflow: hidden;
+					text-overflow: ellipsis;
+					-webkit-box-orient: vertical;
+					-webkit-line-clamp: 1;
+					line-clamp: 1;
+				}
+
+				.item-price-wrapper {
+					display: flex;
+					flex-wrap: wrap;
+					justify-content: space-between;
+					padding: 8px 0;
+
+					.item-price {
+						font-weight: 700;
+						font-size: 1rem;
+						padding: 0;
+						margin-bottom: 0;
+					}
+
+					.item-quantity-wrapper {
+						display: flex;
+						gap: 2px;
+
+						.title {
+							font-weight: 500;
+							font-size: 10px;
+							line-height: 150%;
+							letter-spacing: 0%;
+							align-content: center;
+						}
+
+						.item-quantity {
+							font-weight: 600;
+							font-size: 12px;
+							line-height: 150%;
+						}
+					}
+				}
+			}
+		}
+
+		.line {
+			margin: 0;
+		}
+
+		.total-items-quantity {
+			font-weight: 400;
+			font-size: 0.875rem;
+			line-height: 100%;
+			color: rgba(121, 123, 126, 1);
+		}
+
+		.total-price-wrapper {
+			display: flex;
+			flex-wrap: wrap;
+			align-items: center;
+
+			.total-price {
+				flex: 1;
+				font-weight: 700;
+				font-size: 1rem;
+				line-height: 150%;
+
+			}
+
+			.btn {
+				flex: 1;
+				display: flex;
+				justify-content: space-evenly;
+				align-items: center;
+				gap: 8px;
+				height: 48px;
+				padding: 8px 16px;
+
+				.icon {
+					width: 22px;
+					height: 22px;
+					background-size: 22px;
+					background-repeat: no-repeat;
+				}
+
+				span {
+					font-weight: 700;
+					font-style: Bold;
+					font-size: 1.125rem;
+					line-height: 150%;
+					letter-spacing: 0%;
+				}
+
+				&.new-btn {
+					background-color: rgba(226, 236, 255, 1);
+
+					.icon {
+						background: url('/assets/icons/badgeIcon.svg');
+					}
+
+					span {
+						color: rgba(64, 121, 237, 1);
+					}
+				}
+
+				&.cancelled-btn {
+					background-color: rgba(255, 230, 224, 1);
+
+					.icon {
+						background: url('/assets/icons/timeIcon.svg');
+					}
+
+					span {
+						color: rgba(227, 24, 68, 1);
+					}
+				}
+
+				&.shipping-btn {
+					background-color: rgba(255, 244, 222, 1);
+
+					.icon {
+						background: url('/assets/icons/cartIcon.svg');
+					}
+
+					span {
+						color: rgba(255, 52, 3, 1);
+					}
+				}
+
+				&.completed-btn {
+					background-color: rgba(220, 252, 231, 1);
+
+					.icon {
+						background: url('/assets/icons/checkIcon.svg');
+					}
+
+					span {
+						color: rgba(23, 174, 48, 1);
+					}
+				}
+			}
+		}
+	}
+	
+	.pagination-nav {
+		margin-top: 24px;
+	}
+
+	/* List Orders END */
+
+}
+
+/* Mobile portrait (vertical) */
+@media all and (max-width: 768px) {
+
+	/* smartphones (vertical + horizontal) */
+	:root {
+		--order-item-per-row: 1;
+	}
+}
+
+/* Small laptop */
+@media all and (min-width: 769px) and (max-width: 1024px) {
+	/* Ventricular resolution laptop */
+
+	/* iPad horizontal, large tablet */
+	:root {
+		--order-item-per-row: 3;
 	}
 }

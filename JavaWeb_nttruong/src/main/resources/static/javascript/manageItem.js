@@ -358,22 +358,6 @@ $(document).ready(function() {
 	// Handle previous button and next button on pagination click
 	handlePrevNextPaginationClick('#drink__pagination-nav .pagination', 'drink');
 	handlePrevNextPaginationClick('#food__pagination-nav .pagination', 'food');
-
-	// Handle searching input on search
-	handleSearchingInputOnSearch('#searching-input', function() {
-		// Get data search for
-		const searchingFor = $('#searching-input').attr('data-search-for');
-		switch (searchingFor) {
-			case 'dashboard':
-				break;
-			case 'manage-item':
-				const searchType = $('#searching-input').attr('data-search-type') || 'food';
-				getAndRenderTotalItems(searchType);
-				break;
-			default:
-				alert('Invalid data searching for');
-		}
-	});
 });
 
 

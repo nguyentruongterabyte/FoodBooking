@@ -96,7 +96,7 @@ CREATE TABLE `order_details` (
 
 LOCK TABLES `order_details` WRITE;
 /*!40000 ALTER TABLE `order_details` DISABLE KEYS */;
-INSERT INTO `order_details` VALUES (1,1,1,60000),(1,3,2,30000),(2,1,1,25600),(3,1,1,25600),(4,3,1,51000),(5,25,1,51000),(6,14,1,23000),(6,16,1,24000),(6,11,1,29000),(7,14,1,23000),(7,16,1,24000),(7,11,1,29000),(8,14,1,23000),(8,9,1,36000),(8,4,2,60000),(8,5,1,60000),(9,14,1,23000),(9,11,1,29000);
+INSERT INTO `order_details` VALUES (1,1,1,60000),(1,3,2,30000),(2,1,1,25600),(3,1,1,25600),(4,3,1,51000),(5,25,1,51000),(6,14,1,23000),(6,16,1,24000),(6,11,1,29000),(7,14,1,23000),(7,16,1,24000),(7,11,1,29000),(8,14,1,23000),(8,9,1,36000),(8,4,2,60000),(8,5,1,60000),(9,14,1,23000),(9,11,1,29000),(10,14,1,23000),(10,19,1,50000),(10,20,1,60000),(11,11,1,29000),(11,14,1,23000);
 /*!40000 ALTER TABLE `order_details` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -153,7 +153,7 @@ CREATE TABLE `orders` (
   CONSTRAINT `FKcbbqf26brulgfgvd0mf74rv4y` FOREIGN KEY (`order_status_id`) REFERENCES `order_statuses` (`id`),
   CONSTRAINT `FKec4jbind4ygtygb1f7cir13p4` FOREIGN KEY (`ward_id`) REFERENCES `wards` (`id`),
   CONSTRAINT `orders_order_statuses_FK` FOREIGN KEY (`cancelled_at_status_id`) REFERENCES `order_statuses` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=12 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -162,7 +162,7 @@ CREATE TABLE `orders` (
 
 LOCK TABLES `orders` WRITE;
 /*!40000 ALTER TABLE `orders` DISABLE KEYS */;
-INSERT INTO `orders` VALUES (1,'Wasecod Building, 10 Pho Quang Street','Khong lay ong hut','Nguyen Van A','0392456244',35000,231000,4,1,2,'2025-07-22 12:30:51',NULL),(2,'278 La Xuan Oai Tang Nhon Phu A','Khong lay ong hut','Nguyen Thai Truong','0958915051',20000,25600,1,1,1,'2025-07-22 16:12:35',NULL),(3,'278 La Xuan Oai Tang Nhon Phu A','Khong lay ong hut','Nguyen Thai Truong','0958915051',15000,25600,1,1,1,'2025-07-22 16:27:50',NULL),(4,'278 La Xuan Oai Tang Nhon Phu A','Khong lay ong hut','Nguyen Thai Truong','0958915051',15000,51000,1,1,1,'2025-07-22 16:54:16',NULL),(5,'278 La Xuan Oai, Tang Nhon Phu A','Khong Lay Ong Hut Nha','Nguyễn Thái Trưởng','0948915051',29000,51000,1,3,7,'2025-07-22 17:09:33',NULL),(6,'Số nhà chưa biết ní ơi tạm thời là ở trong rừng','','Nguyễn Trưởng Thái','0948915051',29000,76000,1,3,7,'2025-07-22 22:27:49',NULL),(7,'Không biết nhà ở đâu nữa, hong có biết','','Nguyễn Trưởng Thái','0397538954',23000,76000,3,5,18,'2025-07-22 22:32:36',1),(8,'37 Vo Nguyen Giap Ben Thuong Hai ','','Nguyễn Văn A','0931432349',18000,239000,1,1,3,'2025-07-23 14:20:22',NULL),(9,'30 Vo Nguyen Giap Ben Thuong Hai','','Nguyễn Văn A','0987654321',16000,52000,1,1,2,'2025-07-23 14:21:30',NULL);
+INSERT INTO `orders` VALUES (1,'Wasecod Building, 10 Pho Quang Street','Khong lay ong hut','Nguyen Van A','0392456244',35000,231000,4,1,2,'2025-07-22 12:30:51',NULL),(2,'278 La Xuan Oai Tang Nhon Phu A','Khong lay ong hut','Nguyen Thai Truong','0958915051',20000,25600,1,1,1,'2025-07-22 16:12:35',NULL),(3,'278 La Xuan Oai Tang Nhon Phu A','Khong lay ong hut','Nguyen Thai Truong','0958915051',15000,25600,1,1,1,'2025-07-22 16:27:50',NULL),(4,'278 La Xuan Oai Tang Nhon Phu A','Khong lay ong hut','Nguyen Thai Truong','0958915051',15000,51000,1,1,1,'2025-07-22 16:54:16',NULL),(5,'278 La Xuan Oai, Tang Nhon Phu A','Khong Lay Ong Hut Nha','Nguyễn Thái Trưởng','0948915051',29000,51000,1,3,7,'2025-07-22 17:09:33',NULL),(6,'Số nhà chưa biết ní ơi tạm thời là ở trong rừng','','Nguyễn Trưởng Thái','0948915051',29000,76000,1,3,7,'2025-07-22 22:27:49',NULL),(7,'Không biết nhà ở đâu nữa, hong có biết','','Nguyễn Trưởng Thái','0397538954',23000,76000,3,5,18,'2025-07-22 22:32:36',1),(8,'37 Vo Nguyen Giap Ben Thuong Hai ','','Nguyễn Văn A','0931432349',18000,239000,1,1,3,'2025-07-23 14:20:22',NULL),(9,'30 Vo Nguyen Giap Ben Thuong Hai','','Nguyễn Văn A','0987654321',16000,52000,1,1,2,'2025-07-23 14:21:30',NULL),(10,'39 Vo Nguyen Giap, Cầu Ông Lãnh','Cho tôi thêm một phần cơm thêm','Nguyễn Văn A','0948915051',10000,133000,1,1,5,'2025-07-24 08:44:44',NULL),(11,'30 thôn Tân Lập, xã Chư Kbô, huyện Krông Búk, tỉnh Đắk Lắk','','Nguyễn Thái Trưởng','0948915051',29000,52000,1,3,7,'2025-07-24 09:25:04',NULL);
 /*!40000 ALTER TABLE `orders` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -235,4 +235,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2025-07-23 14:31:33
+-- Dump completed on 2025-07-24 19:05:08
