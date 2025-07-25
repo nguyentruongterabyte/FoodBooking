@@ -16,6 +16,7 @@ import com.foodbooking.dto.response.ErrorResponse;
 import com.foodbooking.entity.BookingProduct;
 import com.foodbooking.entity.Order;
 import com.foodbooking.entity.OrderDetail;
+import com.foodbooking.entity.OrderStatus;
 import com.foodbooking.entity.OrderStatusEnum;
 import com.foodbooking.entity.Ward;
 import com.foodbooking.repository.BookingProductRepository;
@@ -129,8 +130,9 @@ public class OrderServiceImpl implements OrderService {
 	 */
 	@Override
 	public Long getTodaySales() {
-		Long todaySales = orderRepository.getTodaySales();
-	
+		LocalDate today = LocalDate.now();
+		LocalDate tomorrow = today.plusDays(1);
+		Long todaySales = orderRepository.getSales(today, tomorrow);
 		return todaySales == null ? 0 : todaySales;
 	}
 
@@ -142,7 +144,18 @@ public class OrderServiceImpl implements OrderService {
 	 */
 	@Override
 	public Integer getCountToday(Long orderStatusId) {
-		return orderRepository.getCountToday(orderStatusId);
+		
+		LocalDate today = LocalDate.now();
+		LocalDate tomorrow = today.plusDays(1);
+		List<Long> orderStatusIds = new ArrayList<>();
+		orderStatusIds.add(orderStatusId);
+		
+		return orderRepository.getCount(
+				today,
+				tomorrow,
+				orderStatusIds,
+				null
+			);
 	}
 
 	/**
@@ -238,5 +251,97 @@ public class OrderServiceImpl implements OrderService {
 		}
 		
 		return count;
+	}
+
+	/**
+	 * Update order information
+	 * 
+	 * @param order order request
+	 * @return row effected
+	 */
+	@Override
+	public Integer updateOrder(OrderRequestDTO order) {
+		// Check if id null
+		if (order.getId() == null)
+			throw new ErrorResponse(HttpStatus.BAD_REQUEST, "Please provide order id");
+		
+		// Found order
+		Order existOrder = findByOrderId(order.getId());
+		
+		// order To Update
+		
+		
+		// Only update available attributes
+		if (order.getDetailAddress() == null)
+			order.setDetailAddress(existOrder.getDetailAddress());
+		
+		if (order.getMessage() == null) 
+			order.setMessage(existOrder.getMessage());
+		
+		if (order.getName() == null)
+			order.setName(existOrder.getName());
+		
+		if (order.getPhone() == null)
+			order.setPhone(existOrder.getPhone());
+		
+		if (order.getShippingFee() == null)
+			order.setShippingFee(existOrder.getShippingFee());
+		
+		if (order.getTotalPrice() == null)
+			order.setTotalPrice(existOrder.getTotalPrice());
+		
+		if (order.getOrderStatusId() == null && existOrder.getOrderStatus() != null) {
+			order.setOrderStatusId(existOrder.getOrderStatus().getId());
+		}
+		
+		if (order.getProvinceId() == null && existOrder.getProvince() != null)
+			order.setProvinceId(existOrder.getProvince().getId());
+		
+		if (order.getWardId() == null && existOrder.getWard() != null)
+			order.setWardId(existOrder.getWard().getId());
+		
+		if (order.getCancelledAtStatusId() == null && existOrder.getCancelledAtStatus() != null)
+			order.setCancelledAtStatusId(existOrder.getCancelledAtStatus().getId());
+		
+		OrderStatus oldOrderStatus = existOrder.getOrderStatus();
+		
+		if (oldOrderStatus != null) {
+			Long oldOrderStatusId = oldOrderStatus.getId();
+			
+			if (order.getOrderStatusId() != null) {
+				Long newOrderStatusId = order.getOrderStatusId();
+				
+				// Order cancelled, cannot change new status
+				if (oldOrderStatusId == OrderStatusEnum.CANCELLED.getId()) {
+					throw new ErrorResponse(HttpStatus.BAD_REQUEST, "You cannot operate in the cancelled order");
+				}
+				
+				// Order completed, cannot change new status
+				if (oldOrderStatusId == OrderStatusEnum.COMPLETED.getId()) {
+					throw new ErrorResponse(HttpStatus.BAD_REQUEST, "You cannot operate in the completed order");
+				}
+				
+				// Cannot transfer from shipping order to new order
+				if (oldOrderStatusId == OrderStatusEnum.SHIPPING.getId() 
+						&& newOrderStatusId == OrderStatusEnum.NEW.getId()) {
+					throw new ErrorResponse(HttpStatus.BAD_REQUEST, "You cannot transfer from the shipping order to new order");
+				}
+				
+				// Cannot Immediately transfer from new order to completed order,
+				// Must be shipping
+				if (oldOrderStatusId == OrderStatusEnum.NEW.getId() 
+						&& newOrderStatusId == OrderStatusEnum.COMPLETED.getId()) {
+					throw new ErrorResponse(HttpStatus.BAD_REQUEST, 
+							"You cannot transfer from the new order to completed order, please transfer to shipping first");
+				}
+				
+				// Know that cancelled in determined stage
+				if (newOrderStatusId == OrderStatusEnum.CANCELLED.getId()) {
+					order.setCancelledAtStatusId(oldOrderStatusId);
+				}
+			}
+		}
+		
+		return orderRepository.updateOrder(order);
 	}
 }

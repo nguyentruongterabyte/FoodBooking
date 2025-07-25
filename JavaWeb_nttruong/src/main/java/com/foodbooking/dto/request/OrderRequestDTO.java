@@ -41,9 +41,11 @@ public class OrderRequestDTO {
 	@NotNull(message = "Please select a ward.")
 	private Long wardId;
 	
-	private Integer orderStatusId;
+	private Long orderStatusId;
 	
 	private LocalDateTime createdAt;
 	
 	private List<OrderDetail> bookingProducts;
+	
+	private Long cancelledAtStatusId;
 }

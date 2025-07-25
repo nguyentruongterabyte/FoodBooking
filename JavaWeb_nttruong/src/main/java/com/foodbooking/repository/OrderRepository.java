@@ -14,7 +14,9 @@ public interface OrderRepository {
 			List<OrderDetail> bookingProducts
 	);
 	public Order findByOrderId(Long id);
-	public Long getTodaySales();
+	public Long getSales(
+			LocalDate startDay, LocalDate endDate
+	);
 	public Integer getCountToday(Long orderStatusId);
 	
 	public List<Order> findOrdersPage(
@@ -33,4 +35,5 @@ public interface OrderRepository {
 			String keyword
 	);
 	
+	public Integer updateOrder(OrderRequestDTO order);
 }

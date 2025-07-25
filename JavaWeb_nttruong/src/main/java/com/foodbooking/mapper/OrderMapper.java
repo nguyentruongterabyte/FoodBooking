@@ -19,7 +19,7 @@ public interface OrderMapper {
 	);
 	
 	public Order findByOrderId(Long id);
-	public Long getTodaySales();
+	public Long getSales(@Param("startDay") LocalDate startDay, @Param("endDay") LocalDate endDate);
 	public Integer getCountToday(Long orderStatusId);
 	
 	public List<Order> findOrdersPage(
@@ -38,4 +38,5 @@ public interface OrderMapper {
 			@Param("keyword") String keyword
 	);
 	
+	public Integer updateOrder(OrderRequestDTO order);
 }

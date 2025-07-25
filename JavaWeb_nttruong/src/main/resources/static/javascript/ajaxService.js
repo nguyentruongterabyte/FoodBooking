@@ -26,7 +26,8 @@ const METHOD = {
 	GET: 'GET',
 	POST: 'POST',
 	PUT: 'PUT',
-	DELETE: 'DELETE'
+	DELETE: 'DELETE',
+	PATCH: 'PATCH'
 }
 
 /* Order service */
@@ -59,6 +60,23 @@ const orderService = {
 	orderPaged: {
 		url: 'api/orders/',
 		type: METHOD.GET
+	},
+	
+	updateStatus: {
+		url: 'api/orders/',
+		type: METHOD.PATCH
+	},
+	
+	/* Update order status */
+	updateOrderStatus: function({orderId, statusId}) {
+		return new Promise((resolve, reject) => {
+			myAjax({
+				url: `${this.updateStatus.url}${orderId}/${statusId}`,
+				type: this.updateStatus.type,
+				success: res => resolve(res.message),
+				error: err => reject(err.responseJSON.message)
+			})
+		})
 	},
 
 	/* Get count */

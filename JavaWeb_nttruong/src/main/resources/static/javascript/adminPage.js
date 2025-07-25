@@ -6,7 +6,7 @@ $(document).ready(function() {
 	handleTabItemClick('#booking-product-type-navigation');
 
 	handleTabItemClick('#type-selector');
-	
+
 	// Handle searching input on search
 	handleSearchingInputOnSearch('#searching-input', function() {
 		// Get data search for
@@ -70,6 +70,85 @@ $(document).ready(function() {
 				break;
 			default:
 				alert('Invalid tab name');
+		}
+	});
+
+	/* Handle confirmation button click */
+	$('#confirm-btn').on('click', function() {
+		const action = $(this).attr('data-action');
+
+		switch (action) {
+			case 'delete': {
+				const itemId = Number($(this).attr('data-item-id')); // Get item id
+
+				// Call API delete booking product
+				bookingProductService.deleteBookingProduct(itemId)
+					.then((message) => {
+						showSuccessToast({ text: message, headerTitle: 'Remove item' });
+
+						let deletedItem = foodObject.items.find(item => item.id === itemId)
+							|| drinkObject.items.find(item => item.id === itemId);
+
+						deletedItem.isDeleted = true;
+						// Update list
+						foodObject =
+						{
+							...foodObject, items: foodObject.items.map(food =>
+								food.id === itemId ? { ...food, isDeleted: true } : food)
+						}
+						drinkObject =
+						{
+							...drinkObject, items: drinkObject.items.map(drink =>
+								drink.id === itemId ? { ...drink, isDeleted: true } : drink)
+						}
+
+						// Re render list view
+						$(`table tr[data-item-id="${deletedItem.id}"]`)
+							.addClass('table-danger').html(generateItemHTML({ ...deletedItem, itemOrder: '###' }));
+
+						// close modal
+						$('#confirm-modal-close-btn').click();
+					})
+					.catch((message) => {
+						showOtherToast({ text: message, headerTitle: 'Remove item issue' });
+					});
+				break;
+			}
+
+			case 'transfer': {
+
+				const itemId = Number($(this).attr('data-item-id')); // Get item id
+				const statusId = Number($(this).attr('data-status-id'));
+				
+				orderService.updateOrderStatus(
+					{
+						orderId: itemId,
+						statusId
+					}
+				)
+					.then(message => {
+						showSuccessToast({text: message, headerTitle: 'Update successfully'});
+						// Get data item from order object
+						let itemData = orderObject.items.find(item => item.id === itemId);
+		
+		
+						if (itemData) {
+							itemData = { ...itemData, orderStatus: orderStatuses.find(os => os.id = statusId) }
+							orderObject.items = orderObject.items.map(order => order.id === itemData.id ? itemData : order);
+							renderOrderInfo(itemData);
+							renderOrderListView(orderObject.items);
+						}
+		
+						// close modal
+						$('#confirm-modal-close-btn').click();
+					})
+					.catch(message => showErrorToast({text: message, headerTitle: 'Bad request'}));
+
+				break;
+			}
+
+			default:
+				alert('Invalid action!');
 		}
 	});
 });

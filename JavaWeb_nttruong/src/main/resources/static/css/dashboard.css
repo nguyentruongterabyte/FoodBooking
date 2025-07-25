@@ -161,6 +161,10 @@
 		border-radius: 16px;
 		background-color: white;
 
+		&:hover {
+			cursor: pointer;
+		}
+
 		.order-id-wrapper {
 			display: flex;
 			flex-wrap: wrap;
@@ -208,8 +212,8 @@
 					font-weight: 600;
 					font-size: 1rem;
 					display: -webkit-box;
-					height: 2rem;
-					line-height: 1rem;
+					height: 2.6rem;
+					line-height: 1.3rem;
 					overflow: hidden;
 					text-overflow: ellipsis;
 					-webkit-box-orient: vertical;
@@ -222,8 +226,8 @@
 					font-size: 0.75rem;
 					letter-spacing: 0%;
 					display: -webkit-box;
-					line-height: 0.8rem;
-					height: 0.8rem;
+					line-height: 1rem;
+					height: 1rem;
 					overflow: hidden;
 					text-overflow: ellipsis;
 					-webkit-box-orient: vertical;
@@ -279,8 +283,8 @@
 
 		.total-price-wrapper {
 			display: flex;
-			flex-wrap: wrap;
 			align-items: center;
+			overflow-x: hidden;
 
 			.total-price {
 				flex: 1;
@@ -290,88 +294,224 @@
 
 			}
 
-			.btn {
-				flex: 1;
-				display: flex;
-				justify-content: space-evenly;
-				align-items: center;
-				gap: 8px;
-				height: 48px;
-				padding: 8px 16px;
 
-				.icon {
-					width: 22px;
-					height: 22px;
-					background-size: 22px;
-					background-repeat: no-repeat;
-				}
-
-				span {
-					font-weight: 700;
-					font-style: Bold;
-					font-size: 1.125rem;
-					line-height: 150%;
-					letter-spacing: 0%;
-				}
-
-				&.new-btn {
-					background-color: rgba(226, 236, 255, 1);
-
-					.icon {
-						background: url('/assets/icons/badgeIcon.svg');
-					}
-
-					span {
-						color: rgba(64, 121, 237, 1);
-					}
-				}
-
-				&.cancelled-btn {
-					background-color: rgba(255, 230, 224, 1);
-
-					.icon {
-						background: url('/assets/icons/timeIcon.svg');
-					}
-
-					span {
-						color: rgba(227, 24, 68, 1);
-					}
-				}
-
-				&.shipping-btn {
-					background-color: rgba(255, 244, 222, 1);
-
-					.icon {
-						background: url('/assets/icons/cartIcon.svg');
-					}
-
-					span {
-						color: rgba(255, 52, 3, 1);
-					}
-				}
-
-				&.completed-btn {
-					background-color: rgba(220, 252, 231, 1);
-
-					.icon {
-						background: url('/assets/icons/checkIcon.svg');
-					}
-
-					span {
-						color: rgba(23, 174, 48, 1);
-					}
-				}
-			}
 		}
 	}
-	
+
 	.pagination-nav {
 		margin-top: 24px;
 	}
 
 	/* List Orders END */
+}
+
+#order-detail-modal {
+
+	.modal-content {
+		border-radius: 20px;
+	}
+
+	.modal-header {
+		padding: 0;
+		padding-top: 12px;
+		border-bottom: none;
+	}
+
+
+	.modal-body::-webkit-scrollbar {
+		display: none;
+	}
+
+	.modal-footer {
+		margin-left: 32px;
+		margin-right: 32px;
+	}
+
+	.order-id-wrapper {
+		display: flex;
+		gap: 24px;
+		align-content: center;
+
+		.order-id {
+			margin-bottom: 0;
+			font-weight: 500;
+			font-size: 1rem;
+			letter-spacing: 0%;
+			align-content: center;
+		}
+
+		.created-at {
+			font-weight: 400;
+			font-size: 0.875rem;
+			letter-spacing: 0%;
+			color: rgba(121, 123, 126, 1);
+		}
+
+		.total-items-quantity {
+			border-radius: 20px;
+			color: var(--primary-color);
+			padding: 0 16px;
+			font-size: .8rem;
+			height: 100%;
+			background-color: rgba(255, 244, 222, 1);
+		}
+	}
+
+	.order-delivery-info {
+		display: flex;
+		padding: 16px 24px;
+		border-radius: 20px;
+		gap: 8px;
+		background-color: #efefef;
+
+		.delivery-address-title {
+			font-size: 1rem;
+			font-weight: 700;
+		}
+
+		p {
+			color: #666;
+			font-size: 1rem;
+		}
+	}
+
+	.booking-product-list-wrapper {
+		border-radius: 20px;
+		background-color: #efefef;
+		padding: 0 2px;
+		overflow-y: scroll;
+	}
+
+	.list {
+		padding-left: 0;
+		margin-bottom: 0;
+
+		.list-view-item {
+
+			background-color: transparent;
+
+			.item-image-container {
+				display: flex;
+				flex-direction: column;
+				justify-content: flex-start;
+				width: 64px;
+
+				img {
+					width: 64px;
+					height: 64px;
+					border-radius: 4px;
+				}
+			}
+
+			.item-price {
+				margin-bottom: 0;
+			}
+
+			.item-quantity-wrapper {
+				display: flex;
+				align-items: center;
+			}
+
+		}
+	}
+
+	.order-status-selector-wrapper {
+		display: flex;
+		gap: 10px;
+		align-items: center;
+		justify-content: center;
+		.order-status-btn {
+			min-width: 160px;
+		}
+
+		.transfer-icon {
+			display: none;
+			font-size: 1.6rem;
+		}
+		
+		.order-status-selector {
+			min-width: 160px;
+			padding: 8px 16px;
+			display: none;
+		}
+	}
+
 
 }
+
+.order-status-btn {
+	flex: 1;
+	display: flex;
+	justify-content: space-evenly;
+	align-items: center;
+	gap: 8px;
+	height: 48px;
+	padding: 8px 16px;
+
+	.icon {
+		width: 22px;
+		height: 22px;
+		background-size: 22px;
+		background-repeat: no-repeat;
+	}
+
+	span {
+		font-weight: 700;
+		font-style: Bold;
+		font-size: 1.125rem;
+		line-height: 150%;
+		letter-spacing: 0%;
+	}
+
+	&.new-btn {
+		background-color: rgba(226, 236, 255, 1);
+
+		.icon {
+			background: url('/assets/icons/badgeIcon.svg');
+		}
+
+		span {
+			color: rgba(64, 121, 237, 1);
+		}
+	}
+
+	&.cancelled-btn {
+		background-color: rgba(255, 230, 224, 1);
+
+		.icon {
+			background: url('/assets/icons/timeIcon.svg');
+		}
+
+		span {
+			color: rgba(227, 24, 68, 1);
+		}
+	}
+
+	&.shipping-btn {
+		background-color: rgba(255, 244, 222, 1);
+
+		.icon {
+			background: url('/assets/icons/cartIcon.svg');
+		}
+
+		span {
+			color: rgba(255, 52, 3, 1);
+		}
+	}
+
+	&.completed-btn {
+		background-color: rgba(220, 252, 231, 1);
+
+		.icon {
+			background: url('/assets/icons/checkIcon.svg');
+		}
+
+		span {
+			color: rgba(23, 174, 48, 1);
+		}
+	}
+}
+
 
 /* Mobile portrait (vertical) */
 @media all and (max-width: 768px) {

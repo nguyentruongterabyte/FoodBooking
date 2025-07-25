@@ -104,6 +104,7 @@ header {
 			font-size: 1rem;
 			font-weight: 400;
 			color: white;
+			margin-bottom: 0;
 		}
 	}
 
@@ -403,6 +404,11 @@ footer {
 	}
 }
 
+#cart-modal {
+	.list-view-item {
+		padding: 24px 32px !important;
+	}
+}
 
 /*Icon progressbar*/
 #progressbar {

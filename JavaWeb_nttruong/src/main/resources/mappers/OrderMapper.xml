@@ -142,7 +142,9 @@
 	</insert>
 	
 	<!-- Get today's sales -->
-	<select id="getTodaySales" resultType="java.lang.Long">
+	<select id="getSales" 
+			resultType="java.lang.Long"
+	>
 		SELECT 
 			SUM(
 				o.total_price 
@@ -150,7 +152,7 @@
 				) AS today_sales
 		FROM orders o 
 		WHERE 
-			DATE(o.created_at) >= CURDATE()
+			o.created_at BETWEEN #{startDay} AND #{endDay}
 	</select>
 	
 	<!-- Get Count Today -->
@@ -170,17 +172,30 @@
 			resultMap="orderResultMap"
 			parameterType="map"
 	>
+		WITH orders_paged AS (
+			SELECT
+				o.id 
+			FROM 
+				orders o
+			WHERE 1 = 1
+			<if test="startDay != null and endDay != null">
+				AND o.created_at BETWEEN #{startDay} AND #{endDay}
+			</if>
+			<if test="orderStatusIds != null">
+				AND o.order_status_id IN 
+					<foreach collection="orderStatusIds" item="orderStatusId" open="(" separator="," close=")">
+						#{orderStatusId}
+					</foreach>
+			</if>
+			ORDER BY
+				o.created_at DESC
+			
+			LIMIT #{limit}
+			OFFSET #{offset}
+		)
 		<include refid="orderDetailInfoSubquery" />
+		JOIN orders_paged op ON o.id = op.id
 		WHERE 1 = 1
-		<if test="startDay != null and endDay != null">
-			AND o.created_at BETWEEN #{startDay} AND #{endDay}
-		</if>
-		<if test="orderStatusIds != null">
-			AND o.order_status_id IN 
-				<foreach collection="orderStatusIds" item="orderStatusId" open="(" separator="," close=")">
-					#{orderStatusId}
-				</foreach>
-		</if>
 		<if test="keyword != null">
 			AND 
 				bp.name LIKE CONCAT('%', #{keyword}, '%')
@@ -188,8 +203,7 @@
 		ORDER BY
 			o.created_at DESC
 		
-		LIMIT #{limit}
-		OFFSET #{offset}
+		
 	</select>
 	
 	<!-- Get count order item -->
@@ -218,4 +232,23 @@
 		ORDER BY
 			o.created_at DESC
 	</select>
+	
+	<!-- Update order -->
+	<update id="updateOrder"
+			parameterType="map"
+	>
+		UPDATE orders
+		SET
+			detail_address = #{detailAddress}
+			, message = #{message}
+			, name = #{name}
+			, phone = #{phone}
+			, shipping_fee = #{shippingFee}
+			, total_price = #{totalPrice}
+			, order_status_id = #{orderStatusId}
+			, province_id = #{provinceId}
+			, ward_id = #{wardId}
+			, cancelled_at_status_id = #{cancelledAtStatusId}
+		WHERE id = #{id}
+	</update>
 </mapper> 

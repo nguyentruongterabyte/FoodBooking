@@ -291,7 +291,7 @@ function renderPaging({ root = '#pagination', pagination = [1, '...', 7, 8, 9, '
 			<!-- Pagination items START -->
 			${pagination.map(pageItem =>
 			`
-					<li class="page-item page-item-number ${currentPage === pageItem ? 'active' : ''}"><a class="page-link" data-page="${pageItem}" ${pageItem !== '...' ? `href="#page=${pageItem}&size=${size}"` : ''}>${pageItem}</a></li>
+					<li class="page-item page-item-number ${currentPage === pageItem ? 'active' : ''}" data-page="${pageItem}"><a class="page-link" data-page="${pageItem}" ${pageItem !== '...' ? `href="#page=${pageItem}&size=${size}"` : ''}>${pageItem}</a></li>
 				`).join('')}
 			<!-- Pagination items END -->
 

@@ -7,13 +7,13 @@ public enum OrderStatusEnum {
 	CANCELLED(3),
 	COMPLETED(4);
 	
-	private final int id;
+	private final long id;
 	
-	OrderStatusEnum(int id) {
+	OrderStatusEnum(long id) {
 		this.id = id;
 	}
 	
-	public int getId() {
+	public long getId() {
 		return id;
 	}
 	

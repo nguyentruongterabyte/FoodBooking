@@ -35,8 +35,8 @@ public class OrderRepositoryImpl implements OrderRepository {
 	}
 
 	@Override
-	public Long getTodaySales() {
-		return orderMapper.getTodaySales();
+	public Long getSales(LocalDate startDay, LocalDate endDay) {
+		return orderMapper.getSales(startDay, endDay);
 	}
 
 	@Override
@@ -53,6 +53,11 @@ public class OrderRepositoryImpl implements OrderRepository {
 	@Override
 	public Integer getCount(LocalDate startDay, LocalDate endDay, List<Long> orderStatusIds, String keyword) {
 		return orderMapper.getCount(startDay, endDay, orderStatusIds, keyword);
+	}
+
+	@Override
+	public Integer updateOrder(OrderRequestDTO order) {
+		return orderMapper.updateOrder(order);
 	}
 
 }

@@ -66,4 +66,16 @@ public interface OrderController {
 	 * @return count of order
 	 */
 	ResponseEntity<?> getCount(String dateType, List<Long> orderStatusIds, String keyword);
+	
+	/**
+	 * API Update order status
+	 * 
+	 * @param orderId  order id
+	 * @param statusId new status
+	 * @return
+	 */
+	ResponseEntity<?> updateOrderStatus(
+			Long orderId,
+			Long statusId
+	);
 }

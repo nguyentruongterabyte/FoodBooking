@@ -212,7 +212,7 @@
 
 					<!-- List Orders START -->
 					<div class="order-list-wrapper">
-						<ul class="order-list">
+						<ul class="order-list" id="order-list">
 							<li class="order-item">
 								<div class="order-id-wrapper">
 									<h4 class="order-id">#001</h4>
@@ -240,27 +240,26 @@
 								<div class="total-price-wrapper">
 									<h2 class="total-price">60.000 đ</h2>
 									<!-- New button
-										<button class="btn new-btn">
+									<button class="order-status-btn btn new-btn">
 										<div class="icon"></div>
 										<span>New</span>
 									</button>
 									-->
 
-									<!-- New button
-									<button class="btn cancelled-btn">
+									<!-- New cancelled
+									<button class="order-status-btn btn cancelled-btn">
 										<div class="icon"></div>
 										<span>Cancelled</span>
 									</button>
 									-->
-									<!-- New button
-									<button class="btn shipping-btn">
+									<!-- Shipping button
+									<button class="order-status-btn btn shipping-btn">
 										<div class="icon"></div>
 										<span>Shipping</span>
 									</button>
 									-->
 
-									
-									<button class="btn completed-btn">
+									<button class="order-status-btn btn completed-btn">
 										<div class="icon"></div>
 										<span>Completed</span>
 									</button>
@@ -716,6 +715,110 @@
 		</div>
 	</div>
 	<!-- Modal Confirm END -->
+
+	<!-- Button trigger modal -->
+	<button style="display: none" id="show-order-detail-btn" type="button" class="btn btn-primary" data-toggle="modal"
+		data-target="#order-detail-modal">
+		Launch Order Detail modal
+	</button>
+
+	<!-- Modal show order detail  START -->
+	<div class="modal fade" id="order-detail-modal" tabindex="-1" role="dialog" aria-labelledby="cart"
+		aria-hidden="true">
+		<div class="modal-dialog modal-lg modal-dialog-centered" role="document">
+			<div class="modal-content custom-modal-content" data-action-type="create">
+				<div class="modal-header">
+					<div class="order-id-wrapper">
+						<h4 class="order-id">#001</h4>
+						<p class="created-at">24 May 2025</p>
+						<p class="total-items-quantity">4 Items</p>
+					</div>
+					<button id="close-order-detail-modal-btn" type="button" class="close" data-dismiss="modal"
+						aria-label="Close">
+						<span aria-hidden="true">&times;</span>
+					</button>
+				</div>
+				<div class="modal-body">
+					<!-- Detail order view-->
+					<div class="order-delivery-info">
+						<div class="delivery-icon">
+							<i class="fa-solid fa-location-dot"></i>
+						</div>
+
+						<div class="delivery-info-wrapper">
+							<h4 class="delivery-address-title">Delivery Address</h4>
+							<p class="customer-name">Nguyễn Văn A</p>
+							<p class="customer-phone">0393456244</p>
+							<p class="customer-address">Waseco Building, 10 Pho Quang Street, Ward 2, Tan Binh District,
+								Ho
+								Chi Minh City, Vietnam.</p>
+						</div>
+					</div>
+
+					<!-- List booking products -->
+					<div class="booking-product-list-wrapper">
+						<ul class="list booking-product-list">
+							<li class="list-view-item">
+								<div class="item-image-container">
+									<img class="item-image" src="assets/images/exampleFood.png" />
+								</div>
+								<div class="item-info">
+									<div class="item-info-group">
+										<h4 class="item-name"> Combo Gà Xối Mỡ + Cải Chua - Bao Ngon 💥 1
+										</h4>
+										<p class="item-description">
+											Thịt đùi gà tươi đã rút xương + sốt nước mắm + hành tây + cơm + dưa leo +
+											salad
+											+ canh + dưa hấu
+										</p>
+										<div class="detail-fee-line">
+											<h3 class="item-price">29.000 đ</h3>
+
+											<div class="item-quantity-wrapper">
+												<span class="title">Quantity: </span>
+												<span class="item-quantity">1</span>
+											</div>
+										</div>
+									</div>
+								</div>
+							</li>
+						</ul>
+					</div>
+
+					<div>
+						<div class="detail-fee-line">
+							<h6>Total</h6>
+							<h6 id="order-items-total-price">100,000 đ</h6>
+						</div>
+						<div class="detail-fee-line">
+							<h6>Shipping fee</h6>
+							<h6 id="shipping-fee">18,000 đ</h6>
+						</div>
+					</div>
+				</div>
+				<div class="modal-footer">
+					<div class="detail-fee-line">
+						<h3>Total bill</h3>
+						<h2 class="item-price primary" id="order-total-price">118,000 đ</h2>
+					</div>
+					<div class="order-status-selector-wrapper">
+						<button id="order-status-btn" class="btn new-btn">
+							<div class="icon"></div>
+							<span>New</span>
+						</button>
+						<select class="order-status-selector btn">
+							<option value="1">New</option>
+							<option value="2">Completed</option>
+							<option value="3">Cancelled</option>
+							<option value="4">Shipping</option>
+						</select>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<!-- Modal show order detail END -->
+
 </body>
 
 </html>

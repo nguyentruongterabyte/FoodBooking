@@ -640,18 +640,15 @@ function renderOrderDetail(data = {
 
 	// Render booking product list
 	// if only one item, render it and hide see more item button
-	$('.custom-icon').show();
+	$('.order-details .custom-icon').show();
+	$('.list.list-summary').empty();
+	$('.list.list-details').empty();
 	if (data.bookingProducts.length == 1) {
-		$('.list.list-summary').empty();
 		$('.list.list-summary').html(generateItemHTMl(data.bookingProducts[0]));
-
-		$('.custom-icon').hide();
-
+		$('.order-details .custom-icon').hide();
 	} else {
-		$('.list.list-summary').empty();
+		$('.order-details .custom-icon').show();
 		$('.list.list-summary').html(generateItemHTMl(data.bookingProducts[0]));
-
-		$('.list.list-details').empty();
 		$('.list.list-details').html(
 			data.bookingProducts.slice(1)
 				.map(bookingProduct => generateItemHTMl(bookingProduct))
@@ -759,7 +756,7 @@ function handlePrevNextPaginationClick(root = '#drink__pagination-nav .paginatio
 						isDeleted: null
 					}
 				);
-				
+
 			});
 			break;
 		case 'drink':

@@ -1,11 +1,13 @@
 package com.foodbooking.controller.impl;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -18,6 +20,7 @@ import com.foodbooking.dto.request.OrderRequestDTO;
 import com.foodbooking.dto.response.ApiResponse;
 import com.foodbooking.dto.response.PagedResponse;
 import com.foodbooking.entity.Order;
+import com.foodbooking.entity.OrderStatusEnum;
 import com.foodbooking.service.OrderService;
 
 import jakarta.validation.Valid;
@@ -113,7 +116,22 @@ public class OrderControllerImpl implements OrderController {
 	@Override
 	@GetMapping("/count-today")
 	public ResponseEntity<?> getCountToday(@RequestParam(required = false) Long orderStatusId) {
-		Integer countToday = orderService.getCountToday(orderStatusId);
+		
+		Integer countToday = 0;
+		
+		if (orderStatusId != null) {
+			// Count single order status
+			countToday = orderService.getCountToday(orderStatusId);			
+		} else {
+			// Count all order status
+			List<Long> allOrderStatusIds = new ArrayList<>();
+			allOrderStatusIds.add(OrderStatusEnum.NEW.getId());
+			allOrderStatusIds.add(OrderStatusEnum.SHIPPING.getId());
+			allOrderStatusIds.add(OrderStatusEnum.CANCELLED.getId());
+			allOrderStatusIds.add(OrderStatusEnum.COMPLETED.getId());
+			countToday = orderService.getCount("today", null, null);
+		}
+		
 		// Return response
 		return ResponseEntity
 				.status(HttpStatus.OK)
@@ -198,6 +216,36 @@ public class OrderControllerImpl implements OrderController {
 						.timestamp(LocalDateTime.now())
 						.message("Retrieve successfully!")
 						.data(count)
+						.build()
+				);
+	}
+
+	/**
+	 * API Update order status
+	 * 
+	 * @param orderId  order id
+	 * @param statusId new status
+	 * @return
+	 */
+	@Override
+	@PatchMapping("/{orderId}/{orderStatusId}")
+	public ResponseEntity<?> updateOrderStatus(
+			@PathVariable Long orderId, 
+			@PathVariable Long orderStatusId) {
+		
+		OrderRequestDTO orderToUpdate = new OrderRequestDTO();
+		orderToUpdate.setId(orderId);
+		orderToUpdate.setOrderStatusId(orderStatusId);
+	
+		int rowEffected = orderService.updateOrder(orderToUpdate);
+		
+		return ResponseEntity
+				.status(HttpStatus.OK)
+				.body(ApiResponse.builder()
+						.status(HttpStatus.OK.value())
+						.timestamp(LocalDateTime.now())
+						.message("Update successfully!")
+						.data(rowEffected)
 						.build()
 				);
 	}

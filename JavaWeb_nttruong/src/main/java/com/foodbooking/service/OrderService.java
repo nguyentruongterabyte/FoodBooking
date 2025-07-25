@@ -67,4 +67,12 @@ public interface OrderService {
 			List<Long> orderStatusIds,
 			String keyword	
 	);
+	
+	/**
+	 * Update order information
+	 * 
+	 * @param order order request
+	 * @return row effected
+	 */
+	public Integer updateOrder(OrderRequestDTO order);
 }

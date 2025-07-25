@@ -49,11 +49,15 @@ $(document).ready(function() {
 	$('table').on('click', '.remove-btn', function() {
 		const itemId = Number($(this).attr('data-item-id')); // Get item id
 
-		// Show confirmation modal
-		$('#show-confirm-modal').click();
+		$('#modal-confirm-title').text('Delete Confirmation');
+		$('#modal-confirm-body').text('Are you sure delete this item?');
+		
 		$('#confirm-btn')
 			.attr('data-action', 'delete')
 			.attr('data-item-id', itemId);
+
+		// Show confirmation modal
+		$('#show-confirm-modal').click();
 	});
 
 	/* Handle edit button click */
@@ -86,51 +90,6 @@ $(document).ready(function() {
 		$('#info-form')
 			.attr('data-item-id', itemId)
 			.attr('data-action-type', 'edit');
-	});
-
-	/* Handle confirmation button click */
-	$('#confirm-btn').on('click', function() {
-		const action = $(this).attr('data-action');
-
-		switch (action) {
-			case 'delete':
-				const itemId = Number($(this).attr('data-item-id')); // Get item id
-
-				// Call API delete booking product
-				bookingProductService.deleteBookingProduct(itemId)
-					.then((message) => {
-						showSuccessToast({ text: message, headerTitle: 'Remove item' });
-
-						let deletedItem = foodObject.items.find(item => item.id === itemId)
-							|| drinkObject.items.find(item => item.id === itemId);
-
-						deletedItem.isDeleted = true;
-						// Update list
-						foodObject =
-						{
-							...foodObject, items: foodObject.items.map(food =>
-								food.id === itemId ? { ...food, isDeleted: true } : food)
-						}
-						drinkObject =
-						{
-							...drinkObject, items: drinkObject.items.map(drink =>
-								drink.id === itemId ? { ...drink, isDeleted: true } : drink)
-						}
-
-						// Re render list view
-						$(`table tr[data-item-id="${deletedItem.id}"]`)
-							.addClass('table-danger').html(generateItemHTML({ ...deletedItem, itemOrder: '###' }));
-
-						// close modal
-						$('#confirm-modal-close-btn').click();
-					})
-					.catch((message) => {
-						showOtherToast({ text: message, headerTitle: 'Remove item issue' });
-					});
-				break;
-			default:
-				alert('Invalid action!');
-		}
 	});
 
 	/* Handle create new item button click */
@@ -308,9 +267,6 @@ $(document).ready(function() {
 	$('#food__size-selector').on('change', function() {
 		const size = Number($(this).val());
 
-		// If size is greater than total items, then do nothing
-		if (size >= foodObject.totalItems)
-			return;
 
 		foodObject.size = size;
 
@@ -451,6 +407,7 @@ function handlePrevNextPaginationClick(root = '#drink__pagination-nav .paginatio
 				// remove active class
 				$(root).find('.page-item-number').removeClass('active');
 				$(root).find(`.page-item-number[data-page="${currentPage}"]`).addClass('active');
+
 				// Get and render item
 				getBookingProducts(
 					{
@@ -462,6 +419,7 @@ function handlePrevNextPaginationClick(root = '#drink__pagination-nav .paginatio
 						isDeleted: null
 					}
 				);
+
 			});
 
 			// Next page button click
@@ -474,6 +432,7 @@ function handlePrevNextPaginationClick(root = '#drink__pagination-nav .paginatio
 
 				currentPage++; // Increase 1 unit
 				foodObject.currentPage = currentPage; // set current page food object
+
 				// remove active class
 				$(root).find('.page-item-number').removeClass('active');
 				$(root).find(`.page-item-number[data-page="${currentPage}"]`).addClass('active');
@@ -489,6 +448,8 @@ function handlePrevNextPaginationClick(root = '#drink__pagination-nav .paginatio
 						isDeleted: null
 					}
 				);
+
+
 			});
 			break;
 		case 'drink':
@@ -529,6 +490,7 @@ function handlePrevNextPaginationClick(root = '#drink__pagination-nav .paginatio
 
 				currentPage++; // Increase 1 unit
 				drinkObject.currentPage = currentPage; // set current page drink object
+
 				// remove active class
 				$(root).find('.page-item-number').removeClass('active');
 				$(root).find(`.page-item-number[data-page="${currentPage}"]`).addClass('active');
