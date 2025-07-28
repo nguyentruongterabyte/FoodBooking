@@ -16,8 +16,10 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.foodbooking.controller.OrderController;
+import com.foodbooking.dto.RevenueDTO;
 import com.foodbooking.dto.request.OrderRequestDTO;
 import com.foodbooking.dto.response.ApiResponse;
+import com.foodbooking.dto.response.ErrorResponse;
 import com.foodbooking.dto.response.PagedResponse;
 import com.foodbooking.entity.Order;
 import com.foodbooking.entity.OrderStatusEnum;
@@ -246,6 +248,43 @@ public class OrderControllerImpl implements OrderController {
 						.timestamp(LocalDateTime.now())
 						.message("Update successfully!")
 						.data(rowEffected)
+						.build()
+				);
+	}
+
+	/**
+	 * API Get revenue day|week|month
+	 * 
+	 * @param type day|week|month
+	 * @return API list of revenue
+	 */
+	@Override
+	@GetMapping("/revenue")
+	public ResponseEntity<?> getRevenue(@RequestParam(defaultValue = "day") String type) {
+		
+		List<RevenueDTO> revenue = new ArrayList<>();
+		
+		switch (type) {
+		case "day":
+			revenue = orderService.getLast7DaysRevenue();
+			break;
+		case "week":
+			revenue = orderService.getLast12WeeksRevenue();
+			break;
+		case "month":
+			revenue = orderService.getLast12MonthsRevenue();
+			break;
+		default:
+			throw new ErrorResponse(HttpStatus.BAD_REQUEST, "Invalid type of revenue");
+		}
+		
+		return ResponseEntity
+				.status(HttpStatus.OK)
+				.body(ApiResponse.builder()
+						.status(HttpStatus.OK.value())
+						.timestamp(LocalDateTime.now())
+						.message("Retrieve successfully!")
+						.data(revenue)
 						.build()
 				);
 	}

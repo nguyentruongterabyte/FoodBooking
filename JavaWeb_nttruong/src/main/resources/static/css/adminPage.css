@@ -8,6 +8,20 @@
 	position: relative;
 }
 
+#admin-alert {
+	position: fixed;
+	top: var(--header-nav-height);
+	left: 50%;
+	transform: translateX(-50%);
+	z-index: 10;
+	margin-top: 24px;
+	border-radius: 4px;
+	background: #f8d7da; 
+	padding: 10px; 
+	color: #721c24;
+	display: none;
+}
+
 /* Header START */
 header {
 	display: flex;

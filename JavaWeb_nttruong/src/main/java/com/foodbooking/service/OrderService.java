@@ -2,6 +2,7 @@ package com.foodbooking.service;
 
 import java.util.List;
 
+import com.foodbooking.dto.RevenueDTO;
 import com.foodbooking.dto.request.OrderRequestDTO;
 import com.foodbooking.entity.Order;
 
@@ -75,4 +76,25 @@ public interface OrderService {
 	 * @return row effected
 	 */
 	public Integer updateOrder(OrderRequestDTO order);
+	
+	/**
+	 * Get the revenue of last 7 days
+	 * 
+	 * @return List of period, revenue
+	 */
+	public List<RevenueDTO> getLast7DaysRevenue();
+	
+	/**
+	 * Get the revenue of last 12 weeks
+	 * 
+	 * @return List of period, revenue
+	 */
+	public List<RevenueDTO> getLast12WeeksRevenue();
+	
+	/**
+	 * Get the revenue of last 12 months
+	 * 
+	 * @return List of period, revenue
+	 */
+	public List<RevenueDTO> getLast12MonthsRevenue();
 }

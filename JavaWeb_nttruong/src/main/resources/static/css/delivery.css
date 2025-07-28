@@ -53,4 +53,23 @@ header {
 
 }
 
+#cart-modal {
+	position: relative;
+}
+
+#phone::-webkit-inner-spin-button,
+#phone::-webkit-outer-spin-button {
+	-webkit-appearance: none;
+	margin: 0;
+}
+
+#message-length {
+	position: absolute;
+	top: 0;
+	right: 0;
+	transform: translate(-50%, 100%);
+	background-color: white;
+	
+}
+
 /* Delivery Board END */

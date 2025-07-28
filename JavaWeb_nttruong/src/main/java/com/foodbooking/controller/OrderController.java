@@ -78,4 +78,13 @@ public interface OrderController {
 			Long orderId,
 			Long statusId
 	);
+	
+	/**
+	 * API Get revenue day|week|month
+	 * 
+	 * @param type day|week|month
+	 * @return API list of revenue
+	 */
+	ResponseEntity<?> getRevenue(String type);
+	
 }

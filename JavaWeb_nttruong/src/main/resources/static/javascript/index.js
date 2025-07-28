@@ -1,6 +1,9 @@
 
 $(document).ready(function() {
 
+	// Connect socket
+	connectWebsocket();
+
 	if (foodObject.totalItems === null) {
 		getAndRenderTotalItems('food');
 	}
@@ -34,6 +37,9 @@ $(document).ready(function() {
 	// Init list view
 	renderListView({ data: foodObject.items, type: 'food' });
 
+	// Render cart button
+	renderCartButton();
+
 	// Handle navigation tab item click
 	$('.navigation-tabs').on('click', '.navigation-item', function() {
 		const tabId = $(this).attr('data-tab');
@@ -59,6 +65,8 @@ $(document).ready(function() {
 		}
 
 	});
+
+
 
 	// Handle add item into cart click
 	$('.list-view').on('click', '.add-item-btn', function(e) {
@@ -270,7 +278,7 @@ $(document).ready(function() {
 
 		}
 
-		showSuccessToast({ text: 'Item added to your cart', headerTitle: 'Add item to cart' });
+		showSuccessToast({ text: 'Item quantity updated', headerTitle: 'Update item quantity' });
 
 		// Add class for parrent (li tag)
 		$(`.list-view-item[data-item-id="${itemId}"]`).addClass('added');
@@ -419,15 +427,12 @@ $(document).ready(function() {
 	// Handle place order button click
 	$('#place-order-btn').on('click', function() {
 		saveCartToLocalStorage(carts);
+		window.location.href = '/delivery';
 	});
 
 	// Handle food size selector change
 	$('#food__size-selector').on('change', function() {
 		const size = Number($(this).val());
-
-		// If size is greater than total items, then do nothing
-		if (size >= foodObject.totalItems)
-			return;
 
 		foodObject.size = size;
 
@@ -447,10 +452,6 @@ $(document).ready(function() {
 	// Handle drink size selector change
 	$('#drink__size-selector').on('change', function() {
 		const size = Number($(this).val());
-
-		// If size is greater than total items, then do nothing
-		if (size >= drinkObject.totalItems)
-			return;
 
 		drinkObject.size = size;
 
@@ -515,7 +516,17 @@ $(document).ready(function() {
 
 		// Check if the user not yet ordered
 		if (order === null) {
-			showOtherToast({ text: 'Please perform the first order', headerTitle: 'Order requirement' });
+			// Render order information
+			$('#show-your-order-btn').click();
+			renderOrderDetail({
+				id: 0,
+				bookingProducts: [],
+				totalPrice: 0,
+				shippingFee: 0
+			});
+			
+			// Show toast error: please perform the first order
+			showErrorToast({ text: 'Please perform the first order', headerTitle: 'Order requirement' });
 			return;
 		}
 
@@ -527,13 +538,13 @@ $(document).ready(function() {
 
 				// Render order information
 				renderOrderDetail(fetchedOrder);
+				$('#show-your-order-btn').click();
 			})
 			.catch(message => {
 				showErrorToast({ text: message, headerTitle: "Fetch data failed" })
 			}
 			);
 
-		$('#show-your-order-btn').click();
 	})
 });
 
@@ -588,51 +599,58 @@ function renderOrderDetail(data = {
 		.removeClass('active')
 		.removeClass('in-progress')
 		.removeClass('cancelled');
-	switch (data.orderStatus.id) {
-		case ORDER_STATUSES.NEW:
-			// New -> Order place successfully
-			$('#progressbar li.new-status').addClass('active');
-			// New -> Preparing your order
-			$('#progressbar li.preparing').addClass('in-progress');
-			break;
-		case ORDER_STATUSES.SHIPPING:
-			// Shipping -> Shipping
-			$('#progressbar li.new-status').addClass('active');
-			$('#progressbar li.preparing').addClass('active');
-			$('#progressbar li.shipping').addClass('in-progress');
-			break;
-		case ORDER_STATUSES.CANCELLED: {
-			const cancelledAtStatusId = data.cancelledAtStatus?.id;
+		
+	if (data == null)
+		return;
+	
+	if (data.orderStatus) {
+		switch (data.orderStatus.id) {
+			case ORDER_STATUSES.NEW:
+				// New -> Order place successfully
+				$('#progressbar li.new-status').addClass('active');
+				// New -> Preparing your order
+				$('#progressbar li.preparing').addClass('in-progress');
+				break;
+			case ORDER_STATUSES.SHIPPING:
+				// Shipping -> Shipping
+				$('#progressbar li.new-status').addClass('active');
+				$('#progressbar li.preparing').addClass('active');
+				$('#progressbar li.shipping').addClass('in-progress');
+				break;
+			case ORDER_STATUSES.CANCELLED: {
+				const cancelledAtStatusId = data.cancelledAtStatus?.id;
 
-			// If exist status before order was cancelled 
-			if (cancelledAtStatusId) {
-				if (cancelledAtStatusId === ORDER_STATUSES.NEW) {
-					// Cancelled at preparing stage
+				// If exist status before order was cancelled 
+				if (cancelledAtStatusId) {
+					if (cancelledAtStatusId === ORDER_STATUSES.NEW) {
+						// Cancelled at preparing stage
+						$('#progressbar li.new-status').addClass('active');
+						$('#progressbar li.preparing').addClass('cancelled');
+					} else if (cancelledAtStatusId === ORDER_STATUSES.SHIPPING) {
+						// Cancelled at shipping stage
+						$('#progressbar li.new-status').addClass('active');
+						$('#progressbar li.preparing').addClass('active');
+						$('#progressbar li.shipping').addClass('cancelled');
+					}
+				} else {
+					// Otherwise Default the order was cancelled at preparing stage 
 					$('#progressbar li.new-status').addClass('active');
 					$('#progressbar li.preparing').addClass('cancelled');
-				} else if (cancelledAtStatusId === ORDER_STATUSES.SHIPPING) {
-					// Cancelled at shipping stage
-					$('#progressbar li.new-status').addClass('active');
-					$('#progressbar li.preparing').addClass('active');
-					$('#progressbar li.shipping').addClass('cancelled');
 				}
-			} else {
-				// Otherwise Default the order was cancelled at preparing stage 
-				$('#progressbar li.new-status').addClass('active');
-				$('#progressbar li.preparing').addClass('cancelled');
+				break;
 			}
-			break;
+			case ORDER_STATUSES.COMPLETED:
+				// Completed -> Completed
+				$('#progressbar li.new-status').addClass('active');
+				$('#progressbar li.preparing').addClass('active');
+				$('#progressbar li.shipping').addClass('active');
+				$('#progressbar li.completed').addClass('active')
+				break;
+			default:
+				alert("May be database has changed statuses");
 		}
-		case ORDER_STATUSES.COMPLETED:
-			// Completed -> Completed
-			$('#progressbar li.new-status').addClass('active');
-			$('#progressbar li.preparing').addClass('active');
-			$('#progressbar li.shipping').addClass('active');
-			$('#progressbar li.completed').addClass('active')
-			break;
-		default:
-			alert("May be database has changed statuses");
 	}
+
 
 	// Render order id
 	const orderIdStr = "#" + String(data.id).padStart(6, '0') || "NaN";
@@ -643,17 +661,22 @@ function renderOrderDetail(data = {
 	$('.order-details .custom-icon').show();
 	$('.list.list-summary').empty();
 	$('.list.list-details').empty();
-	if (data.bookingProducts.length == 1) {
-		$('.list.list-summary').html(generateItemHTMl(data.bookingProducts[0]));
-		$('.order-details .custom-icon').hide();
+	if (data.bookingProducts.length > 0) {
+		$('.order-details').show();
+		if (data.bookingProducts.length == 1) {
+			$('.list.list-summary').html(generateItemHTMl(data.bookingProducts[0]));
+			$('.order-details .custom-icon').hide();
+		} else {
+			$('.order-details .custom-icon').show();
+			$('.list.list-summary').html(generateItemHTMl(data.bookingProducts[0]));
+			$('.list.list-details').html(
+				data.bookingProducts.slice(1)
+					.map(bookingProduct => generateItemHTMl(bookingProduct))
+					.join('')
+			);
+		}
 	} else {
-		$('.order-details .custom-icon').show();
-		$('.list.list-summary').html(generateItemHTMl(data.bookingProducts[0]));
-		$('.list.list-details').html(
-			data.bookingProducts.slice(1)
-				.map(bookingProduct => generateItemHTMl(bookingProduct))
-				.join('')
-		)
+		$('.order-details').hide();
 	}
 
 	// Render total items price
@@ -908,14 +931,16 @@ function getBookingProducts(
 		isDeleted = false
 	}
 ) {
+	$('#list-view-section .loader').show();
 	bookingProductService.getBookingProductsPage(
 		{ keyword, type, page, size, includeTotal, isDeleted, priceDESC: isPriceDESC() }
 	)
 		.then(pagedResponse => {
 			// Toggle skeleton
 			setTimeout(() => {
-				hideSkeletonContainer(false);
-			}, 0)
+				hideSkeletonContainer();
+				$('#list-view-section .loader').hide();
+			}, 200);
 			switch (type) {
 				case 'food': {
 					if (pagedResponse.totalPages) {
@@ -966,7 +991,11 @@ function getBookingProducts(
 			renderListView({ data: pagedResponse.items, type });
 
 		})
-		.catch(message => showOtherToast({ text: message, headerTitle: 'Retrieve issues', autoClose: 10000 }))
+		.catch(message => {
+			showErrorToast({ text: message, headerTitle: 'Retrieve issues', autoClose: 10000 })
+			hideSkeletonContainer();
+			$('#list-view-section .loader').hide();
+		});
 }
 
 
@@ -1056,8 +1085,9 @@ function generateCartItemHTML(data = {
 
 	return `
 			<li class="list-view-item" data-item-id="${data.id}">
-				<button class="remove-item-btn" type="button" data-item-id="${data.id}"><i
-						class="fa-regular fa-circle-xmark"></i></button>
+				<button class="remove-item-btn" type="button" data-item-id="${data.id}">
+					<i class="fa-solid fa-circle-xmark"></i>
+				</button>
 				<div class="item-image-container">
 					<img class="item-image" src="${data.imageUrl}" />
 				</div>
@@ -1156,7 +1186,7 @@ function renderListView({ data = [{
 function removeItemInCarts(itemId) {
 	// Remove item from carts
 	carts = carts.filter(cartItem => cartItem.id !== itemId);
-
+	showSuccessToast({headerTitle: 'Remove item from cart', text: 'Item removed from your cart'})
 	updateListViewItemWhenCartChanged(itemId);
 	renderCartButton();
 }
@@ -1242,6 +1272,59 @@ function generateItemHTML(data = {
 			</li>`;
 }
 
+stompClient.onConnect = (frame) => {
+	setConnected(true);
+	console.log('WebSocket connected:', frame);
+
+	stompClient.subscribe('/topic/orders/status', (message) => {
+		const order = JSON.parse(message.body);
+		const orderStatus = order.orderStatus;
+
+		// Get order from local storage
+		const orderFromLocalStorage = getOrderFromLocalStorage();
+
+		if (orderStatus && orderFromLocalStorage && Number(order.orderId) === Number(orderFromLocalStorage.id)) {
+			switch (orderStatus.id) {
+				case ORDER_STATUSES.NEW:
+					break;
+				case ORDER_STATUSES.SHIPPING:
+					$('#customer-alert .order-info').html(`<b>#${String(order.orderId).padStart(6, '0')}</b> is currently on its way to your address.`);
+					break;
+				case ORDER_STATUSES.CANCELLED:
+					$('#customer-alert .order-info').html(`<b>#${String(order.orderId).padStart(6, '0')}</b> has been cancelled.`)
+					break;
+				case ORDER_STATUSES.COMPLETED:
+					$('#customer-alert .order-info').html(`<b>#${String(order.orderId).padStart(6, '0')}</b>  has been completed.`);
+					break;
+				default:
+					console.log('Invalid status notification');
+					return;
+			}
+			// Display order status notification
+			$("#customer-alert").fadeIn();
+
+			// Call API find by id
+			orderService.getByOrderId(order.orderId)
+				.then(fetchedOrder => {
+
+					// Render order information
+					renderOrderDetail(fetchedOrder);
+				})
+				.catch(message => {
+					showErrorToast({ text: message, headerTitle: "Fetch data failed" })
+				}
+				);
+
+			setTimeout(function() {
+				$("#customer-alert").fadeOut();
+			}, 10000);
+		}
+
+
+
+	});
+}
+
 let foodObject = {
 	totalItems: null,
 	size: 10,
@@ -1269,7 +1352,7 @@ let foodObject = {
 		{
 			id: 11,
 			name: "Cơm Đùi Gà Góc Tư Sốt Mắm Tỏi Chua Cay phơi phới",
-			description: "Đùi gà tươi góc 4 xối mỡ + sốt mắm tỏi + Cơm + dưa leo + salad + canh",
+			description: "Đùi gà tươi góc 4 xối mỡ + sốt mắm tỏi + Cơm + dưa leo + salad + canh", 
 			price: 40000,
 			imageUrl: '/assets/images/exampleFood.png',
 			type: 'food',

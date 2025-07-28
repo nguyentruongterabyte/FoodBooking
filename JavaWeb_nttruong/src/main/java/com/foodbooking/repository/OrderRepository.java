@@ -1,8 +1,10 @@
 package com.foodbooking.repository;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 
+import com.foodbooking.dto.RevenueDTO;
 import com.foodbooking.dto.request.OrderRequestDTO;
 import com.foodbooking.entity.Order;
 import com.foodbooking.entity.OrderDetail;
@@ -36,4 +38,10 @@ public interface OrderRepository {
 	);
 	
 	public Integer updateOrder(OrderRequestDTO order);
+	
+	public List<RevenueDTO> getSalesGroupedBy(
+			String format, 
+			LocalDateTime startDay, 
+			LocalDateTime endDay
+	);
 }

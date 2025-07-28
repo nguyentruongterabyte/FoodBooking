@@ -22,9 +22,10 @@ public class OrderRequestDTO {
 	
 	@NotNull(message = "Please provide detail address.")
 	@NotBlank(message = "Please enter your detail address.")
-	@Length(min = 30, max = 95, message = "The length of the detail address between 30 to 95 characters.")
+	@Length(min = 20, max = 95, message = "The length of the detail address between 20 to 95 characters.")
 	private String detailAddress;
 	
+	@Length(max = 100, message = "The length of the message is maximum 100 characters.")
 	private String message;
 	
 	@NotNull(message = "Please provide your phone number.")

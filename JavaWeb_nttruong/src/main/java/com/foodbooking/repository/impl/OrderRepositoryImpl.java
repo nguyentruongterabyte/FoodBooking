@@ -1,11 +1,13 @@
 package com.foodbooking.repository.impl;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
+import com.foodbooking.dto.RevenueDTO;
 import com.foodbooking.dto.request.OrderRequestDTO;
 import com.foodbooking.entity.Order;
 import com.foodbooking.entity.OrderDetail;
@@ -58,6 +60,11 @@ public class OrderRepositoryImpl implements OrderRepository {
 	@Override
 	public Integer updateOrder(OrderRequestDTO order) {
 		return orderMapper.updateOrder(order);
+	}
+
+	@Override
+	public List<RevenueDTO> getSalesGroupedBy(String format, LocalDateTime startDay, LocalDateTime endDay) {
+		return orderMapper.getSalesGroupedBy(format, startDay, endDay);
 	}
 
 }

@@ -13,7 +13,7 @@ $(document).ready(function() {
 		accountService.updateAccountPassword(JSON.stringify(formObj))
 			.then(message => {
 				showSuccessToast({ text: message, headerTitle: 'Password updated', autoClose: 15000 });
-				window.location.href = "/admin/login";
+				window.location.href = "/admin/dashboard";
 			})
 			.catch(err => {
 				const errors = err.errors;

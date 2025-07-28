@@ -251,4 +251,21 @@
 			, cancelled_at_status_id = #{cancelledAtStatusId}
 		WHERE id = #{id}
 	</update>
+	
+	<!-- Group Sales by Day/Week/Month -->
+	<select id="getSalesGroupedBy" 
+			resultType="com.foodbooking.dto.RevenueDTO"
+	>
+		SELECT 
+			DATE_FORMAT(o.created_at, #{groupByFormat}) AS period,
+			SUM(
+				o.total_price
+				+ o.shipping_fee
+				) AS total
+		FROM orders o
+		WHERE 
+			o.created_at BETWEEN #{startDay} AND #{endDay}
+		GROUP BY period
+		ORDER BY period ASC
+	</select>
 </mapper> 

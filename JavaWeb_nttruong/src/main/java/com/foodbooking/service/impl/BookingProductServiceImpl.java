@@ -138,7 +138,7 @@ public class BookingProductServiceImpl implements BookingProductService {
 		// Check if booking product not found
 		BookingProduct existProduct = bookingProductRepository.findByBookingProductId(id);
 		if (existProduct == null) 
-			throw new ErrorResponse(HttpStatus.NOT_FOUND, "The booking product not found");
+			throw new ErrorResponse(HttpStatus.NOT_FOUND, "Booking product with id '" + id + "' not found!");
 		
 		return existProduct;
 	}

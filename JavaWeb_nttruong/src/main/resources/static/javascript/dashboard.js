@@ -1,5 +1,9 @@
 $(document).ready(function() {
 
+	// Handle revenue navigation tab item click
+	handleTabItemClick('#revenue-navigation-tab');
+
+	// Get and render total order items
 	getAndRenderTotalOrderItems();
 
 	// Render today's sales
@@ -8,10 +12,10 @@ $(document).ready(function() {
 	// Render today's order count
 
 	// ORDER_STATUSES: common.js
-	renderTodayOrdersCount({ orderStatusId: null, root: '#total-orders-counter .card-content' });
-	renderTodayOrdersCount({ orderStatusId: ORDER_STATUSES.SHIPPING, root: '#shipping-orders-counter .card-content' });
-	renderTodayOrdersCount({ orderStatusId: ORDER_STATUSES.COMPLETED, root: '#completed-orders-counter .card-content' });
-	renderTodayOrdersCount({ orderStatusId: ORDER_STATUSES.CANCELLED, root: '#cancelled-orders-counter .card-content' });
+	renderTodayOrdersCount({ orderStatusId: null, root: '#total-orders-counter' });
+	renderTodayOrdersCount({ orderStatusId: ORDER_STATUSES.SHIPPING, root: '#shipping-orders-counter' });
+	renderTodayOrdersCount({ orderStatusId: ORDER_STATUSES.COMPLETED, root: '#completed-orders-counter' });
+	renderTodayOrdersCount({ orderStatusId: ORDER_STATUSES.CANCELLED, root: '#cancelled-orders-counter' });
 
 
 	// Call API statuses or not
@@ -55,7 +59,7 @@ $(document).ready(function() {
 
 		// Get data item from order object
 		let itemData = orderObject.items.find(item => item.id === itemId);
-		
+
 		if (itemData) {
 			$('#show-order-detail-btn').click();
 			renderOrderInfo(itemData);
@@ -135,36 +139,36 @@ function handleOrderPrevNextPaginationClick() {
 		$('#order-status-selector').toggle();
 		$('.transfer-icon').toggle();
 	});
-	
+
 	// Handle order status selector changed
 	$('.order-status-selector-wrapper').on('change', '#order-status-selector', function() {
-		
+
 		// Get change status 
 		const statusIdToChange = Number($(this).val());
-		
+
 		// Get previous status
 		const currentStatusId = Number($(this).attr('data-order-status-id'));
-		
+
 		// Get item id
 		const itemId = Number($(this).attr('data-item-id'));
 
 		// Check if both is equals
 		if (statusIdToChange === currentStatusId)
 			return;
-		
+
 		// Get status to change object
 		const statusToChange = orderStatuses.find(orderStatus => statusIdToChange === orderStatus.id);
-		
+
 		const currentStatus = orderStatuses.find(orderStatus => currentStatusId === orderStatus.id);
-		
+
 		$('#confirm-btn')
 			.attr('data-action', 'transfer')
 			.attr('data-item-id', itemId)
 			.attr('data-status-id', statusIdToChange);
-		
+
 		$('#modal-confirm-title').text('Change Order Status Confirmation');
 		$('#modal-confirm-body').text(
-			`Are you sure to transfer order status from "${currentStatus.name}" to "${statusToChange.name}"`
+			`Confirm changing order status from "${currentStatus.name}" to "${statusToChange.name}"?`
 		);
 		$('#show-confirm-modal').click();
 	});
@@ -271,6 +275,9 @@ function renderOrderInfo(data = {
 	$('#order-detail-modal .customer-address').text(
 		`${data.detailAddress}, ${data.ward.name}, ${data.province.name}`
 	);
+	
+	// Customer message
+	$('#order-detail-modal .customer-message').text(data.message);
 
 	// Booking product list
 	const bookingProductsHTML = data.bookingProducts.map(
@@ -313,11 +320,16 @@ function renderOrderInfo(data = {
 	let itemStatusButtonHTML = '';
 	let itemStatusSelectorHTML = '';
 	switch (data.orderStatus.id) {
-		case ORDER_STATUSES.NEW:
+		case ORDER_STATUSES.NEW: // Button new
 			itemStatusButtonHTML = `
-				<button data-order-status-id="${data.orderStatus.id}" id="order-status-btn" class="btn order-status-btn new-btn">
+				<button 
+					data-order-status-id="${data.orderStatus.id}"
+					id="order-status-btn" 
+					class="btn order-status-btn new-btn"
+				>
 					<div class="icon"></div>
 					<span>New</span>
+					<i class="fa-solid fa-caret-down"></i>
 				</button>`;
 			itemStatusSelectorHTML = `
 				<select 
@@ -329,14 +341,18 @@ function renderOrderInfo(data = {
 					<option value="1" disabled selected>New</option>
 					<option value="2">Shipping</option>
 					<option value="3">Cancel</option>
-					<option value="4" disabled>Complete</option>
+					<option value="4">Complete</option>
 				</select>`;
 			break;
-		case ORDER_STATUSES.SHIPPING:
+		case ORDER_STATUSES.SHIPPING: // Button shipping
 			itemStatusButtonHTML = `
-				<button data-order-status-id="${data.orderStatus.id}" id="order-status-btn" class="btn order-status-btn shipping-btn">
+				<button data-order-status-id="${data.orderStatus.id}" 
+						id="order-status-btn" 
+						class="btn order-status-btn shipping-btn"
+				>
 					<div class="icon"></div>
 					<span>Shipping</span>
+					<i class="fa-solid fa-caret-down"></i>
 				</button>`;
 			itemStatusSelectorHTML = `
 				<select 
@@ -351,9 +367,12 @@ function renderOrderInfo(data = {
 					<option value="4">Complete</option>
 				</select>`;
 			break;
-		case ORDER_STATUSES.CANCELLED:
+		case ORDER_STATUSES.CANCELLED: // Button cancelled
 			itemStatusButtonHTML = `		
-				<button data-order-status-id="${data.orderStatus.id}" id="order-status-btn" class="btn order-status-btn cancelled-btn">
+				<button data-order-status-id="${data.orderStatus.id}" 
+						id="order-status-btn" 
+						class="btn order-status-btn cancelled-btn"
+				>
 					<div class="icon"></div>
 					<span>Cancelled</span>
 				</button>`;
@@ -370,14 +389,20 @@ function renderOrderInfo(data = {
 					<option value="4" disabled>Complete</option>
 				</select>`;
 			break;
-		case ORDER_STATUSES.COMPLETED:
+		case ORDER_STATUSES.COMPLETED: // Button completed
 			itemStatusButtonHTML = `
-				<button data-order-status-id="${data.orderStatus.id}" id="order-status-btn"  class="btn order-status-btn completed-btn">
+				<button data-order-status-id="${data.orderStatus.id}" 
+						id="order-status-btn" 
+						class="btn order-status-btn completed-btn"
+				>
 					<div class="icon"></div>
 					<span>Completed</span>
 				</button>`;
 			itemStatusSelectorHTML = `
-				<select data-order-status-id="${data.orderStatus.id}" id="order-status-selector" class="btn btn-outline-primary order-status-selector">
+				<select data-order-status-id="${data.orderStatus.id}" 
+						id="order-status-selector" 
+						class="btn btn-outline-primary order-status-selector"
+				>
 					<option value="1" disabled>New</option>
 					<option value="2" disabled>Shipping</option>
 					<option value="3" disabled>Cancel</option>
@@ -389,6 +414,7 @@ function renderOrderInfo(data = {
 				<button data-order-status-id="${data.orderStatus.id}" id="order-status-btn"  class="btn order-status-btn cancelled-btn">
 					<div class="icon"></div>
 					<span>Completed</span>
+					<i class="fa-solid fa-caret-down"></i>
 				</button>`;
 			itemStatusSelectorHTML = `
 				<select 
@@ -543,8 +569,7 @@ function getOrders(
 	}
 ) {
 
-	// Empty list view 
-	$('#order-list').empty();
+	$('.order-list-wrapper .loader').show();
 
 	// Call API get order page 
 	orderService.getOrdersPage(
@@ -558,6 +583,11 @@ function getOrders(
 
 		}
 	).then(pagedResponse => {
+		setTimeout(function() {
+			$('.order-list-wrapper .loader').hide();
+		}, 200);
+		// Empty list view 
+		$('#order-list').empty();
 		if (pagedResponse.totalPages) {
 			orderObject.totalPages = pagedResponse.totalPages;
 			orderObject.currentPage = pagedResponse.page;
@@ -575,7 +605,12 @@ function getOrders(
 		orderObject.items = pagedResponse.items;
 		renderOrderListView(orderObject.items);
 
-	}).catch(message => showOtherToast({ text: message, headerTitle: 'Retrieve issues', autoClose: 10000 }));
+	})
+	.catch(message => {
+		$('.order-list-wrapper .loader').hide();
+		showOtherToast({ text: message, headerTitle: 'Retrieve issues', autoClose: 10000 })
+	
+	});
 }
 
 
@@ -585,7 +620,7 @@ function getAndRenderTotalOrderItems() {
 
 	// Empty order list
 	$('#order-list').empty();
-
+	
 	// Call API get total items
 	orderService.getCount({
 		keyword: getKeywordFromSearchingInput('#searching-input'),
@@ -609,7 +644,7 @@ function getAndRenderTotalOrderItems() {
 			);
 		} else {
 			$('#order__pagination-nav .pagination').hide();
-			showOtherToast({ text: 'There is nothing to show!', headerTitle: 'Empty list' });
+			showOtherToast({ text: "Oops! It looks like you don't have any orders", headerTitle: '' });
 		}
 	})
 		.catch(message => {
@@ -626,24 +661,38 @@ function getKeywordFromSearchingInput(root = '#searching-input') {
 /* Call API and Render today's sales*/
 function renderTodaySales() {
 
+	$('#today-sales .loader').show();
 	// Call API get today sales
 	orderService.getTodaySales()
 		.then(todaySales => {
+			setTimeout(function() {
+				$('#today-sales .loader').hide();
+			}, 200);
 			$('#today-sales .card-content').text(Number(todaySales).toLocaleString() + ' đ');
 		})
 		.catch(message => {
 			$('#today-sales .card-content').text('0 đ');
-			showErrorToast({ headerTitle: "Retrieve today's sales failed", text: message })
+			showErrorToast({ headerTitle: "Retrieve today's sales failed", text: message });
+			$('#today-sales .loader').hide();
 		});
 }
 
 /* Call API and render today order count by order status id */
 function renderTodayOrdersCount({ orderStatusId, root }) {
+	
+	$(root).find('.loader').show();
 	orderService.getTodayCount(orderStatusId)
 		.then(todayCount => {
-			$(root).text(todayCount);
+			setTimeout(() => {
+				$(root).find('.loader').hide();
+			}, 200);
+			
+			$(root).find('.card-content').text(todayCount);
 		})
-		.catch(message => showErrorToast({ headerTitle: "Retrieve today count failed", text: message }));
+		.catch(message => {
+			showErrorToast({ headerTitle: "Retrieve today count failed", text: message });
+			$(root).find('.loader').hide();
+		});
 }
 
 /* Render order status buttons*/
@@ -691,7 +740,7 @@ let selectedFilteredStatuses = [];
 
 let orderObject = {
 	currentPage: 1,
-	dateType: 'today',
+	dateType: 'all',
 	totalPages: null,
 	size: 20,
 	items: [

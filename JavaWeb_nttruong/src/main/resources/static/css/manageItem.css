@@ -1,8 +1,8 @@
 #manage-item-tab {
+	position: relative;
 	padding: 24px;
 
 	/* Navigation tab */
-
 
 	/* Tab content START */
 	.tab-contents {
@@ -121,7 +121,17 @@
 }
 
 /* Modal show detail item (edit, create) START */
+#detail-modal {
+	position: relative;
+	.loader {
+		display: none;
+	}
+}
+
 #info-form {
+	
+	border-radius: 16px;
+	
 	.form-wrapper {
 		display: flex;
 		align-items: flex-start;

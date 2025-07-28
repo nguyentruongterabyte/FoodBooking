@@ -1,4 +1,8 @@
 $(document).ready(function() {
+
+	// Connect socket
+	connectWebsocket();
+
 	// Handle main navigation tab item click
 	handleTabItemClick('#main-navigation-tab');
 
@@ -25,8 +29,16 @@ $(document).ready(function() {
 	});
 
 	// Handle collapse navigation button click
+	const savedState = localStorage.getItem('JavaWeb_nttruong_navCollapsed');
+	if (savedState === 'true') {
+		$('.nav').addClass('collapsed');
+	} else {
+		$('.nav').removeClass('collapsed');
+	}
+
 	$('.collapse-navigation-btn').on('click', function() {
-		$('.nav').toggleClass('collapsed');
+		const isCollapsed = $('.nav').toggleClass('collapsed').hasClass('collapsed');
+		localStorage.setItem('JavaWeb_nttruong_navCollapsed', isCollapsed ? 'true' : 'false');
 	});
 
 	/* Handle when main navigation item click */
@@ -119,7 +131,7 @@ $(document).ready(function() {
 
 				const itemId = Number($(this).attr('data-item-id')); // Get item id
 				const statusId = Number($(this).attr('data-status-id'));
-				
+
 				orderService.updateOrderStatus(
 					{
 						orderId: itemId,
@@ -127,22 +139,33 @@ $(document).ready(function() {
 					}
 				)
 					.then(message => {
-						showSuccessToast({text: message, headerTitle: 'Update successfully'});
+						showSuccessToast({ text: message, headerTitle: 'Update successfully' });
 						// Get data item from order object
 						let itemData = orderObject.items.find(item => item.id === itemId);
-		
-		
+
+
 						if (itemData) {
 							itemData = { ...itemData, orderStatus: orderStatuses.find(os => os.id = statusId) }
 							orderObject.items = orderObject.items.map(order => order.id === itemData.id ? itemData : order);
 							renderOrderInfo(itemData);
 							renderOrderListView(orderObject.items);
 						}
-		
+
+						// Send updated status for customer
+						if (stompClient.connected) {
+							// Create notification for customer
+							stompClient.publish({
+								destination: "/app/order-status",
+								body: JSON.stringify({ orderId: itemData.id, orderStatus: itemData.orderStatus })
+							});
+						} else {
+							console.warn("WebSocket disconnect, cannot sent order!");
+						}
+
 						// close modal
 						$('#confirm-modal-close-btn').click();
 					})
-					.catch(message => showErrorToast({text: message, headerTitle: 'Bad request'}));
+					.catch(message => showErrorToast({ text: message, headerTitle: 'Bad request' }));
 
 				break;
 			}
@@ -169,3 +192,40 @@ function customRenderPaging({ root = '#food__pagination-nav .pagination', size =
 			currentPage
 		});
 }
+
+
+stompClient.onConnect = (frame) => {
+	setConnected(true);
+	console.log('WebSocket connected:', frame);
+
+	// Subcribe to receive new order notification
+	stompClient.subscribe('/topic/orders', (message) => {
+		const order = JSON.parse(message.body);
+
+		// Display new order notification
+		$("#admin-alert .order-info")
+			.html(`Customer <b>${order.customerName}</b> has just created order <b>#${String(order.orderId).padStart(6, '0')}</b>`);
+		$("#admin-alert").fadeIn();
+
+		// Re-Render today's sales
+		renderTodaySales();
+
+		// Re-render today order count
+		renderTodayOrdersCount({ orderStatusId: null, root: '#total-orders-counter .card-content' });
+
+		setTimeout(function() {
+			$("#admin-alert").fadeOut();
+		}, 10000);
+
+		// Call API find by id
+		orderService.getByOrderId(order.orderId)
+			.then(fetchedOrder => {
+				orderObject.items.unshift(fetchedOrder);
+				// Re render order list view
+				renderOrderListView(orderObject.items);
+			})
+			.catch(message =>
+				console.error(message)
+			);
+	});
+};

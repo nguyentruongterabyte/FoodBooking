@@ -232,4 +232,29 @@ public class BookingProductControllerImpl implements BookingProductController {
 			);
 	}
 
+	/**
+	 * API get booking product by id
+	 * 
+	 * @param id id from request
+	 * @return found booking product
+	 */
+	@Override
+	@GetMapping("/{id}")
+	public ResponseEntity<?> getByBookingProductId(@PathVariable Long id) {
+		BookingProduct foundBookingProduct = bookingProductService.findByBookingProductId(id);			
+		
+		// Return response
+		return ResponseEntity
+				.status(HttpStatus.OK)
+				.body(ApiResponse.builder()
+						.status(HttpStatus.OK.value())
+						.timestamp(LocalDateTime.now())
+						.message("Retrieve successfully!")
+						.data(foundBookingProduct)
+						.build()
+			);
+	}
+	
+	
+
 }

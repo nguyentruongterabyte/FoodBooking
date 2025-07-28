@@ -139,6 +139,7 @@ $(document).ready(function() {
 
 		const formObj = Object.fromEntries(formData.entries());
 		// Submit form
+		$('#detail-modal .loader').show();
 		switch (action) {
 			case 'create':
 				// Call api create booking product
@@ -181,6 +182,8 @@ $(document).ready(function() {
 						} else {
 							showOtherToast({ text: err.message, headerTitle: 'Bad Request', autoClose: 10000 });
 						}
+					}).finally(() => {
+						$('#detail-modal .loader').hide();
 					});
 				break;
 			case 'edit':
@@ -195,7 +198,6 @@ $(document).ready(function() {
 				// Call api update booking product
 				bookingProductService.updateBookingProduct(itemId, formObj)
 					.then((updatedItem) => {
-
 						$('#close-detail-modal-btn').click(); // Close modal
 						showSuccessToast({ text: 'Item updated successfully!', headerTitle: 'Update item', autoClose: 15000 })
 						switch (updatedItem.type) {
@@ -224,6 +226,8 @@ $(document).ready(function() {
 						} else {
 							showOtherToast({ text: err.message, headerTitle: 'Bad Request', autoClose: 10000 });
 						}
+					}).finally(() => {
+						$('#detail-modal .loader').hide();
 					});
 				break;
 			default:
@@ -608,10 +612,14 @@ function getBookingProducts(
 		isDeleted = null
 	}
 ) {
+	$('#manage-item-tab .loader').show();
 	bookingProductService.getBookingProductsPage(
 		{ keyword, type, page, size, includeTotal, isDeleted }
 	)
 		.then(pagedResponse => {
+			setTimeout(function() {
+				$('#manage-item-tab .loader').hide();
+			}, 200);
 			switch (type) {
 				case 'food': {
 					if (pagedResponse.totalPages) {
@@ -662,7 +670,10 @@ function getBookingProducts(
 			renderListView({ data: pagedResponse.items, type });
 
 		})
-		.catch(message => showOtherToast({ text: message, headerTitle: 'Retrieve issues', autoClose: 10000 }))
+		.catch(message => {
+			showOtherToast({ text: message, headerTitle: 'Retrieve issues', autoClose: 10000 })
+			$('#manage-item-tab .loader').hide();
+		});
 }
 
 /* Clear input */

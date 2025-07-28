@@ -1,4 +1,27 @@
-$(document).ready(function() {
+$(document).ready(async function() {
+
+	$('#cart-modal .loader').show();
+	const fetchedCart = await Promise.all(carts.map(cartItem => {
+		const fetchedCartItem = bookingProductService.getByBookingProductId(cartItem.id)
+			.then(bookingProduct => {
+				return {...cartItem, price: bookingProduct.price}
+			})
+			.catch(message => showErrorToast({text: message, headerTitle: 'Retrieve issue'}));
+		return fetchedCartItem;
+	}));
+	
+	$('#cart-modal .loader').hide();
+	
+	
+	if (fetchedCart.every(cartItem => !cartItem)) {
+		carts = new Array();
+	} else {
+		carts = fetchedCart;
+	}
+	
+	
+	// Connect socket
+	connectWebsocket();
 
 	// render list of cart from local storage
 	renderListOfCart();
@@ -59,19 +82,28 @@ $(document).ready(function() {
 
 		// Add booking products
 		formObj.bookingProducts = carts.map(cartItem =>
-		(
-			{
-				bookingProductId: cartItem.id,
-				quantity: cartItem.quantity
-			}
-		)
-	);
+		({
+			bookingProductId: cartItem.id,
+			quantity: cartItem.quantity
+		})
+		);
 
 		// Call API create order
 		orderService.createOrder(JSON.stringify(formObj))
 			.then(newOrder => {
 				saveOrderToLocalStorage(newOrder);
 				saveCartToLocalStorage();// Reset card
+
+				if (stompClient.connected) {
+					// Create notification for admin
+					stompClient.publish({
+						destination: "/app/order",
+						body: JSON.stringify({ orderId: newOrder.id, customerName: newOrder.name })
+					});
+				} else {
+					console.warn("WebSocket disconnect, cannot sent order!");
+				}
+
 				// Redirect to order successfully page
 				window.location.replace('/order-successfully');
 			})
@@ -83,20 +115,31 @@ $(document).ready(function() {
 						$(`.form-control[name="${error.field}"]`).addClass('is-invalid');
 						$(`.form-control[name="${error.field}"]`).siblings('.invalid-feedback').text(error.message);
 					}
+					showErrorToast({ text: err.message, headerTitle: 'Bad request' });
 				} else {
-					showOtherToast({ text: err.message, headerTitle: 'Bad request' });
+					showErrorToast({ text: err.message, headerTitle: 'Bad request' });
 				}
 			});
 	});
-	
+
 	// Handle remove error when form control (input, textarea) change
 	$('.form-control').on('change', function() {
 		$(this).removeClass('is-invalid');
 	});
-	
+
 	// Handle cancel delivery then back to home page but still keep all select item in basket (Q2.3)
 	$('#cancel-btn').on('click', function() {
 		window.location.href = '/';
+	});
+	
+	// Handle limit message length
+	$('#message').on('input', function() {
+		const value = $(this).val();
+		const valueLength = value.length;
+		if (valueLength >= 100) {
+			$(this).val(value.slice(0, 100));
+		}
+		$('#message-length').text(`${$(this).val().length}/100`);
 	});
 });
 

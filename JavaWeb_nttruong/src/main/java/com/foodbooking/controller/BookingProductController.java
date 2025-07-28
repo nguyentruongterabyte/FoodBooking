@@ -55,4 +55,12 @@ public interface BookingProductController {
 	 * @return message
 	 */
 	public ResponseEntity<?> deleteBookingProduct(Long id);
+	
+	/**
+	 * API get booking product by id
+	 * 
+	 * @param id id from request
+	 * @return found booking product
+	 */
+	public ResponseEntity<?> getByBookingProductId(Long id);
 }

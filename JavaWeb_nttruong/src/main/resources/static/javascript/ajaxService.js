@@ -67,6 +67,23 @@ const orderService = {
 		type: METHOD.PATCH
 	},
 	
+	revenue: {
+		url: 'api/orders/revenue',
+		type: METHOD.GET
+	},
+	
+	/* Get revenue day|week|month */
+	getRevenue: function(type = 'day') {
+		return new Promise((resolve, reject) => {
+			myAjax({
+				url: `${this.revenue.url}?type=${type}`,
+				type: this.revenue.type,
+				success: (res) => resolve(res.data),
+				error: (err) => reject(err.responseJSON.message)
+			});
+		});
+	},
+	
 	/* Update order status */
 	updateOrderStatus: function({orderId, statusId}) {
 		return new Promise((resolve, reject) => {
@@ -270,6 +287,11 @@ const bookingProductService = {
 		url: 'api/booking-products/',
 		type: METHOD.GET
 	},
+	
+	getById: {
+		url: 'api/booking-products/',
+		type: METHOD.GET
+	},
 
 	getCount: {
 		url: 'api/booking-products/count',
@@ -284,6 +306,18 @@ const bookingProductService = {
 	update: {
 		url: 'api/booking-products/',
 		type: METHOD.PUT
+	},
+	
+	/* Get by booking product id */
+	getByBookingProductId: function(id) {
+		return new Promise((resolve, reject) => {
+			myAjax({
+				url: `${this.getById.url}${id}`,
+				type: this.getById.type,
+				success: (res) => resolve(res.data),
+				error: (err) => reject(err.responseJSON.message)
+			});
+		});
 	},
 
 	/* Update booking product */

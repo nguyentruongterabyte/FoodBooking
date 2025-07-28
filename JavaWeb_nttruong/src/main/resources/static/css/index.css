@@ -4,7 +4,7 @@
 }
 
 :root {
-	--header-height: 308px;
+	--header-height: 256px;
 	--search-box-height: 132px;
 	--tabs-section-height: 124px;
 	--list-view-items-per-row: 2;
@@ -16,6 +16,20 @@ body {
 	margin-left: auto;
 	margin-right: auto;
 	position: relative;
+}
+
+#customer-alert {
+	position: fixed;
+	top: var(--header-nav-height);
+	left: 50%;
+	transform: translateX(-50%);
+	z-index: 100;
+	margin-top: 24px;
+	border-radius: 4px;
+	background: #f8d7da; 
+	padding: 10px; 
+	color: #721c24;
+	display: none;
 }
 
 /* Header START */
@@ -115,7 +129,6 @@ header {
 		height: 18px;
 		min-width: 18px;
 		z-index: 2;
-		padding: 4px 5px;
 		display: none;
 		color: var(--primary-color);
 		border: 1px solid var(--primary-color);
@@ -210,11 +223,14 @@ header .question {
 
 /* List view section START */
 #list-view-section {
+	position: relative;
+	z-index: 0;
 	margin-left: auto;
 	margin-right: auto;
 	margin-top: 36px;
 	padding-bottom: 64px;
 	width: var(--section-container-width);
+	
 }
 
 /* Cart buttons */
@@ -252,10 +268,12 @@ header .question {
 			outline: none;
 			border: none;
 			background-color: rgba(239, 239, 239, 1);
-			color: rgba(124, 124, 124, 1);
-
+			
 			&:hover {
 				cursor: pointer;
+			}
+			i {
+				color: rgba(124, 124, 124, 1);
 			}
 		}
 
@@ -407,6 +425,10 @@ footer {
 #cart-modal {
 	.list-view-item {
 		padding: 24px 32px !important;
+		
+		.remove-item-btn {
+			color: rgba(124, 124, 124, 1);
+		}
 	}
 }
 
@@ -590,3 +612,14 @@ footer {
 }
 
 /* Skeleton Container END */
+
+/* Tablet landscape (horizontal) */
+@media all and (max-width: 769px) {
+
+	/* iPad horizontal, large tablet */
+	
+	:root {
+		--list-view-items-per-row: 1;
+	}
+
+}
