@@ -24,8 +24,8 @@ $(document).ready(function() {
 						$(`.form-control[name="${error.field}"]`).siblings('.invalid-feedback').text(error.message);
 					}
 				} else {
-					showOtherToast({text: err.message, headerTitle: 'Bad request'});
+					showErrorToast({text: err.message, headerTitle: 'Bad request'});
 				}
-			})
+			});
 	});
 });

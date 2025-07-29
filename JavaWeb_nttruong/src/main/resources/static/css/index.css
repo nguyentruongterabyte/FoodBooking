@@ -9,13 +9,13 @@
 	--tabs-section-height: 124px;
 	--list-view-items-per-row: 2;
 	--list-view-item-gap: 24px;
-
 }
 
 body {
 	margin-left: auto;
 	margin-right: auto;
 	position: relative;
+	overflow-x: hidden;
 }
 
 #customer-alert {

@@ -778,14 +778,14 @@
 				<form class="change-password-form" id="change-password-form" autocomplete="off">
 					<div class="form-group">
 						<label for="password">Enter your Password</label>
-						<input type="password" class="form-control" id="password" name="password" />
+						<input autocomplete="off" required type="password" class="form-control" id="password" name="password" />
 						<div class="invalid-feedback">
 							The password is incorrect
 						</div>
 					</div>
 					<div class="form-group">
 						<label for="new-password">Enter your New password</label>
-						<input type="password" class="form-control" id="new-password" name="newPassword" />
+						<input autocomplete="off" required type="password" class="form-control" id="new-password" name="newPassword" />
 						<div class="invalid-feedback">
 							Please enter new password
 						</div>
@@ -873,7 +873,7 @@
 						</div>
 					</div>
 					<!-- Item name -->
-					<div class="form-group form-col">
+					<div class="form-group form-col string-length-container">
 						<label for="name" class="label-up-to">
 							Item name
 						</label>
@@ -881,16 +881,18 @@
 						<div class="invalid-feedback">
 							Please provide a name
 						</div>
+						<span class="string-length">0/100</span>
 					</div>
 
 					<!-- Description -->
-					<div class="form-group form-col">
+					<div class="form-group form-col string-length-container">
 						<label for="description" class="label-up-to">Description</label>
 						<textarea class="form-control" id="description" name="description"
 							placeholder="Enter something..."></textarea>
 						<div class="invalid-feedback">
 							Description too long
 						</div>
+						<span class="string-length">0/500</span>
 					</div>
 
 					<!-- Price -->

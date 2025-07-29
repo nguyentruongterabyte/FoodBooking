@@ -43,7 +43,7 @@ public class SecurityConfig {
 
 				// Restricted APIs
 				.requestMatchers(HttpMethod.GET, "/admin/**").hasRole("ADMIN")
-//				.requestMatchers(HttpMethod.POST, "/api/animals").hasRole("ADMIN")
+//				.requestMatchers(HttpMethod.POST, "/api/booking-products").hasRole("ADMIN")
 //				.requestMatchers(HttpMethod.PUT, "/api/animals/**").hasRole("ADMIN")
 //				.requestMatchers(HttpMethod.PUT, "/api/animals").hasRole("ADMIN")
 

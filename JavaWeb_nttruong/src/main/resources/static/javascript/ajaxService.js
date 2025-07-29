@@ -1,6 +1,21 @@
 // host
 const host = 'http://localhost:8080/';
 
+// Check connection
+function checkInternetConnection() {
+	const online = navigator.onLine;
+	
+	if (!online) {
+		if (showOtherToast) {
+			showOtherToast({headerTitle: 'No network connection', text: 'No network connection. Please check your internet and try again'});
+		} else {
+			console.warn('No netword connection. Please check your internet and try again');
+		}
+	}
+	
+	return online;
+}
+
 // Custom ajax
 async function myAjax({
 	url = 'api/animals',
@@ -11,14 +26,30 @@ async function myAjax({
 	success,
 	error,
 }) {
+	
+	// If no internet, do nothing
+	if (!checkInternetConnection()) 
+		return;
+	
 	return $.ajax({
 		type,
 		url: host + url,
 		data,
 		contentType,
-		success,
 		processData,
-		error,
+		timeout: 15000,
+		statusCode: {
+			// Handle internal system error
+			500: function() {
+				if (showOtherToast) {
+					showOtherToast({headerTitle: 'System error', text: 'A system error occurred. Please try again later'});
+				} else {
+					console.log('A system error occurred. Please try again later');
+				}
+			}
+		},
+		success,
+		error: (err, status) => error(null, status, err)
 	});
 }
 
@@ -79,7 +110,19 @@ const orderService = {
 				url: `${this.revenue.url}?type=${type}`,
 				type: this.revenue.type,
 				success: (res) => resolve(res.data),
-				error: (err) => reject(err.responseJSON.message)
+				error: (_, status, err) => {
+					// Handle request timeout
+					if (status === 'timeout') {
+						if (showOtherToast) {
+							showOtherToast({text: "Request Timeout", headerTitle: "Request Timeout"});
+						} else {
+							console.warn("Request Timeout");
+						}
+						return;
+					}
+					
+					reject(err.responseJSON.message);
+				}
 			});
 		});
 	},
@@ -90,8 +133,20 @@ const orderService = {
 			myAjax({
 				url: `${this.updateStatus.url}${orderId}/${statusId}`,
 				type: this.updateStatus.type,
-				success: res => resolve(res.message),
-				error: err => reject(err.responseJSON.message)
+				success: (res) => resolve(res.message),
+				error: (_, status, err) => {
+					// Handle request timeout
+					if (status === 'timeout') {
+						if (showOtherToast) {
+							showOtherToast({text: "Request Timeout", headerTitle: "Request Timeout"});
+						} else {
+							console.warn("Request Timeout");
+						}
+						return;
+					}
+					
+					reject(err.responseJSON.message);
+				}
 			})
 		})
 	},
@@ -112,7 +167,19 @@ const orderService = {
 				url: `${this.count.url}?keyword=${keyword}&dateType=${dateType}&${orderStatusIdParams.join('&')}`,
 				type: this.count.type,
 				success: (res) => resolve(res.data),
-				error: (err) => reject(err.responseJSON.message)
+				error: (_, status, err) => {
+					// Handle request timeout
+					if (status === 'timeout') {
+						if (showOtherToast) {
+							showOtherToast({text: "Request Timeout", headerTitle: "Request Timeout"});
+						} else {
+							console.warn("Request Timeout");
+						}
+						return;
+					}
+					
+					reject(err.responseJSON.message);
+				}
 			});
 		});
 	},
@@ -140,7 +207,19 @@ const orderService = {
 				&${orderStatusIdParams.join('&')}`,
 				type: this.orderPaged.type,
 				success: (res) => resolve(res.data),
-				error: (err) => reject(err.responseJSON.message)
+				error: (_, status, err) => {
+					// Handle request timeout
+					if (status === 'timeout') {
+						if (showOtherToast) {
+							showOtherToast({text: "Request Timeout", headerTitle: "Request Timeout"});
+						} else {
+							console.warn("Request Timeout");
+						}
+						return;
+					}
+					
+					reject(err.responseJSON.message);
+				}
 			});
 		});
 	},
@@ -152,7 +231,19 @@ const orderService = {
 				url: this.todaySales.url,
 				type: this.todaySales.type,
 				success: (res) => resolve(res.data),
-				error: (err) => reject(err.responseJSON.message)
+				error: (_, status, err) => {
+					// Handle request timeout
+					if (status === 'timeout') {
+						if (showOtherToast) {
+							showOtherToast({text: "Request Timeout", headerTitle: "Request Timeout"});
+						} else {
+							console.warn("Request Timeout");
+						}
+						return;
+					}
+					
+					reject(err.responseJSON.message);
+				}
 			});
 		});
 	},
@@ -170,7 +261,19 @@ const orderService = {
 				url: this.countToday.url + (orderStatusId !== null ? `?orderStatusId=${orderStatusId}` : ''),
 				type: this.countToday.type,
 				success: (res) => resolve(res.data),
-				error: (err) => reject(err.responseJSON.message)
+				error: (_, status, err) => {
+					// Handle request timeout
+					if (status === 'timeout') {
+						if (showOtherToast) {
+							showOtherToast({text: "Request Timeout", headerTitle: "Request Timeout"});
+						} else {
+							console.warn("Request Timeout");
+						}
+						return;
+					}
+					
+					reject(err.responseJSON.message);
+				}
 			})
 		})
 	},
@@ -182,7 +285,18 @@ const orderService = {
 				url: `${this.getById.url}${id}`,
 				type: this.getById.type,
 				success: (res) => resolve(res.data),
-				error: (err) => reject(err.responseJSON.message)
+				error: (_, status, err) => {
+					// Handle request timeout
+					if (status === 'timeout') {
+						if (showOtherToast) {
+							showOtherToast({text: "Request Timeout", headerTitle: "Request Timeout"});
+						} else {
+							console.warn("Request Timeout");
+						}
+						return;
+					}
+					reject(err.responseJSON.message);
+				}
 			});
 		});
 	},
@@ -210,12 +324,24 @@ const orderService = {
 				type: this.create.type,
 				data,
 				success: (res) => resolve(res.data),
-				error: (err) => reject(
-					{
-						message: err.responseJSON.message,
-						errors: err.responseJSON.errors
+				error: (_, status, err) => {
+					// Handle request timeout
+					if (status === 'timeout') {
+						if (showOtherToast) {
+							showOtherToast({text: "Request Timeout", headerTitle: "Request Timeout"});
+						} else {
+							console.warn("Request Timeout");
+						}
+						return;
 					}
-				)
+					
+					reject(
+						{
+							message: err.responseJSON.message,
+							errors: err.responseJSON.errors
+						}
+					);
+				}
 			})
 		});
 	}
@@ -248,8 +374,20 @@ const accountService = {
 				data: formData,
 				contentType: false,
 				processData: false,
-				success: res => resolve(res),
-				error: err => reject(err.responseJSON.error)
+				success: (res) => resolve(res),
+				error: (_, status, err) => {
+					// Handle request timeout
+					if (status === 'timeout') {
+						if (showOtherToast) {
+							showOtherToast({text: "Request Timeout", headerTitle: "Request Timeout"});
+						} else {
+							console.warn("Request Timeout");
+						}
+						return;
+					}
+					
+					reject(err.responseJSON.error);
+				}
 			});
 		});
 	},
@@ -265,12 +403,26 @@ const accountService = {
 				type: this.updatePassword.type,
 				data,
 				success: (res) => resolve(res.message),
-				error: (err) => reject(
-					{
-						message: err.responseJSON.message,
-						errors: err.responseJSON.errors
+				error: (_, status, err) => {
+					// Handle request timeout
+					if (status === 'timeout') {
+						if (showOtherToast) {
+							showOtherToast({text: "Request Timeout", headerTitle: "Request Timeout"});
+						} else {
+							console.warn("Request Timeout");
+						}
+						return;
 					}
-				)
+					
+					console.log(err)
+					
+					reject(
+						{
+							message: err.responseJSON.message,
+							errors: err.responseJSON.errors
+						}
+					);
+				}
 			});
 		});
 	}
@@ -315,7 +467,19 @@ const bookingProductService = {
 				url: `${this.getById.url}${id}`,
 				type: this.getById.type,
 				success: (res) => resolve(res.data),
-				error: (err) => reject(err.responseJSON.message)
+				error: (_, status, err) => {
+					// Handle request timeout
+					if (status === 'timeout') {
+						if (showOtherToast) {
+							showOtherToast({text: "Request Timeout", headerTitle: "Request Timeout"});
+						} else {
+							console.warn("Request Timeout");
+						}
+						return;
+					}
+					
+					reject(err.responseJSON.message);
+				}
 			});
 		});
 	},
@@ -359,12 +523,24 @@ const bookingProductService = {
 				contentType: false,
 				processData: false,
 				success: (res) => resolve(res.data),
-				error: (err) => reject(
+				error: (_, status, err) => {
+					
+					// Handle request timeout
+					if (status === 'timeout') {
+						if (showOtherToast) {
+							showOtherToast({text: "Request Timeout", headerTitle: "Request Timeout"});
+						} else {
+							console.warn("Request Timeout");
+						}
+						return;
+					}
+					
+					reject(
 					{
 						message: err.responseJSON.message,
 						errors: err.responseJSON.errors
-					}
-				)
+					});
+				}
 			});
 		});
 	},
@@ -376,7 +552,20 @@ const bookingProductService = {
 				url: `${this.delete.url}${id}`,
 				type: this.delete.type,
 				success: (res) => resolve(res.message),
-				error: (err) => reject(err.responseJSON.message)
+				error: (_, status, err) => {
+					
+					// Handle request timeout
+					if (status === 'timeout') {
+						if (showOtherToast) {
+							showOtherToast({text: "Request Timeout", headerTitle: "Request Timeout"});
+						} else {
+							console.warn("Request Timeout");
+						}
+						return;
+					}
+					
+					reject(err.responseJSON.message);
+				}
 			});
 		});
 	},
@@ -394,7 +583,20 @@ const bookingProductService = {
 				url: `${this.getCount.url}?keyword=${keyword}&type=${type}${isDeleted === null ? '' : `&isDeleted=${isDeleted}`}`,
 				type: this.getCount.type,
 				success: (res) => resolve(res.data),
-				error: (err) => reject(err.responseJSON.message)
+				error: (_, status, err) => {
+					
+					// Handle request timeout
+					if (status === 'timeout') {
+						if (showOtherToast) {
+							showOtherToast({text: "Request Timeout", headerTitle: "Request Timeout"});
+						} else {
+							console.warn("Request Timeout");
+						}
+						return;
+					}
+					
+					reject(err.responseJSON.message);
+				}
 			});
 		});
 	},
@@ -424,7 +626,19 @@ const bookingProductService = {
 				`,
 				type: this.getPage.type,
 				success: (res) => resolve(res.data),
-				error: (err) => reject(err.responseJSON.message)
+				error: (_, status, err) => {
+					// Handle request timeout
+					if (status === 'timeout') {
+						if (showOtherToast) {
+							showOtherToast({text: "Request Timeout", headerTitle: "Request Timeout"});
+						} else {
+							console.warn("Request Timeout");
+						}
+						return;
+					}
+					
+					reject(err.responseJSON.message);
+				}
 			});
 		});
 	},
@@ -454,12 +668,26 @@ const bookingProductService = {
 				contentType: false,
 				processData: false,
 				success: (res) => resolve(res.data),
-				error: (err) => reject(
-					{
-						message: err.responseJSON.message,
-						errors: err.responseJSON.errors
+				error: (_, status, err) => {
+					
+					// Handle request timeout
+					if (status === 'timeout') {
+						if (showOtherToast) {
+							showOtherToast({text: "Request Timeout", headerTitle: "Request Timeout"});
+						} else {
+							console.warn("Request Timeout");
+						}
+						return;
 					}
-				)
+					
+					reject(
+						{
+							message: err.responseJSON.message,
+							errors: err.responseJSON.errors
+						}
+					);
+					
+				}
 			});
 		});
 	},
@@ -489,7 +717,18 @@ const wardService = {
 				url: this.getByProvinceId.url + provinceId,
 				type: this.getByProvinceId.type,
 				success: (res) => resolve(res.data),
-				error: (err) => reject(err.responseJSON.message)
+				error: (_, status, err) => {
+					// Handle request timeout
+					if (status === 'timeout') {
+						if (showOtherToast) {
+							showOtherToast({text: "Request Timeout", headerTitle: "Request Timeout"});
+						} else {
+							console.warn("Request Timeout");
+						}
+						return;
+					}
+					reject(err.responseJSON.message);
+				}
 			});
 		});
 	},
@@ -502,7 +741,20 @@ const wardService = {
 				type: this.create.type,
 				data,
 				success: (res) => resolve(res.data),
-				error: (err) => reject(err.responseJSON)
+				error: (_, status, err) => {
+					
+					// Handle request timeout
+					if (status === 'timeout') {
+						if (showOtherToast) {
+							showOtherToast({text: "Request Timeout", headerTitle: "Request Timeout"});
+						} else {
+							console.warn("Request Timeout");
+						}
+						return;
+					}
+					
+					reject(err.responseJSON.message);
+				}
 			});
 		});
 	},
@@ -514,7 +766,18 @@ const wardService = {
 				url: this.delete.url + wardId,
 				type: this.delete.type,
 				success: (res) => resolve(res.message),
-				error: (err) => reject(err.responseJSON)
+				error: (_, status, err) => {
+					// Handle request timeout
+					if (status === 'timeout') {
+						if (showOtherToast) {
+							showOtherToast({text: "Request Timeout", headerTitle: "Request Timeout"});
+						} else {
+							console.warn("Request Timeout");
+						}
+						return;
+					}
+					reject(err.responseJSON);
+				}
 			});
 		});
 	},
@@ -544,7 +807,19 @@ const provinceService = {
 				url: this.getAll.url,
 				type: this.getAll.type,
 				success: (res) => resolve(res.data),
-				error: (err) => reject(err.responseJSON.message)
+				error: (_, status, err) => {
+					// Handle request timeout
+					if (status === 'timeout') {
+						if (showOtherToast) {
+							showOtherToast({text: "Request Timeout", headerTitle: "Request Timeout"});
+						} else {
+							console.warn("Request Timeout");
+						}
+						return;
+					}
+					
+					reject(err.responseJSON.message);
+				}
 			});
 
 		})
@@ -559,7 +834,19 @@ const provinceService = {
 				type: this.create.type,
 				data,
 				success: (res) => resolve(res.data),
-				error: (err) => reject(err.responseJSON)
+				error: (_, status, err) => {
+					// Handle request timeout
+					if (status === 'timeout') {
+						if (showOtherToast) {
+							showOtherToast({text: "Request Timeout", headerTitle: "Request Timeout"});
+						} else {
+							console.warn("Request Timeout");
+						}
+						return;
+					}
+					
+					reject(err.responseJSON);
+				}
 			})
 		})
 	},
@@ -572,7 +859,19 @@ const provinceService = {
 				type: this.create.type,
 				data,
 				success: (res) => resolve(res.message),
-				error: (err) => reject(err.responseJSON.message)
+				error: (_, status, err) => {
+					// Handle request timeout
+					if (status === 'timeout') {
+						if (showOtherToast) {
+							showOtherToast({text: "Request Timeout", headerTitle: "Request Timeout"});
+						} else {
+							console.warn("Request Timeout");
+						}
+						return;
+					}
+					
+					reject(err.responseJSON.message);
+				}
 			})
 		})
 	},

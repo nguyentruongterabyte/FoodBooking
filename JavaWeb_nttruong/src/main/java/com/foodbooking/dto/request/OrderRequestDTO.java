@@ -18,6 +18,7 @@ public class OrderRequestDTO {
 	
 	@NotNull(message = "Please provide your name.")
 	@NotBlank(message = "Please enter your name.")
+	@Length(max = 60, message = "The name too long. Maximum 60 characters.")
 	private String name;
 	
 	@NotNull(message = "Please provide detail address.")

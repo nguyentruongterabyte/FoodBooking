@@ -1,25 +1,59 @@
 $(document).ready(async function() {
 
+	$('body > .loader').hide();
+	
 	$('#cart-modal .loader').show();
+	// Fetch exact item price from database and compare with local carts 
 	const fetchedCart = await Promise.all(carts.map(cartItem => {
 		const fetchedCartItem = bookingProductService.getByBookingProductId(cartItem.id)
 			.then(bookingProduct => {
-				return {...cartItem, price: bookingProduct.price}
+				if (cartItem.price !== bookingProduct.price) {
+
+					// Show price changed
+					showOtherToast(
+						{
+							headerTitle: 'Price changed',
+							text: `
+									The product "${bookingProduct.name}" 
+									has been changed price from "${cartItem.price.toLocaleString()} đ" 
+									to "${bookingProduct.price.toLocaleString()} đ"`
+						}
+					);
+				}
+
+				// Check if the product is deleted by admin
+				if (bookingProduct.isDeleted) {
+					showOtherToast(
+						{
+							headerTitle: 'Item was deleted',
+							text: `
+								The product "${bookingProduct.name}" 
+								has been deleted by admin
+							`
+						}
+					);
+					return undefined;
+				}
+
+				// Update cart price item
+				return { ...cartItem, price: bookingProduct.price }
 			})
-			.catch(message => showErrorToast({text: message, headerTitle: 'Retrieve issue'}));
+			.catch(message => showErrorToast({ text: message, headerTitle: 'Retrieve issue' }));
 		return fetchedCartItem;
 	}));
-	
-	$('#cart-modal .loader').hide();
-	
-	
+
+	setTimeout(function() {
+		$('#cart-modal .loader').hide();
+	}, 2000);
+
 	if (fetchedCart.every(cartItem => !cartItem)) {
 		carts = new Array();
 	} else {
-		carts = fetchedCart;
+		carts = fetchedCart.filter(cartItem => cartItem);
 	}
-	
-	
+
+	saveCartToLocalStorage(carts);
+
 	// Connect socket
 	connectWebsocket();
 
@@ -88,6 +122,7 @@ $(document).ready(async function() {
 		})
 		);
 
+		$('body > .loader').show();
 		// Call API create order
 		orderService.createOrder(JSON.stringify(formObj))
 			.then(newOrder => {
@@ -104,11 +139,21 @@ $(document).ready(async function() {
 					console.warn("WebSocket disconnect, cannot sent order!");
 				}
 
-				// Redirect to order successfully page
-				window.location.replace('/order-successfully');
+				showSuccessToast({ headerTilte: 'Place order successfully', text: "Order placed successfully! We're preparing your food" });
+
+				setTimeout(function() {
+					$('body > .loader').hide();
+				}, 2000);
+				
+				setTimeout(function() {
+					// Redirect to order successfully page
+					window.location.replace('/order-successfully');
+				}, 2500);
 			})
 			.catch(err => {
 				const errors = err.errors;
+				
+				$('body .loader').hide();
 
 				if (errors instanceof Array) {
 					for (const error of errors) {
@@ -131,16 +176,15 @@ $(document).ready(async function() {
 	$('#cancel-btn').on('click', function() {
 		window.location.href = '/';
 	});
-	
+
+	// Handle limit customer name length
+	handleLimitTextInputLength({ inputId: '#name', maxLength: 60 });
+
+	// Handle limit detail address length
+	handleLimitTextInputLength({ inputId: '#detail-address', maxLength: 95 });
+
 	// Handle limit message length
-	$('#message').on('input', function() {
-		const value = $(this).val();
-		const valueLength = value.length;
-		if (valueLength >= 100) {
-			$(this).val(value.slice(0, 100));
-		}
-		$('#message-length').text(`${$(this).val().length}/100`);
-	});
+	handleLimitTextInputLength({ inputId: '#message', maxLength: 100 });
 });
 
 function renderShippingFee() {

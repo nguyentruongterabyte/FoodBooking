@@ -1029,7 +1029,8 @@ function getAndRenderTotalItems(type = 'food') {
 						);
 					} else {
 						$('#food__pagination-nav .pagination').hide();
-						showOtherToast({ text: 'There is nothing to show!', headerTitle: 'Empty list' });
+						$('#food-tab .list-view').empty();
+						showErrorToast({ text: 'There is nothing to show!', headerTitle: 'Empty list' });
 					}
 				})
 				.catch(message => showOtherToast({ text: message, headerTitle: 'Get total food items failed' }));
@@ -1061,8 +1062,8 @@ function getAndRenderTotalItems(type = 'food') {
 						});
 					} else {
 						$('#drink__pagination-nav .pagination').hide();
-						showOtherToast({ text: 'There is nothing to show!', headerTitle: 'Empty list' });
-
+						$('#drink-tab .list-view').empty();
+						showErrorToast({ text: 'There is nothing to show!', headerTitle: 'Empty list' });
 					}
 				})
 				.catch(message => showOtherToast({ text: message, headerTitle: 'Get total drink items failed' }));

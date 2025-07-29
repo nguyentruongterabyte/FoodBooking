@@ -313,9 +313,23 @@ function handleSearchingInputOnSearch(root = "#searching-input", callback = () =
 			e.preventDefault(); // Prevent default
 
 			const keyword = $(this).val(); // Get keyword from input
-			callback(keyword);
+			if (keyword)
+				callback(keyword);
 		}
 
+	});
+}
+
+// Handle limit length text input
+function handleLimitTextInputLength({inputId = '#name', maxLength = 100}) {
+	$(inputId).on('input', function() {
+		const value = $(this).val();
+		const valueLength = value.length;
+		if (valueLength >= maxLength) {
+			$(this).val(value.slice(0, maxLength));
+		}
+		
+		$(this).siblings('.string-length').text(`${$(this).val().length}/${maxLength}`);
 	});
 }
 

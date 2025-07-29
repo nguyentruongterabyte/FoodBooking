@@ -36,6 +36,28 @@
 </head>
 
 <body>
+	<!-- Loading START -->
+	<div class="loader">
+		<div class="mosaic-loader">
+			<div class="cell d-0"></div>
+			<div class="cell d-1"></div>
+			<div class="cell d-2"></div>
+			<div class="cell d-3"></div>
+			<div class="cell d-1"></div>
+			<div class="cell d-2"></div>
+			<div class="cell d-3"></div>
+			<div class="cell d-4"></div>
+			<div class="cell d-2"></div>
+			<div class="cell d-3"></div>
+			<div class="cell d-4"></div>
+			<div class="cell d-5"></div>
+			<div class="cell d-3"></div>
+			<div class="cell d-4"></div>
+			<div class="cell d-5"></div>
+			<div class="cell d-6"></div>
+		</div>
+	</div>
+	<!-- Loading END -->
 	<!-- Header START -->
 	<header>
 		<a href="/" class="brand"></a>
@@ -51,12 +73,13 @@
 			<div class="form-row">
 
 				<!-- Name -->
-				<div class="col form-group">
+				<div class="col form-group string-length-container">
 					<label for="name" class="label-up-to">Your Full Name</label>
 					<input required type="text" id="name" name="name" class="form-control" />
 					<div class="invalid-feedback">
 						Please provide a name
 					</div>
+					<span class="string-length">0/60</span>
 				</div>
 
 				<!-- Phone number -->
@@ -108,6 +131,7 @@
 					<div class="invalid-feedback">
 						Please enter your address
 					</div>
+					<span class="string-length">0/95</span>
 				</div>
 			</div>
 
@@ -117,13 +141,13 @@
 				width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy"
 				referrerpolicy="no-referrer-when-downgrade"></iframe>
 
-			<div class="form-group form-row">
+			<div class="form-group form-row string-length-container">
 				<label for="message">Message</label>
 				<textarea class="form-control" id="message" name="message" placeholder="Your message"></textarea>
 				<div class="invalid-feedback">
 					Write something...
 				</div>
-				<span id="message-length">1/100</span>
+				<span class="string-length">0/100</span>
 			</div>
 
 			<div class="dashed-line"></div>

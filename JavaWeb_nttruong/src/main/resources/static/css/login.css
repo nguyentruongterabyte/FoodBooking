@@ -63,8 +63,13 @@ body {
 		color: black
 	}
 
+	
+	.form-group {
+		position: relative;
+		margin: 0 0 32px;
+	}
+	
 	.control {
-		margin: 0 0 24px;
 		border: 1px solid #ccc;
 		background-color: white;
 		border-radius: 8px;
@@ -92,6 +97,17 @@ body {
 				border: 0;
 			}
 		}
+	}
+	
+	.invalid-feedback {
+		position: absolute;
+		bottom: 0;
+		left: 0;
+		transform: translateY(100%);
+		font-size: 1rem;
+		font-weight: 400;
+		color: red;
+		display: none;
 	}
 
 	.btn {

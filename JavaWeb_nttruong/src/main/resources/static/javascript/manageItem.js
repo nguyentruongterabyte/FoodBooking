@@ -80,8 +80,10 @@ $(document).ready(function() {
 		$('.remove-image-btn').show();
 		$('input[name="imageFile"]').val('');
 		$('input[name="name"]').val(foundItem.name);
+		$('#name ~ .string-length').text(`${foundItem.name?.length || 0}/100`)
 		$('input[name="price"]').val(foundItem.price);
 		$('textarea[name="description"]').val(foundItem.description);
+		$('#description ~ .string-length').text(`${foundItem.description?.length || 0}/500`)
 
 		// Show detail modal 
 		$('#show-detail-btn').click();
@@ -310,6 +312,12 @@ $(document).ready(function() {
 			}
 		);
 	});
+	
+	// Handle limit name length
+	handleLimitTextInputLength({inputId: '#name', maxLength: 100});
+	
+	// Handle limit description length
+	handleLimitTextInputLength({inputId: '#description', maxLength: 500});
 
 	// Handle pagination item click
 	handlePaginationItemClick('#drink__pagination-nav .pagination', 'drink');
@@ -350,7 +358,7 @@ function getAndRenderTotalItems(type) {
 						);
 					} else {
 						$('#food__pagination-nav .pagination').hide();
-						showOtherToast({ text: 'There is nothing to show!', headerTitle: 'Empty list' });
+						showErrorToast({ text: 'There is nothing to show!', headerTitle: 'Empty list' });
 					}
 				})
 				.catch(message => showOtherToast({ text: message, headerTitle: 'Get total food items failed' }));
@@ -381,7 +389,7 @@ function getAndRenderTotalItems(type) {
 						});
 					} else {
 						$('#drink__pagination-nav .pagination').hide();
-						showOtherToast({ text: 'There is nothing to show!', headerTitle: 'Empty list' });
+						showErrorToast({ text: 'There is nothing to show!', headerTitle: 'Empty list' });
 
 					}
 				})
@@ -581,7 +589,8 @@ function handlePaginationItemClick(root = '#drink__pagination-nav .pagination', 
 			default:
 				alert('Invalid type.')
 		}
-	})
+	});
+	
 }
 
 /* Custom render paging */
@@ -704,7 +713,7 @@ function renderListView({ data = [{
 }], type = 'food' }) {
 
 	if (data.length === 0)
-		showOtherToast({ text: 'There is nothing to show!', headerTitle: 'Empty list' });
+		showErrorToast({ text: 'There is nothing to show!', headerTitle: 'Empty list' });
 
 	switch (type) {
 		case 'food':

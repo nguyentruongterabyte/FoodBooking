@@ -644,12 +644,12 @@ function getAndRenderTotalOrderItems() {
 			);
 		} else {
 			$('#order__pagination-nav .pagination').hide();
-			showOtherToast({ text: "Oops! It looks like you don't have any orders", headerTitle: '' });
+			showErrorToast({ text: "Oops! It looks like you don't have any orders", headerTitle: '' });
 		}
 	})
 		.catch(message => {
 			$('#order__pagination-nav .pagination').hide();
-			showOtherToast({ text: message, headerTitle: 'Get total order items failed' });
+			showErrorToast({ text: message, headerTitle: 'Get total order items failed' });
 		})
 }
 

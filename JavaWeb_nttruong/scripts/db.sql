@@ -1,27 +1,12 @@
--- MySQL dump 10.13  Distrib 8.0.19, for Win64 (x86_64)
---
--- Host: localhost    Database: food_booking
--- ------------------------------------------------------
--- Server version	8.0.40
+DROP DATABASE IF EXISTS food_booking;
 
-/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
-/*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
-/*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
-/*!50503 SET NAMES utf8mb4 */;
-/*!40103 SET @OLD_TIME_ZONE=@@TIME_ZONE */;
-/*!40103 SET TIME_ZONE='+00:00' */;
-/*!40014 SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0 */;
-/*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
-/*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
-/*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
+CREATE DATABASE food_booking
+CHARACTER SET utf8mb4
+COLLATE utf8mb4_unicode_ci;
 
---
+USE food_booking;
+
 -- Table structure for table `accounts`
---
-
-DROP TABLE IF EXISTS `accounts`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `accounts` (
   `id` bigint NOT NULL AUTO_INCREMENT,
   `username` varchar(50) NOT NULL,
@@ -29,26 +14,12 @@ CREATE TABLE `accounts` (
   `role` varchar(20) DEFAULT 'ROLE_USER',
   PRIMARY KEY (`id`),
   UNIQUE KEY `username` (`username`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
-/*!40101 SET character_set_client = @saved_cs_client */;
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
---
 -- Dumping data for table `accounts`
---
+INSERT INTO accounts (`id`, `username`, `password`, `role`) VALUES (1,'admin', MD5('admin'),'ROLE_ADMIN'), (2,'admin2', MD5('123'),'ROLE_ADMIN'), (3,'admin3', MD5('123456'),'ROLE_ADMIN'), (4, 'truongchiller', MD5('2202A54square@'), 'ROLE_ADMIN');
 
-LOCK TABLES `accounts` WRITE;
-/*!40000 ALTER TABLE `accounts` DISABLE KEYS */;
-INSERT INTO `accounts` VALUES (1,'admin','21232f297a57a5a743894a0e4a801fc3','ROLE_ADMIN');
-/*!40000 ALTER TABLE `accounts` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
 -- Table structure for table `booking_products`
---
-
-DROP TABLE IF EXISTS `booking_products`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `booking_products` (
   `type` varchar(31) NOT NULL,
   `id` bigint NOT NULL AUTO_INCREMENT,
@@ -58,79 +29,47 @@ CREATE TABLE `booking_products` (
   `name` varchar(100) DEFAULT NULL,
   `price` bigint DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=27 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
-/*!40101 SET character_set_client = @saved_cs_client */;
+) ENGINE=InnoDB AUTO_INCREMENT=36 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
---
 -- Dumping data for table `booking_products`
---
+INSERT INTO booking_products (`type`, `id`, `description`, `image_url`, `is_deleted`, `name`, `price`) VALUES ('food',1,'Đùi gà tươi góc 4 xối mỡ + sốt mắm tỏi + Cơm + dưa leo + salad + canh','http://localhost:8080/api/files/d21c0c62-f146-4283-9a1e-aaaef0350c78_exampleFood.png',_binary '\0','Cơm Đùi Gà Góc Tư Sốt Mắm Tỏi Chua Cay phơi phới',45000), ('drink',3,'Lục Trà Macchiato - Size nhỏ #Dòng thức uống đặc trưng, không thêm topping, không dùng ống hút','http://localhost:8080/api/files/619eefea-3412-4b6e-bc9f-7757f86df33e_72ab8914216a1bce7215dff4d7d0c68657aecf67.png',_binary '\0','S-Green Tea Macchiato',51000), ('food',4,'(Thịt đùi gà tươi đã rút xương + sốt nước mắm + hành tây + cơm + dưa leo + salad + canh)','http://localhost:8080/api/files/0a333835-a6f8-46de-bd0b-5c521d8e0971_f93227e6005185bd347971839a569488ab0a347a.png',_binary '\0','Cơm Gà Đùi Rút Xương Chiên Nước Mắm',60000), ('food',5,'Đùi gà tươi góc 4 xối mỡ + Cơm + dưa leo + salad + canh','http://localhost:8080/api/files/be783e92-bfc6-4ad7-b564-7d1b5f8691b1_2d67141c6314cf77561caa94b59f694d8bb49b01.png',_binary '\0','Cơm Gà Đùi Góc Tư Xối Mỡ',60000), ('food',6,'Cơm + gà tươi xối mỡ + salad + dưa leo + canh.','http://localhost:8080/api/files/c049ce7c-292f-49b9-a21d-a5f43a8409a3_e41d8fd8670458b2223db48f5f97c1615b77ab14.png',_binary '\0','Cơm Gà Xối Mỡ Nhỏ (Đùi Tỏi Hoặc Má Đùi Ngẫu nhiên)',60000), ('food',7,'Cơm Chiên/ Đùi Góc Tư/ Sốt Mắm Tỏi/ Mix salad','http://localhost:8080/api/files/cb89b045-a47a-4c45-add3-1b930fc05091_3e3b16c236da6e712cdf8c9eeea10dec14a583af.png',_binary '\0','Cơm Chiên Đùi Gà Mắm Tỏi',55000), ('food',8,'(Thịt đùi gà tươi đã rút xương + sốt nước mắm + hành tây + cơm + dưa leo + salad + canh)','http://localhost:8080/api/files/79b8e2f9-f75c-44dc-94bf-29dd1b141d36_f93227e6005185bd347971839a569488ab0a347a%20(1).png',_binary '\0','Cơm Gà Đùi Rút Xương Chiên Nước Mắm 2',35000), ('food',9,'Đùi gà tươi góc 4 xối mỡ + Cơm + dưa leo + salad + canh','http://localhost:8080/api/files/63a0cd93-45d7-4d06-8cc6-4057cdf6a075_f93227e6005185bd347971839a569488ab0a347a%20(1).png',_binary '\0','Cơm Gà Đùi Rút Xương Chiên Nước Mắm 3',36000), ('food',10,'Cơm Chiên Đùi Gà Xối Mỡ + Cải Chua','http://localhost:8080/api/files/0a0fa6bd-48e3-4b16-875b-e0a596fb4f83_1bca93c4686636d4fca8529d0e002012f927c6a0.png',_binary '\0','Combo Gà Xối Mỡ + Cải Chua - Bao Ngon 💥',89000), ('food',11,'Thịt đùi gà tươi đã rút xương + sốt nước mắm + hành tây + cơm + dưa leo + salad + canh + dưa hấu','http://localhost:8080/api/files/97d39b22-d7a1-4f77-9fcd-f89a74968a3b_f93227e6005185bd347971839a569488ab0a347a%20(1).png',_binary '\0','Combo Gà Xối Mỡ + Cải Chua - Bao Ngon 💥 1',29000), ('food',12,'Đùi gà tươi góc 4 xối mỡ + Cơm + dưa leo + salad + canh','http://localhost:8080/api/files/dadcee0e-aa61-4a97-9f13-7cd955cef9af_3e3b16c236da6e712cdf8c9eeea10dec14a583af.png',_binary '\0','Cơm Gà Đùi Rút Xương Chiên Nước Mắm 4',27000), ('food',13,'(Thịt đùi gà tươi đã rút xương + sốt nước mắm + hành tây + cơm + dưa leo + salad + canh)','http://localhost:8080/api/files/548fd022-b78e-408e-b10b-a466d99f4e3f_f93227e6005185bd347971839a569488ab0a347a.png',_binary '\0','Combo Gà Xối Mỡ + Cải Chua - Bao Ngon 💥 5',30000), ('food',14,'Đùi gà tươi góc 4 xối mỡ + Cơm + dưa leo + salad + canh','http://localhost:8080/api/files/d1d21809-2414-46b6-8d23-bfcb9942e7b5_1bca93c4686636d4fca8529d0e002012f927c6a0.png',_binary '\0','Cơm Gà Đùi Góc Tư Xối Mỡ 1',23000), ('food',15,'Cơm Chiên Đùi Gà Xối Mỡ + Cải Chua','http://localhost:8080/api/files/12e9766b-f0f9-4155-82cc-89ec9ab3c1ae_3e3b16c236da6e712cdf8c9eeea10dec14a583af.png',_binary '\0','Combo Gà Xối Mỡ + Cải Chua - Bao Ngon 💥 90',43000), ('food',16,'(Thịt đùi gà tươi đã rút xương + sốt nước mắm + hành tây + cơm + dưa leo + salad + canh)','http://localhost:8080/api/files/ade4fd9c-248b-4ee0-94c5-752054d9162c_f93227e6005185bd347971839a569488ab0a347a%20(1).png',_binary '\0','Cơm Gà Đùi Rút Xương Chiên Nước Mắm 1',24000), ('drink',17,'Lục Trà Macchiato - Size vừa #Dòng thức uống đặc trưng, không thêm topping, không dùng ống hút','http://localhost:8080/api/files/00295542-8dd7-47bb-a079-64bbee8cc981_96378c951cba28a8851ff6bb6a37c8b6f5d335b2.png',_binary '\0','M-Green Tea Macchiato',60000), ('drink',18,'Lục Trà Macchiato - Size lớn #Dòng thức uống đặc trưng, không thêm topping, không dùng ống hút','http://localhost:8080/api/files/78a74e0d-3bb3-43e1-91ab-3e641588eb0a_96636a2ca80da20c1df738114412cdc046fe7d31.png',_binary '\0','L-Green Tea Macchiato',86000), ('drink',19,'Hồng Trà Macchiato - Size nhỏ #Dòng thức uống đặc trưng, không thêm topping, không dùng ống hút','http://localhost:8080/api/files/c07a2550-0339-4744-9568-db709b300a8c_d39f047767852537fa63fd80e6d9ca6ff347d634.png',_binary '\0','S-Black Tea Macchiato',50000), ('drink',20,'Hồng Trà Macchiato - Size vừa #Dòng thức uống đặc trưng, không thêm topping, không dùng ống hút','http://localhost:8080/api/files/08b6efd3-2587-450f-862f-bbee6144c013_d39f047767852537fa63fd80e6d9ca6ff347d634%20(1).png',_binary '\0','M-Black Tea Macchiato',60000), ('drink',21,'Lục Trà Mãng Cầu-Size Vừa','http://localhost:8080/api/files/ba3c30d4-552a-4b6f-a0d1-eb4307453d13_0b0a9c9022c9d0b79b70413dca8b003ba8dff420.png',_binary '\0','M-Soursop Green Tea',60000), ('drink',22,'Hồng Trà Mãng Cầu-Size Vừa','http://localhost:8080/api/files/a3ef02fe-edf6-43c9-99e4-3fb3057593d8_3b861229d76608eeeca3e3943ed9ce385fd2ed0d.png',_binary '\0','M-Soursop Black Tea',70000), ('drink',23,'Lục Trà Mãng Cầu-Size Nhỏ','http://localhost:8080/api/files/bb16541f-7c90-4c0b-938d-adaf895e2045_633690367d92aaff6d1699e83f42caec4c824cc9.png',_binary '\0','S-Soursop Green Tea',51000), ('drink',24,'Hồng Trà Mãng Cầu-Size Lớn','http://localhost:8080/api/files/d2102683-8eb2-4318-9ae8-f19fd1f3a727_6ceb935d1478ea7b4a10451768cf1339fec96e3e.png',_binary '\0','L-Soursop Black Tea',86000), ('drink',25,'Hồng Trà Mãng Cầu-Size Nhỏ','http://localhost:8080/api/files/997ec044-c6d0-42df-bdde-b1996d8b0439_848db6e4192fdbfcb9a65198138c841208855e29.png',_binary '\0','S-Soursop Black Tea',51000), ('drink',26,'Món ăn mang lại niềm vui và hạnh phúc cho mọi người. Nguyên liệu bao gồm: tôm, thịt nạc, nạc xay, gan, tim trứng cút','http://localhost:8080/api/files/5c7cdf5a-b907-4156-93b0-2deed65807b7_72ab8914216a1bce7215dff4d7d0c68657aecf67.png',_binary '\0','Hủ Tiếu Hạnh Phúc (Thập Cẩm)',53000), ('food',27,'Bánh kem béo ngậy vị dâu tây','http://localhost:8080/api/files/a69ae164-ed89-4179-b094-509d31e8defa_banhkem.jpg',_binary '\0','Bánh kem dâu tây',12000), ('food',28,'Xúc xích + Trứng + Bột lọc + Bột mì','http://localhost:8080/api/files/b0cc4f93-bdaa-4154-9bb4-9c29f383ad6f_pexels-cottonbro-3944311.jpg',_binary '\0','Pizza xúc xích trứng bán kính 50cm',36000), ('food',29,'Súp đậu nành + Súp đậu hũ','http://localhost:8080/api/files/0ee74f60-2c44-4194-8344-e32c5fb9b674_banh.jpg',_binary '\0','Súp đậu nành',30000), ('food',30,'Berry preserves diy canning','http://localhost:8080/api/files/0b665d71-0dce-4aae-b4a7-54d2872d18d8_berry_preserves_diy_canning_square_food_kids_labels-r_zqr6gm_1024.jpg',_binary '\0','Món tráng miệng kẹo dâu tây',60000), ('food',31,'Bò xào lá lốt + Bún + Mắm nêm + Nước tương','http://localhost:8080/api/files/8def4e69-4b56-4744-a424-1d735edf933c_popular-vietnamese-foods.jpg',_binary '\0','Mâm đồ ăn truyền thống Việt Nam',246000), ('food',32,'Thưởng thức tô phở đặc biệt phố cổ Hà Nội','http://localhost:8080/api/files/e91afb56-8e1e-400b-83d7-b9e65bb978fa_Pho.jpg',_binary '\0','Phở bò',40000), ('food',33,'2 Tôm + mắm nêm đậm vị + 10 cuốn','http://localhost:8080/api/files/1f9ab0a1-943b-41da-bfb1-77f351381490_banhBotLoc.jpg',_binary '\0','Combo 10 Bánh cuốn',70000), ('food',34,'In Hội An, chicken rice remains a beloved dish, famous for its savory flavor and widespread appeal among locals and tourists alike. The residents of Hội An take great pride in this culinary specialty. The dish features rice cooked in chicken broth with a hint of turmeric, resulting in a light yellow hue that reflects the infusion of chicken fat.','http://localhost:8080/api/files/8269c798-75fa-4939-b764-97907a6ef411_ChickenRiceHoiAn.jpg',_binary '\0','Chicken Rice Hội An',300000), ('food',35,'Pho, undoubtedly the most renowned Vietnamese dish worldwide, offers a delightful medley of flavours. A steaming bowl presents a harmonious combination of pho (rice noodles), tender meat (beef or chicken), aromatic herbs, and a fragrant broth.','http://localhost:8080/api/files/9d974a67-7126-4b86-83c4-ceb8abeeee86_Chip-Weiner-Bistro-BT.jpg',_binary '\0','Phở Bò Bát Tràng',60000);
 
-LOCK TABLES `booking_products` WRITE;
-/*!40000 ALTER TABLE `booking_products` DISABLE KEYS */;
-INSERT INTO `booking_products` VALUES ('food',1,'Đùi gà tươi góc 4 xối mỡ + sốt mắm tỏi + Cơm + dưa leo + salad + canh','http://localhost:8080/api/files/d21c0c62-f146-4283-9a1e-aaaef0350c78_exampleFood.png',0x01,'Cơm Đùi Gà Góc Tư Sốt Mắm Tỏi Chua Cay phơi phới',45000),('drink',3,'Lục Trà Macchiato - Size nhỏ #Dòng thức uống đặc trưng, không thêm topping, không dùng ống hút','http://localhost:8080/api/files/619eefea-3412-4b6e-bc9f-7757f86df33e_72ab8914216a1bce7215dff4d7d0c68657aecf67.png',0x00,'S-Green Tea Macchiato',51000),('food',4,'(Thịt đùi gà tươi đã rút xương + sốt nước mắm + hành tây + cơm + dưa leo + salad + canh)','http://localhost:8080/api/files/0a333835-a6f8-46de-bd0b-5c521d8e0971_f93227e6005185bd347971839a569488ab0a347a.png',0x00,'Cơm Gà Đùi Rút Xương Chiên Nước Mắm',60000),('food',5,'Đùi gà tươi góc 4 xối mỡ + Cơm + dưa leo + salad + canh','http://localhost:8080/api/files/be783e92-bfc6-4ad7-b564-7d1b5f8691b1_2d67141c6314cf77561caa94b59f694d8bb49b01.png',0x00,'Cơm Gà Đùi Góc Tư Xối Mỡ',60000),('food',6,'Cơm + gà tươi xối mỡ + salad + dưa leo + canh.','http://localhost:8080/api/files/c049ce7c-292f-49b9-a21d-a5f43a8409a3_e41d8fd8670458b2223db48f5f97c1615b77ab14.png',0x00,'Cơm Gà Xối Mỡ Nhỏ (Đùi Tỏi Hoặc Má Đùi Ngẫu nhiên)',60000),('food',7,'Cơm Chiên/ Đùi Góc Tư/ Sốt Mắm Tỏi/ Mix salad','http://localhost:8080/api/files/cb89b045-a47a-4c45-add3-1b930fc05091_3e3b16c236da6e712cdf8c9eeea10dec14a583af.png',0x00,'Cơm Chiên Đùi Gà Mắm Tỏi',55000),('food',8,'(Thịt đùi gà tươi đã rút xương + sốt nước mắm + hành tây + cơm + dưa leo + salad + canh)','http://localhost:8080/api/files/79b8e2f9-f75c-44dc-94bf-29dd1b141d36_f93227e6005185bd347971839a569488ab0a347a%20(1).png',0x00,'Cơm Gà Đùi Rút Xương Chiên Nước Mắm 2',35000),('food',9,'Đùi gà tươi góc 4 xối mỡ + Cơm + dưa leo + salad + canh','http://localhost:8080/api/files/63a0cd93-45d7-4d06-8cc6-4057cdf6a075_f93227e6005185bd347971839a569488ab0a347a%20(1).png',0x00,'Cơm Gà Đùi Rút Xương Chiên Nước Mắm 3',36000),('food',10,'Cơm Chiên Đùi Gà Xối Mỡ + Cải Chua','http://localhost:8080/api/files/0a0fa6bd-48e3-4b16-875b-e0a596fb4f83_1bca93c4686636d4fca8529d0e002012f927c6a0.png',0x01,'Combo Gà Xối Mỡ + Cải Chua - Bao Ngon 💥',89000),('food',11,'Thịt đùi gà tươi đã rút xương + sốt nước mắm + hành tây + cơm + dưa leo + salad + canh + dưa hấu','http://localhost:8080/api/files/97d39b22-d7a1-4f77-9fcd-f89a74968a3b_f93227e6005185bd347971839a569488ab0a347a%20(1).png',0x00,'Combo Gà Xối Mỡ + Cải Chua - Bao Ngon 💥 1',29000),('food',12,'Đùi gà tươi góc 4 xối mỡ + Cơm + dưa leo + salad + canh','http://localhost:8080/api/files/dadcee0e-aa61-4a97-9f13-7cd955cef9af_3e3b16c236da6e712cdf8c9eeea10dec14a583af.png',0x01,'Cơm Gà Đùi Rút Xương Chiên Nước Mắm 4',27000),('food',13,'(Thịt đùi gà tươi đã rút xương + sốt nước mắm + hành tây + cơm + dưa leo + salad + canh)','http://localhost:8080/api/files/548fd022-b78e-408e-b10b-a466d99f4e3f_f93227e6005185bd347971839a569488ab0a347a.png',0x01,'Combo Gà Xối Mỡ + Cải Chua - Bao Ngon 💥 5',30000),('food',14,'Đùi gà tươi góc 4 xối mỡ + Cơm + dưa leo + salad + canh','http://localhost:8080/api/files/d1d21809-2414-46b6-8d23-bfcb9942e7b5_1bca93c4686636d4fca8529d0e002012f927c6a0.png',0x00,'Cơm Gà Đùi Góc Tư Xối Mỡ 1',23000),('food',15,'Cơm Chiên Đùi Gà Xối Mỡ + Cải Chua','http://localhost:8080/api/files/12e9766b-f0f9-4155-82cc-89ec9ab3c1ae_3e3b16c236da6e712cdf8c9eeea10dec14a583af.png',0x00,'Combo Gà Xối Mỡ + Cải Chua - Bao Ngon 💥 90',43000),('food',16,'(Thịt đùi gà tươi đã rút xương + sốt nước mắm + hành tây + cơm + dưa leo + salad + canh)','http://localhost:8080/api/files/ade4fd9c-248b-4ee0-94c5-752054d9162c_f93227e6005185bd347971839a569488ab0a347a%20(1).png',0x01,'Cơm Gà Đùi Rút Xương Chiên Nước Mắm 1',24000),('drink',17,'Lục Trà Macchiato - Size vừa #Dòng thức uống đặc trưng, không thêm topping, không dùng ống hút','http://localhost:8080/api/files/00295542-8dd7-47bb-a079-64bbee8cc981_96378c951cba28a8851ff6bb6a37c8b6f5d335b2.png',0x00,'M-Green Tea Macchiato',60000),('drink',18,'Lục Trà Macchiato - Size lớn #Dòng thức uống đặc trưng, không thêm topping, không dùng ống hút','http://localhost:8080/api/files/78a74e0d-3bb3-43e1-91ab-3e641588eb0a_96636a2ca80da20c1df738114412cdc046fe7d31.png',0x00,'L-Green Tea Macchiato',86000),('drink',19,'Hồng Trà Macchiato - Size nhỏ #Dòng thức uống đặc trưng, không thêm topping, không dùng ống hút','http://localhost:8080/api/files/c07a2550-0339-4744-9568-db709b300a8c_d39f047767852537fa63fd80e6d9ca6ff347d634.png',0x00,'S-Black Tea Macchiato',50000),('drink',20,'Hồng Trà Macchiato - Size vừa #Dòng thức uống đặc trưng, không thêm topping, không dùng ống hút','http://localhost:8080/api/files/08b6efd3-2587-450f-862f-bbee6144c013_d39f047767852537fa63fd80e6d9ca6ff347d634%20(1).png',0x00,'M-Black Tea Macchiato',60000),('drink',21,'Lục Trà Mãng Cầu-Size Vừa','http://localhost:8080/api/files/ba3c30d4-552a-4b6f-a0d1-eb4307453d13_0b0a9c9022c9d0b79b70413dca8b003ba8dff420.png',0x00,'M-Soursop Green Tea',60000),('drink',22,'Hồng Trà Mãng Cầu-Size Vừa','http://localhost:8080/api/files/a3ef02fe-edf6-43c9-99e4-3fb3057593d8_3b861229d76608eeeca3e3943ed9ce385fd2ed0d.png',0x01,'M-Soursop Black Tea',70000),('drink',23,'Lục Trà Mãng Cầu-Size Nhỏ','http://localhost:8080/api/files/bb16541f-7c90-4c0b-938d-adaf895e2045_633690367d92aaff6d1699e83f42caec4c824cc9.png',0x01,'S-Soursop Green Tea',51000),('drink',24,'Hồng Trà Mãng Cầu-Size Lớn','http://localhost:8080/api/files/d2102683-8eb2-4318-9ae8-f19fd1f3a727_6ceb935d1478ea7b4a10451768cf1339fec96e3e.png',0x00,'L-Soursop Black Tea',86000),('drink',25,'Hồng Trà Mãng Cầu-Size Nhỏ','http://localhost:8080/api/files/997ec044-c6d0-42df-bdde-b1996d8b0439_848db6e4192fdbfcb9a65198138c841208855e29.png',0x00,'S-Soursop Black Tea',51000),('drink',26,'Món ăn mang lại niềm vui và hạnh phúc cho mọi người. Nguyên liệu bao gồm: tôm, thịt nạc, nạc xay, gan, tim trứng cút','http://localhost:8080/api/files/5c7cdf5a-b907-4156-93b0-2deed65807b7_72ab8914216a1bce7215dff4d7d0c68657aecf67.png',0x00,'Hủ Tiếu Hạnh Phúc (Thập Cẩm)',53000);
-/*!40000 ALTER TABLE `booking_products` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
--- Table structure for table `order_details`
---
-
-DROP TABLE IF EXISTS `order_details`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `order_details` (
-  `order_id` bigint NOT NULL,
-  `booking_product_id` bigint NOT NULL,
-  `quantity` int NOT NULL DEFAULT '1',
-  `item_price` bigint NOT NULL,
-  KEY `FKnlk3yygb8apt51gd2dt2gwige` (`booking_product_id`),
-  KEY `FKjyu2qbqt8gnvno9oe9j2s2ldk` (`order_id`),
-  CONSTRAINT `FKjyu2qbqt8gnvno9oe9j2s2ldk` FOREIGN KEY (`order_id`) REFERENCES `orders` (`id`) ON DELETE CASCADE,
-  CONSTRAINT `FKnlk3yygb8apt51gd2dt2gwige` FOREIGN KEY (`booking_product_id`) REFERENCES `booking_products` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `order_details`
---
-
-LOCK TABLES `order_details` WRITE;
-/*!40000 ALTER TABLE `order_details` DISABLE KEYS */;
-INSERT INTO `order_details` VALUES (1,1,1,60000),(1,3,2,30000),(2,1,1,25600),(3,1,1,25600),(4,3,1,51000),(5,25,1,51000),(6,14,1,23000),(6,16,1,24000),(6,11,1,29000),(7,14,1,23000),(7,16,1,24000),(7,11,1,29000),(8,14,1,23000),(8,9,1,36000),(8,4,2,60000),(8,5,1,60000),(9,14,1,23000),(9,11,1,29000),(10,14,1,23000),(10,19,1,50000),(10,20,1,60000),(11,11,1,29000),(11,14,1,23000),(12,14,1,23000),(12,11,1,29000),(13,11,1,29000),(13,14,1,23000),(13,9,1,36000),(14,14,1,23000),(14,11,1,29000),(15,14,1,23000),(16,14,1,23000),(16,11,1,29000),(16,8,1,35000),(17,14,1,23000),(17,11,1,29000),(17,8,1,35000),(18,14,1,23000),(18,11,1,29000),(19,14,1,23000),(19,11,1,29000),(20,14,1,23000),(20,11,1,29000),(21,14,1,23000),(22,14,1,23000),(22,11,1,29000),(23,11,1,29000),(23,14,1,23000),(24,14,1,23000),(25,14,1,23000),(26,9,1,36000),(27,11,1,29000),(27,14,1,23000),(28,14,1,23000),(28,11,1,29000),(29,11,1,29000),(30,14,1,23000),(30,11,1,29000),(31,14,1,23000),(31,11,2,29000),(32,11,1,29000),(32,14,1,23000),(33,11,1,29000),(33,14,1,23000),(34,11,1,29000),(34,14,1,23000),(35,14,1,23000),(36,11,1,29000),(36,14,1,23000),(37,15,1,43000);
-/*!40000 ALTER TABLE `order_details` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
 -- Table structure for table `order_statuses`
---
-
-DROP TABLE IF EXISTS `order_statuses`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `order_statuses` (
   `id` bigint NOT NULL AUTO_INCREMENT,
   `name` varchar(12) DEFAULT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
-/*!40101 SET character_set_client = @saved_cs_client */;
 
---
 -- Dumping data for table `order_statuses`
---
+INSERT INTO `order_statuses` (`id`, `name`) VALUES (1,'New'), (2,'Shipping'), (3,'Cancelled'), (4,'Completed');
 
-LOCK TABLES `order_statuses` WRITE;
-/*!40000 ALTER TABLE `order_statuses` DISABLE KEYS */;
-INSERT INTO `order_statuses` VALUES (1,'New'),(2,'Shipping'),(3,'Cancelled'),(4,'Completed');
-/*!40000 ALTER TABLE `order_statuses` ENABLE KEYS */;
-UNLOCK TABLES;
+-- Table structure for table `provinces`
+CREATE TABLE `provinces` (
+  `id` bigint NOT NULL AUTO_INCREMENT,
+  `name` varchar(30) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
---
+-- Dumping data for table `provinces`
+INSERT INTO `provinces` (`id`, `name`) VALUES (1,'Ho Chi Minh City'), (3,'Dak Lak'), (4,'Ha Noi City'), (5,'Quang Tri'), (6,'Ben Tre');
+
+-- Table structure for table `wards`
+CREATE TABLE `wards` (
+  `id` bigint NOT NULL AUTO_INCREMENT,
+  `name` varchar(50) DEFAULT NULL,
+  `province_id` bigint DEFAULT NULL,
+  `shipping_fee` bigint DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `FKbwfs5nhey1leef1v5ydhb45j2` (`province_id`),
+  CONSTRAINT `FKbwfs5nhey1leef1v5ydhb45j2` FOREIGN KEY (`province_id`) REFERENCES `provinces` (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=26 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+
+-- Dumping data for table `wards`
+INSERT INTO `wards` (`id`, `name`, `province_id`, `shipping_fee`) VALUES (1,'Tan Dinh',1,15000), (2,'Da Kao',1,16000), (3,'Ben Nghe',1,18000), (4,'Ben Thanh',1,27000), (5,'Cau Ong Lanh',1,10000), (6,'Ea Tam',3,28000), (7,'Hoa Thang',3,29000), (8,'An Binh',3,30000), (9,'Hoa Xuan',3,31000), (10,'Ea Sien',3,32000), (11,'Phuc Xa',4,32000), (12,'Lieu Giai',4,11000), (13,'Giang Vo',4,17000), (14,'Thanh Cong',4,29000), (15,'Hang Dao',4,20000), (16,'Gio An',5,40000), (17,'Trieu Nguyen',5,30000), (18,'Ba Nang',5,23000), (19,'Cam Lo',5,13000), (20,'Dien Sanh',5,26000), (21,'Phu Khuong',6,17000), (22,'My Thanh An',6,18000), (23,'Phu Tuc',6,34000), (24,'Quoi Thanh',6,35000), (25,'Phuoc Hanh',6,31000);
+
 -- Table structure for table `orders`
---
-
-DROP TABLE IF EXISTS `orders`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `orders` (
   `id` bigint NOT NULL AUTO_INCREMENT,
   `detail_address` varchar(100) DEFAULT NULL,
@@ -153,86 +92,25 @@ CREATE TABLE `orders` (
   CONSTRAINT `FKcbbqf26brulgfgvd0mf74rv4y` FOREIGN KEY (`order_status_id`) REFERENCES `order_statuses` (`id`),
   CONSTRAINT `FKec4jbind4ygtygb1f7cir13p4` FOREIGN KEY (`ward_id`) REFERENCES `wards` (`id`),
   CONSTRAINT `orders_order_statuses_FK` FOREIGN KEY (`cancelled_at_status_id`) REFERENCES `order_statuses` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=38 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
-/*!40101 SET character_set_client = @saved_cs_client */;
+) ENGINE=InnoDB AUTO_INCREMENT=52 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
---
 -- Dumping data for table `orders`
---
+INSERT INTO `orders` (`id`, `detail_address`, `message`, `name`, `phone`, `shipping_fee`, `total_price`, `order_status_id`, `province_id`, `ward_id`, `created_at`, `cancelled_at_status_id`) VALUES (1,'Wasecod Building, 10 Pho Quang Street','Khong lay ong hut','Nguyen Van A','0392456244',35000,231000,4,1,2,'2025-07-22 12:30:51',NULL),(2,'278 La Xuan Oai Tang Nhon Phu A','Khong lay ong hut','Nguyen Thai Truong','0958915051',20000,25600,1,1,1,'2025-07-22 16:12:35',NULL),(3,'278 La Xuan Oai Tang Nhon Phu A','Khong lay ong hut','Nguyen Thai Truong','0958915051',15000,25600,1,1,1,'2025-07-22 16:27:50',NULL),(4,'278 La Xuan Oai Tang Nhon Phu A','Khong lay ong hut','Nguyen Thai Truong','0958915051',15000,51000,1,1,1,'2025-07-22 16:54:16',NULL),(5,'278 La Xuan Oai, Tang Nhon Phu A','Khong Lay Ong Hut Nha','Nguyễn Thái Trưởng','0948915051',29000,51000,1,3,7,'2025-07-22 17:09:33',NULL),(6,'Số nhà chưa biết ní ơi tạm thời là ở trong rừng','','Nguyễn Trưởng Thái','0948915051',29000,76000,1,3,7,'2025-07-22 22:27:49',NULL),(7,'Không biết nhà ở đâu nữa, hong có biết','','Nguyễn Trưởng Thái','0397538954',23000,76000,3,5,18,'2025-07-22 22:32:36',1),(8,'37 Vo Nguyen Giap Ben Thuong Hai ','','Nguyễn Văn A','0931432349',18000,239000,1,1,3,'2025-07-23 14:20:22',NULL),(9,'30 Vo Nguyen Giap Ben Thuong Hai','','Nguyễn Văn A','0987654321',16000,52000,1,1,2,'2025-07-23 14:21:30',NULL),(10,'39 Vo Nguyen Giap, Cầu Ông Lãnh','Cho tôi thêm một phần cơm thêm','Nguyễn Văn A','0948915051',10000,133000,1,1,5,'2025-07-24 08:44:44',NULL),(11,'30 thôn Tân Lập, xã Chư Kbô, huyện Krông Búk, tỉnh Đắk Lắk','','Nguyễn Thái Trưởng','0948915051',29000,52000,1,3,7,'2025-07-24 09:25:04',NULL),(12,'30 thôn Tân Lập, xã Chư Kbô, huyện Krông Búk, tỉnh Đắk Lắk','','Nguyễn Thái Trưởng','0948915051',29000,126000,1,3,7,'2025-07-24 19:19:43',NULL),(13,'30 thôn Tân Lập, xã Chư Kbô, huyện Krông Búk, tỉnh Đắk Lắk','','Nguyễn Thái Trưởng','0948915051',29000,64000,1,3,7,'2025-07-25 08:59:42',NULL),(14,'30 thôn Tân Lập, xã Chư Kbô, huyện Krông Búk, tỉnh Đắk Lắk','','Nguyễn Thái Trưởng','0948915051',30000,72000,1,3,8,'2025-07-25 09:21:51',NULL),(15,'30 thôn Tân Lập, xã Chư Kbô, huyện Krông Búk, tỉnh Đắk Lắk','','Nguyễn Thái Trưởng','0948915051',30000,86000,1,3,8,'2025-07-25 09:29:39',NULL),(16,'12/23/4/53 Duong Vo Nguyen Giap','','Nguyễn Văn A','0943783834',18000,71000,3,1,3,'2025-07-25 09:30:32',1),(17,'30 thôn Tân Lập, xã Chư Kbô, huyện Krông Búk, tỉnh Đắk Lắk','','Nguyễn Thái Trưởng','0948915051',23000,161000,2,5,18,'2025-07-25 09:31:25',NULL),(18,'30 thôn Tân Lập, xã Chư Kbô, huyện Krông Búk, tỉnh Đắk Lắk','','Nguyễn Thái Trưởng','0948915051',23000,158000,3,5,18,'2025-07-25 09:32:12',2),(19,'30 thôn Tân Lập, xã Chư Kbô, huyện Krông Búk, tỉnh Đắk Lắk','','Nguyễn Thái Trưởng','0948915051',26000,222000,1,5,20,'2025-07-25 09:32:32',NULL),(20,'30 thôn Tân Lập, xã Chư Kbô, huyện Krông Búk, tỉnh Đắk Lắk','','Nguyễn Thái Trưởng','0948915051',13000,98000,1,5,19,'2025-07-25 09:32:49',NULL),(21,'30 thôn Tân Lập, xã Chư Kbô, huyện Krông Búk, tỉnh Đắk Lắk','','Nguyễn Thái Trưởng','0948915051',18000,163000,2,6,22,'2025-07-25 09:33:13',NULL),(22,'30 thôn Tân Lập, xã Chư Kbô, huyện Krông Búk, tỉnh Đắk Lắk','','Nguyễn Thái Trưởng','0948915051',34000,60000,4,6,23,'2025-07-25 09:33:27',NULL),(23,'30 thôn Tân Lập, xã Chư Kbô, huyện Krông Búk, tỉnh Đắk Lắk','','Nguyễn Thái Trưởng','0948915051',18000,100000,3,6,22,'2025-07-25 10:43:35',1),(24,'30 thôn Tân Lập, xã Chư Kbô, huyện Krông Búk, tỉnh Đắk Lắk','','Nguyễn Thái Trưởng','0948915051',30000,64000,3,3,8,'2025-07-28 09:04:21',2),(25,'30 thôn Tân Lập, xã Chư Kbô, huyện Krông Búk, tỉnh Đắk Lắk','','Nguyễn Thái Trưởng','0948915051',29000,29000,3,3,7,'2025-07-28 09:09:26',1),(26,'30 thôn Tân Lập, xã Chư Kbô, huyện Krông Búk, tỉnh Đắk Lắk','','Nguyễn Thái Trưởng','0948915051',29000,64000,1,3,7,'2025-07-28 09:22:53',NULL),(27,'30 thôn Tân Lập, xã Chư Kbô, huyện Krông Búk, tỉnh Đắk Lắk','','Nguyễn Thái Trưởng','0948915051',30000,64000,4,3,8,'2025-07-28 09:23:13',NULL),(28,'30 thôn Tân Lập, xã Chư Kbô, huyện Krông Búk, tỉnh Đắk Lắk','','Nguyễn Thái Trưởng','0948915051',29000,29000,3,3,7,'2025-07-28 09:28:03',2),(29,'30 thôn Tân Lập, xã Chư Kbô, huyện Krông Búk, tỉnh Đắk Lắk','','Nguyễn Thái Trưởng','0948915051',29000,29000,1,3,7,'2025-07-28 09:32:31',NULL),(30,'30 thôn Tân Lập, xã Chư Kbô, huyện Krông Búk, tỉnh Đắk Lắk','','Nguyễn Thái Trưởng','0948915051',29000,107000,4,3,7,'2025-07-28 09:35:20',NULL),(31,'Nguyen Thai Truong 30 thôn Tân Lập, xã Chư Kbô','','Nguyễn Thái Trưởng','0948915051',28000,129000,4,3,6,'2025-07-28 10:13:14',NULL),(32,'30 thôn Tân Lập, xã Chư Kbô, huyện Krông Búk, tỉnh Đắk Lắk','','Nguyễn Thái Trưởng','0948915051',29000,143000,3,3,7,'2025-07-28 10:18:21',1),(33,'30 thôn Tân Lập, xã Chư Kbô, huyện Krông Búk, tỉnh Đắk Lắk','','Nguyễn Thái Trưởng','0948915051',29000,115000,3,3,7,'2025-07-28 10:43:56',1),(34,'30 thôn Tân Lập, xã Chư Kbô','','Nguyễn Thái Trưởng','0948915051',29000,119000,4,3,7,'2025-07-28 11:31:35',NULL),(35,'30 thôn Tân Lập, xã Chư Kbô, huyện Krông Búk, tỉnh Đắk Lắk','','Nguyễn Thái Trưởng','0948915051',30000,47000,1,3,8,'2025-07-28 11:32:25',NULL),(36,'30 thôn Tân Lập, xã Chư Kbô, huyện Krông Búk, tỉnh Đắk Lắk','','Nguyễn Thái Trưởng','0948915051',30000,55000,4,3,8,'2025-07-28 11:35:58',NULL),(37,'30 thôn Tân Lập, xã Chư Kbô, huyện Krông Búk, tỉnh Đắk Lắk','','Nguyễn Thái Trưởng','0948915051',31000,24000,2,3,9,'2025-07-28 11:37:55',NULL),(38,'30 thôn Tân Lập, xã Chư Kbô, huyện Krông Búk, tỉnh Đắk Lắk','','Nguyễn Thái Trưởng','0948915051',30000,24000,4,3,8,'2025-07-28 11:38:12',NULL),(39,'30 thôn Tân Lập, xã Chư Kbô, huyện Krông Búk, tỉnh Đắk Lắk','','Nguyễn Thái Trưởng','0948915051',29000,47000,3,3,7,'2025-07-28 11:39:17',1),(40,'30 thôn Tân Lập, xã Chư Kbô, huyện Krông Búk, tỉnh Đắk Lắk','','Nguyễn Thái Trưởng','0948915051',30000,126000,3,3,8,'2025-07-28 11:40:40',2),(41,'30 thôn Tân Lập, xã Chư Kbô, huyện Krông Búk, tỉnh Đắk Lắk','','Nguyễn Thái Trưởng','0948915051',30000,24000,4,3,8,'2025-07-28 11:41:52',NULL),(42,'30 thôn Tân Lập, xã Chư Kbô, huyện Krông Búk, tỉnh Đắk Lắk','','Nguyễn Thái Trưởng','0948915051',29000,93000,4,3,7,'2025-07-28 13:28:48',NULL),(43,'30 thôn Tân Lập, xã Chư Kbô, huyện Krông Búk, tỉnh Đắk Lắk','','Nguyễn Thái Trưởng','0948915051',29000,300000,4,3,7,'2025-07-28 14:21:46',NULL),(44,'30 thôn Tân Lập, xã Chư Kbô, huyện Krông Búk, tỉnh Đắk Lắk','Không lấy dụng cụ ăn uống','Nguyễn Thái Trưởng','0948915051',29000,23000,2,3,7,'2025-07-28 14:42:27',NULL),(45,'30 thôn Tân Lập, xã Chư Kbô, huyện Krông Búk, tỉnh Đắk Lắk','','Nguyễn Thái Trưởng','0948915051',30000,70000,4,3,8,'2025-07-28 15:13:43',NULL),(46,'30 thôn Tân Lập, xã Chư Kbô, huyện Krông Búk, tỉnh Đắk Lắk','','Nguyễn Thái Trưởng','0948915051',31000,23000,3,3,9,'2025-07-28 15:44:15',1),(47,'30 thôn Tân Lập, xã Chư Kbô, huyện Krông Búk, tỉnh Đắk Lắk','','Nguyễn Thái Trưởng','0948915051',29000,36000,1,3,7,'2025-07-28 16:26:36',NULL),(48,'30 thôn Tân Lập, xã Chư Kbô, huyện Krông Búk, tỉnh Đắk Lắk','','Nguyễn Thái Trưởng','0948915051',29000,11000,1,3,7,'2025-07-28 16:29:43',NULL),(49,'30 thôn Tân Lập, xã Chư Kbô, huyện Krông Búk, tỉnh Đắk Lắk','','Nguyễn Thái Trưởng','0948915051',30000,45000,4,3,8,'2025-07-28 17:05:17',NULL),(50,'30 thôn Tân Lập, xã Chư Kbô, huyện Krông Búk, tỉnh Đắk Lắk','','Nguyễn Thái Trưởng','0948915051',30000,23000,3,3,8,'2025-07-28 18:18:18',2),(51,'30 thôn Tân Lập, xã Chư Kbô, huyện Krông Búk, tỉnh Đắk Lắk','','Nguyễn Thái Trưởng','0948915051',28000,89000,2,3,6,'2025-07-29 10:03:26',NULL),(52,'30 thôn Tân Lập, xã Chư Kbo','Không lấy thìa nhựa','Nguyễn Thái Trưởng','0948915051',28000,65000,2,3,6,'2025-07-29 12:57:05',NULL),(53,'30 thôn Tân Lập, Xã Chư Kbo','','Nguyễn Thái Trưởng','0948915051',30000,86000,2,3,8,'2025-07-29 13:09:27',NULL),(54,'33269866666642fwefwefverfcccfrefvd  ','','b2111818','0941884929',29000,124000,3,3,7,'2025-07-29 14:09:20',2),(55,'asfewfefe rgwegwefhsdvg sdgcvsdvc sdcvsdgcv sgcvaasc sgcva ','vgwegweg gưegwef','Nguyen Van B','0199441111',13000,138000,1,5,19,'2025-07-29 14:10:05',NULL),(56,'30 thôn Tân Lập, xã Chư Kbô, huyện Krông Búk, tỉnh Đắk Lắk','','Nguyễn Thái Trưởng','0948915051',23000,129000,2,5,18,'2025-07-29 14:57:36',NULL),(57,'30 thôn Tân Lập, xã Chư Kbô, huyện Krông Búk, tỉnh Đắk Lắk','','Nguyễn Thái Trưởng','0948915051',32000,71000,1,3,10,'2025-07-29 16:12:28',NULL),(58,'30 thôn Tân Lập, xã Chư Kbô, huyện Krông Búk, tỉnh Đắk Lắk','','Nguyễn Thái Trưởng','0948915051',29000,35000,1,3,7,'2025-07-29 16:19:47',NULL),(59,'30 thôn Tân Lập, xã Chư Kbô, huyện Krông Búk, tỉnh Đắk Lắk','','Nguyễn Thái Trưởng','0948915051',30000,35000,1,3,8,'2025-07-29 16:20:16',NULL),(60,'30 thôn Tân Lập, xã Chư Kbô, huyện Krông Búk, tỉnh Đắk Lắk','','Nguyễn Thái Trưởng','0948915051',30000,35000,1,3,8,'2025-07-29 16:20:46',NULL),(61,'30 thôn Tân Lập, xã Chư Kbô, huyện Krông Búk, tỉnh Đắk Lắk','','Nguyễn Thái Trưởng','0948915051',30000,12000,1,3,8,'2025-07-29 16:21:43',NULL),(62,'30 thôn Tân Lập, xã Chư Kbô, huyện Krông Búk, tỉnh Đắk Lắk','','Nguyễn Thái Trưởng','0948915051',29000,35000,1,3,7,'2025-07-29 16:22:50',NULL),(63,'30 thôn Tân Lập, xã Chư Kbô, huyện Krông Búk, tỉnh Đắk Lắk','','Nguyễn Thái Trưởng','0948915051',29000,12000,1,3,7,'2025-07-29 16:23:07',NULL),(64,'30 thôn Tân Lập, xã Chư Kbô, huyện Krông Búk, tỉnh Đắk Lắk','','Nguyễn Thái Trưởng','0948915051',30000,35000,1,3,8,'2025-07-29 16:23:32',NULL),(65,'30 thôn Tân Lập, xã Chư Kbô, huyện Krông Búk, tỉnh Đắk Lắk','','Nguyễn Thái Trưởng','0948915051',30000,63000,1,3,8,'2025-07-29 16:25:42',NULL),(66,'30 thôn Tân Lập, xã Chư Kbô, huyện Krông Búk, tỉnh Đắk Lắk','','Nguyễn Thái Trưởng','0948915051',29000,35000,1,3,7,'2025-07-29 16:25:59',NULL),(67,'30 thôn Tân Lập, xã Chư Kbô, huyện Krông Búk, tỉnh Đắk Lắk','','Nguyễn Thái Trưởng','0948915051',30000,51000,1,3,8,'2025-07-29 16:26:26',NULL),(68,'30 thôn Tân Lập, xã Chư Kbô, huyện Krông Búk, tỉnh Đắk Lắk','','Nguyễn Thái Trưởng','0948915051',31000,27000,1,3,9,'2025-07-29 16:27:03',NULL),(69,'30 thôn Tân Lập, xã Chư Kbô, huyện Krông Búk, tỉnh Đắk Lắk','','Nguyễn Thái Trưởng','0948915051',29000,12000,1,3,7,'2025-07-29 16:28:36',NULL),(70,'30 thôn Tân Lập, xã Chư Kbô, huyện Krông Búk, tỉnh Đắk Lắk','','Nguyễn Thái Trưởng','0948915051',29000,62000,1,3,7,'2025-07-29 16:30:18',NULL),(71,'30 thôn Tân Lập, xã Chư Kbô, huyện Krông Búk, tỉnh Đắk Lắk','','Nguyễn Thái Trưởng','0948915051',29000,35000,1,3,7,'2025-07-29 16:31:53',NULL),(72,'30 thôn Tân Lập, xã Chư Kbô, huyện Krông Búk, tỉnh Đắk Lắk','','Nguyễn Thái Trưởng','0948915051',31000,389000,3,3,9,'2025-07-29 16:32:32',2),(73,'30 thôn Tân Lập, xã Chư Kbô, huyện Krông Búk, tỉnh Đắk Lắk','','Nguyễn Thái Trưởng','0948915051',30000,86000,1,3,8,'2025-07-29 16:33:42',NULL),(74,'30 thôn Tân Lập, xã Chư Kbô, huyện Krông Búk, tỉnh Đắk Lắk','','Nguyễn Thái Trưởng','0948915051',31000,116000,1,3,9,'2025-07-29 16:34:16',NULL),(75,'30 thôn Tân Lập, xã Chư Kbô, huyện Krông Búk, tỉnh Đắk Lắk','','Nguyễn Thái Trưởng','0948915051',30000,115000,1,3,8,'2025-07-29 16:34:47',NULL),(76,'30 thôn Tân Lập, xã Chư Kbô, huyện Krông Búk, tỉnh Đắk Lắk','','Nguyễn Thái Trưởng','0948915051',30000,203000,1,3,8,'2025-07-29 16:35:23',NULL),(77,'30 thôn Tân Lập, xã Chư Kbô, huyện Krông Búk, tỉnh Đắk Lắk','','Nguyễn Thái Trưởng','0948915051',30000,84000,1,3,8,'2025-07-29 16:35:41',NULL),(78,'30 thôn Tân Lập, xã Chư Kbô, huyện Krông Búk, tỉnh Đắk Lắk','','Nguyễn Thái Trưởng','0948915051',31000,112000,1,3,9,'2025-07-29 16:36:00',NULL),(79,'30 thôn Tân Lập, xã Chư Kbô, huyện Krông Búk, tỉnh Đắk Lắk','','Nguyễn Thái Trưởng','0948915051',31000,62000,1,3,9,'2025-07-29 16:36:19',NULL),(80,'30 thôn Tân Lập, xã Chư Kbô, huyện Krông Búk, tỉnh Đắk Lắk','','Nguyễn Thái Trưởng','0948915051',30000,86000,1,3,8,'2025-07-29 16:36:39',NULL);
 
-LOCK TABLES `orders` WRITE;
-/*!40000 ALTER TABLE `orders` DISABLE KEYS */;
-INSERT INTO `orders` VALUES (1,'Wasecod Building, 10 Pho Quang Street','Khong lay ong hut','Nguyen Van A','0392456244',35000,231000,4,1,2,'2025-07-22 12:30:51',NULL),(2,'278 La Xuan Oai Tang Nhon Phu A','Khong lay ong hut','Nguyen Thai Truong','0958915051',20000,25600,1,1,1,'2025-07-22 16:12:35',NULL),(3,'278 La Xuan Oai Tang Nhon Phu A','Khong lay ong hut','Nguyen Thai Truong','0958915051',15000,25600,1,1,1,'2025-07-22 16:27:50',NULL),(4,'278 La Xuan Oai Tang Nhon Phu A','Khong lay ong hut','Nguyen Thai Truong','0958915051',15000,51000,1,1,1,'2025-07-22 16:54:16',NULL),(5,'278 La Xuan Oai, Tang Nhon Phu A','Khong Lay Ong Hut Nha','Nguyễn Thái Trưởng','0948915051',29000,51000,1,3,7,'2025-07-22 17:09:33',NULL),(6,'Số nhà chưa biết ní ơi tạm thời là ở trong rừng','','Nguyễn Trưởng Thái','0948915051',29000,76000,1,3,7,'2025-07-22 22:27:49',NULL),(7,'Không biết nhà ở đâu nữa, hong có biết','','Nguyễn Trưởng Thái','0397538954',23000,76000,3,5,18,'2025-07-22 22:32:36',1),(8,'37 Vo Nguyen Giap Ben Thuong Hai ','','Nguyễn Văn A','0931432349',18000,239000,1,1,3,'2025-07-23 14:20:22',NULL),(9,'30 Vo Nguyen Giap Ben Thuong Hai','','Nguyễn Văn A','0987654321',16000,52000,1,1,2,'2025-07-23 14:21:30',NULL),(10,'39 Vo Nguyen Giap, Cầu Ông Lãnh','Cho tôi thêm một phần cơm thêm','Nguyễn Văn A','0948915051',10000,133000,1,1,5,'2025-07-24 08:44:44',NULL),(11,'30 thôn Tân Lập, xã Chư Kbô, huyện Krông Búk, tỉnh Đắk Lắk','','Nguyễn Thái Trưởng','0948915051',29000,52000,4,3,7,'2025-07-24 09:25:04',NULL),(12,'30 thôn Tân Lập, xã Chư Kbô, huyện Krông Búk, tỉnh Đắk Lắk','','Nguyễn Thái Trưởng','0948915051',29000,52000,3,3,7,'2025-07-25 22:34:59',2),(13,'30 thôn Tân Lập, xã Chư Kbô, huyện Krông Búk, tỉnh Đắk Lắk','','Nguyễn Thái Trưởng','0948915051',30000,88000,3,3,8,'2025-07-25 22:37:34',1),(14,'30 thôn Tân Lập, xã Chư Kbô, huyện Krông Búk, tỉnh Đắk Lắk','','Nguyễn Thái Trưởng','0948915051',29000,52000,4,3,7,'2025-07-26 08:24:44',NULL),(15,'30 thôn Tân Lập, xã Chư Kbô, huyện Krông Búk, tỉnh Đắk Lắk','','Nguyễn Thái Trưởng','0948915051',29000,23000,4,3,7,'2025-07-26 20:49:21',NULL),(16,'30 thôn Tân Lập, xã Chư Kbô, huyện Krông Búk, tỉnh Đắk Lắk','','Nguyễn Thái Trưởng','0948915051',31000,87000,1,3,9,'2025-07-27 12:37:13',NULL),(17,'30 thôn Tân Lập, xã Chư Kbô, huyện Krông Búk, tỉnh Đắk Lắk','','Nguyễn Thái Trưởng','0948915051',31000,87000,1,3,9,'2025-07-27 12:37:20',NULL),(18,'30 thôn Tân Lập, xã Chư Kbô, huyện Krông Búk, tỉnh Đắk Lắk','','Nguyễn Thái Trưởng','0948915051',29000,52000,1,3,7,'2025-07-27 12:39:34',NULL),(19,'30 thôn Tân Lập, xã Chư Kbô, huyện Krông Búk, tỉnh Đắk Lắk','','Nguyễn Thái Trưởng','0948915051',29000,52000,1,3,7,'2025-07-27 12:39:58',NULL),(20,'30 thôn Tân Lập, xã Chư Kbô, huyện Krông Búk, tỉnh Đắk Lắk','','Nguyễn Thái Trưởng','0948915051',29000,52000,1,3,7,'2025-07-27 12:40:13',NULL),(21,'30 thôn Tân Lập, xã Chư Kbô, huyện Krông Búk, tỉnh Đắk Lắk','','Nguyễn Thái Trưởng','0948915051',29000,23000,1,3,7,'2025-07-27 12:42:49',NULL),(22,'30 thôn Tân Lập, xã Chư Kbô, huyện Krông Búk, tỉnh Đắk Lắk','','Nguyễn Thái Trưởng','0948915051',29000,52000,1,3,7,'2025-07-27 12:45:21',NULL),(23,'30 thôn Tân Lập, xã Chư Kbô, huyện Krông Búk, tỉnh Đắk Lắk','','Nguyễn Thái Trưởng','0948915051',29000,52000,1,3,7,'2025-07-27 12:56:03',NULL),(24,'30 Tan Lap - Chu Kbo - Krong Buk - Dak Lak','','Nguyen Thai Truong','0948915051',29000,23000,1,3,7,'2025-07-27 13:08:29',NULL),(25,'30 Tan Lap - Chu Kbo - Krong Buk - Dak Lak','','Nguyen Thai Truong','0948915051',29000,23000,1,3,7,'2025-07-27 13:09:16',NULL),(26,'30 thôn Tân Lập, xã Chư Kbô, huyện Krông Búk, tỉnh Đắk Lắk','','Nguyễn Thái Trưởng','0948915051',29000,36000,2,3,7,'2025-07-27 13:13:43',NULL),(27,'30 Tan Lap - Chu Kbo - Krong Buk - Dak Lak','','Nguyen Thai Truong','0948915051',28000,52000,1,3,6,'2025-07-27 13:30:51',NULL),(28,'30 Tan Lap - Chu Kbo - Krong Buk - Dak Lak','','Nguyen Thai Truong','0948915051',28000,52000,1,3,6,'2025-07-27 13:33:32',NULL),(29,'30 Tan Lap - Chu Kbo - Krong Buk - Dak Lak','','Nguyen Thai Truong','0948915051',29000,29000,4,3,7,'2025-07-27 14:06:17',NULL),(30,'30 Tan Lap - Chu Kbo - Krong Buk - Dak Lak','','Nguyen Thai Truong','0948915051',29000,52000,3,3,7,'2025-07-27 14:07:41',2),(31,'30 Tan Lap - Chu Kbo - Krong Buk - Dak Lak','','Nguyen Thai Truong','0948915051',29000,81000,4,3,7,'2025-07-27 14:08:51',NULL),(32,'30 Tan Lap - Chu Kbo - Krong Buk - Dak Lak','','Nguyen Thai Truong','0948915051',29000,52000,3,3,7,'2025-07-27 14:26:10',2),(33,'30 Tan Lap - Chu Kbo - Krong Buk - Dak Lak','','Nguyen Thai Truong','0948915051',28000,52000,4,3,6,'2025-07-27 15:13:26',NULL),(34,'30 Tan Lap - Chu Kbo - Krong Buk - Dak Lak','','Nguyen Thai Truong','0948915051',29000,52000,4,3,7,'2025-07-27 15:15:19',NULL),(35,'30 Tan Lap - Chu Kbo - Krong Buk - Dak Lak','','Nguyen Thai Truong','0948915051',29000,23000,4,3,7,'2025-07-27 15:20:13',NULL),(36,'30 Tan Lap - Chu Kbo - Krong Buk - Dak Lak','','Nguyen Thai Truong','0948915051',29000,52000,4,3,7,'2025-07-27 16:36:26',NULL),(37,'30 Tan Lap - Chu Kbo - Krong Buk - Dak Lak','','Nguyen Thai Truong','0948915051',29000,43000,4,3,7,'2025-07-27 17:05:31',NULL);
-/*!40000 ALTER TABLE `orders` ENABLE KEYS */;
-UNLOCK TABLES;
+-- Table structure for table `order_details`
+CREATE TABLE `order_details` (
+  `order_id` bigint NOT NULL,
+  `booking_product_id` bigint NOT NULL,
+  `quantity` int NOT NULL DEFAULT '1',
+  `item_price` bigint NOT NULL,
+  KEY `FKnlk3yygb8apt51gd2dt2gwige` (`booking_product_id`),
+  KEY `FKjyu2qbqt8gnvno9oe9j2s2ldk` (`order_id`),
+  CONSTRAINT `FKjyu2qbqt8gnvno9oe9j2s2ldk` FOREIGN KEY (`order_id`) REFERENCES `orders` (`id`) ON DELETE CASCADE,
+  CONSTRAINT `FKnlk3yygb8apt51gd2dt2gwige` FOREIGN KEY (`booking_product_id`) REFERENCES `booking_products` (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
---
--- Table structure for table `provinces`
---
+-- Dumping data for table `order_details`
+INSERT INTO `order_details` (`order_id`, `booking_product_id`, `quantity`, `item_price`) VALUES (1,1,1,60000),(1,3,2,30000),(2,1,1,25600),(3,1,1,25600),(4,3,1,51000),(5,25,1,51000),(6,14,1,23000),(6,16,1,24000),(6,11,1,29000),(7,14,1,23000),(7,16,1,24000),(7,11,1,29000),(8,14,1,23000),(8,9,1,36000),(8,4,2,60000),(8,5,1,60000),(9,14,1,23000),(9,11,1,29000),(10,14,1,23000),(10,19,1,50000),(10,20,1,60000),(11,11,1,29000),(11,14,1,23000),(12,8,1,35000),(12,9,1,36000),(12,7,1,55000),(13,11,1,29000),(13,8,1,35000),(14,11,1,29000),(14,15,1,43000),(15,8,1,35000),(15,25,1,51000),(16,8,1,35000),(16,9,1,36000),(17,19,1,50000),(17,3,1,51000),(17,17,1,60000),(18,15,1,43000),(18,4,1,60000),(18,7,1,55000),(19,3,1,51000),(19,25,1,51000),(19,20,1,60000),(19,21,1,60000),(20,15,1,43000),(20,7,1,55000),(21,15,1,43000),(21,5,1,60000),(21,20,1,60000),(22,5,1,60000),(23,8,1,35000),(23,11,1,29000),(23,9,1,36000),(24,8,1,35000),(24,11,1,29000),(25,11,1,29000),(26,11,1,29000),(26,8,1,35000),(27,11,1,29000),(27,8,1,35000),(28,11,1,29000),(29,11,1,29000),(30,11,1,29000),(30,8,1,35000),(30,15,1,43000),(31,15,1,43000),(31,9,1,36000),(31,19,1,50000),(32,8,1,35000),(32,15,1,43000),(32,11,1,29000),(32,9,1,36000),(33,7,1,55000),(33,4,1,60000),(34,8,1,35000),(34,11,1,29000),(34,7,1,55000),(35,16,1,24000),(35,14,1,23000),(36,7,1,55000),(37,16,1,24000),(38,16,1,24000),(39,16,1,24000),(39,14,1,23000),(40,16,1,24000),(40,14,1,23000),(40,11,1,29000),(40,19,1,50000),(41,16,1,24000),(42,16,1,24000),(42,14,3,23000),(43,34,1,300000),(44,14,1,23000),(45,14,2,23000),(45,27,3,8000),(46,14,1,23000),(47,12,1,27000),(47,27,1,9000),(48,27,1,11000),(49,1,1,45000),(50,14,1,23000),(51,16,1,24000),(51,29,1,30000),(51,8,1,35000),(52,29,1,30000),(52,8,1,35000),(53,27,1,12000),(53,14,1,23000),(53,16,1,24000),(53,12,1,27000),(54,13,1,30000),(54,11,1,29000),(54,29,1,30000),(54,8,1,35000),(55,27,1,12000),(55,16,1,24000),(55,25,2,51000),(56,33,1,69000),(56,5,1,60000),(57,14,1,23000),(57,16,2,24000),(58,27,1,12000),(58,14,1,23000),(59,27,1,12000),(59,14,1,23000),(60,27,1,12000),(60,14,1,23000),(61,27,1,12000),(62,27,1,12000),(62,14,1,23000),(63,27,1,12000),(64,27,1,12000),(64,14,1,23000),(65,27,1,12000),(65,3,1,51000),(66,27,1,12000),(66,14,1,23000),(67,16,1,24000),(67,12,1,27000),(68,12,1,27000),(69,27,1,12000),(70,27,1,12000),(70,14,1,23000),(70,12,1,27000),(71,27,1,12000),(71,14,1,23000),(72,10,1,89000),(72,34,1,300000),(73,14,1,23000),(73,27,1,12000),(73,16,1,24000),(73,12,1,27000),(74,27,1,12000),(74,14,1,23000),(74,12,1,27000),(74,16,1,24000),(74,29,1,30000),(75,27,1,12000),(75,14,1,23000),(75,12,1,27000),(75,16,1,24000),(75,11,1,29000),(76,19,1,50000),(76,3,1,51000),(76,23,1,51000),(76,25,1,51000),(77,16,1,24000),(77,29,1,30000),(77,13,1,30000),(78,27,1,12000),(78,14,1,23000),(78,12,1,27000),(78,19,1,50000),(79,27,1,12000),(79,14,1,23000),(79,12,1,27000),(80,27,1,12000),(80,14,1,23000),(80,16,1,24000),(80,12,1,27000);
 
-DROP TABLE IF EXISTS `provinces`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `provinces` (
-  `id` bigint NOT NULL AUTO_INCREMENT,
-  `name` varchar(30) DEFAULT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `provinces`
---
-
-LOCK TABLES `provinces` WRITE;
-/*!40000 ALTER TABLE `provinces` DISABLE KEYS */;
-INSERT INTO `provinces` VALUES (1,'Ho Chi Minh City'),(3,'Dak Lak'),(4,'Ha Noi City'),(5,'Quang Tri'),(6,'Ben Tre');
-/*!40000 ALTER TABLE `provinces` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
--- Table structure for table `wards`
---
-
-DROP TABLE IF EXISTS `wards`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `wards` (
-  `id` bigint NOT NULL AUTO_INCREMENT,
-  `name` varchar(50) DEFAULT NULL,
-  `province_id` bigint DEFAULT NULL,
-  `shipping_fee` bigint DEFAULT NULL,
-  PRIMARY KEY (`id`),
-  KEY `FKbwfs5nhey1leef1v5ydhb45j2` (`province_id`),
-  CONSTRAINT `FKbwfs5nhey1leef1v5ydhb45j2` FOREIGN KEY (`province_id`) REFERENCES `provinces` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=26 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `wards`
---
-
-LOCK TABLES `wards` WRITE;
-/*!40000 ALTER TABLE `wards` DISABLE KEYS */;
-INSERT INTO `wards` VALUES (1,'Tan Dinh',1,15000),(2,'Da Kao',1,16000),(3,'Ben Nghe',1,18000),(4,'Ben Thanh',1,27000),(5,'Cau Ong Lanh',1,10000),(6,'Ea Tam',3,28000),(7,'Hoa Thang',3,29000),(8,'An Binh',3,30000),(9,'Hoa Xuan',3,31000),(10,'Ea Sien',3,32000),(11,'Phuc Xa',4,32000),(12,'Lieu Giai',4,11000),(13,'Giang Vo',4,17000),(14,'Thanh Cong',4,29000),(15,'Hang Dao',4,20000),(16,'Gio An',5,40000),(17,'Trieu Nguyen',5,30000),(18,'Ba Nang',5,23000),(19,'Cam Lo',5,13000),(20,'Dien Sanh',5,26000),(21,'Phu Khuong',6,17000),(22,'My Thanh An',6,18000),(23,'Phu Tuc',6,34000),(24,'Quoi Thanh',6,35000),(25,'Phuoc Hanh',6,31000);
-/*!40000 ALTER TABLE `wards` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
--- Dumping events for database 'food_booking'
---
-
---
 -- Dumping routines for database 'food_booking'
---
-/*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
-
-/*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
-/*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;
-/*!40014 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS */;
-/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
-/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
-/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
-/*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
-
--- Dump completed on 2025-07-27 20:18:54
+-- Dump completed on 2025-07-29 11:00:59

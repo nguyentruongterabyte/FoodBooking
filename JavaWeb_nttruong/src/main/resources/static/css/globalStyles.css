@@ -863,6 +863,20 @@ p {
 	--cell-color: #911750;
 }
 
+
+.string-length-container {
+	position: relative;
+}
+
+.string-length {
+	position: absolute;
+	top: 0;
+	right: 0;
+	transform: translate(-50%, -50%);
+	background-color: white;
+}
+
+
 @keyframes ripple {
 	0% {
 		background-color: transparent;
