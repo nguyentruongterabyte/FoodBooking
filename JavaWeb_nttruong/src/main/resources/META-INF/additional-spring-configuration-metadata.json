@@ -4,6 +4,26 @@
 			"name": "file.upload-dir",
 			"type": "java.lang.String",
 			"description": "A description for 'file.upload-dir'"
+		},
+		{
+			"name": "spring.ai.huggingface.embedding.model",
+			"type": "java.lang.String",
+			"description": "A description for 'spring.ai.huggingface.embedding.model'"
+		},
+		{
+			"name": "spring.ai.huggingface.embedding.model",
+			"type": "java.lang.String",
+			"description": "A description for 'spring.ai.huggingface.embedding.model'"
+		},
+		{
+			"name": "spring.ai.vectorstore.elasticsearch.uri",
+			"type": "java.lang.String",
+			"description": "A description for 'spring.ai.vectorstore.elasticsearch.uri'"
+		},
+		{
+			"name": "spring.ai.vectorstore.type",
+			"type": "java.lang.String",
+			"description": "A description for 'spring.ai.vectorstore.type'"
 		}
 	]
 }

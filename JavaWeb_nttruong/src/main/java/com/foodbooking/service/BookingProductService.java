@@ -25,7 +25,8 @@ public interface BookingProductService {
 			String type,
 			Boolean priceDESC,
 			Integer offset,
-			Integer limit);
+			Integer limit
+	);
 
 
 	/**

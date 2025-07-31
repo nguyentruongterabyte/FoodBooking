@@ -191,6 +191,7 @@ public class BookingProductControllerImpl implements BookingProductController {
 		// Retrieve updated booking product
 		BookingProduct updatedBookingProduct = bookingProductService.findByBookingProductId(id);
 		
+		
 		// Return response
 		return ResponseEntity
 				.status(HttpStatus.OK)

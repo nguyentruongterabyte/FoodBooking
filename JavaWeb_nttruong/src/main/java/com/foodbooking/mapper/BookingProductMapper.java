@@ -29,4 +29,5 @@ public interface BookingProductMapper {
 			@Param("type") String type);
 	public Integer updateBookingProduct(BookingProduct bookingProduct);
 	public BookingProduct findByBookingProductId(Long id);
+	public List<BookingProduct> findAllBookingProducts();
 }

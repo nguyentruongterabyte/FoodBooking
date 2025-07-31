@@ -14,9 +14,10 @@ public interface BookingProductRepository {
 			Integer limit
 			);
 	public Boolean existsByNameInType(String name, String type);
-	public Boolean existsById(Long id);
+	public Boolean existsByBookingProductId(Long id);
 	public void saveBookingProduct(BookingProduct bookingProduct);
 	public Integer getCount(String keyword, Boolean isDeleted, String type);
 	public Integer updateBookingProduct(BookingProduct bookingProduct);
 	public BookingProduct findByBookingProductId(Long id);
+	public List<BookingProduct> findAllBookingProducts();
 }

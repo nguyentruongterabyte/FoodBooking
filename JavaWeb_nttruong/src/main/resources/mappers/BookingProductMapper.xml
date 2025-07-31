@@ -62,6 +62,13 @@
 		)
 	</insert>
 
+	<!-- Find all booking products -->
+	<select id="findAllBookingProducts" 
+			resultMap="bookingProductResultMap"
+	>
+		<include refid="bookingProductInfoSubquery" /> 
+	</select>
+
 	<!-- Find booking products pagination -->
 	<select id="findBookingProductsPage"
 			resultMap="bookingProductResultMap"
@@ -86,7 +93,6 @@
 					ORDER BY 
 						bp.id DESC
 				</when>
-				
 				<!-- Otherwise, order by price DESC, ASC -->
 				<otherwise>
 					<choose>

@@ -53,8 +53,13 @@ public class BookingProductRepositoryImpl implements BookingProductRepository {
 	}
 
 	@Override
-	public Boolean existsById(Long id) {
+	public Boolean existsByBookingProductId(Long id) {
 		return bookingProductMapper.existsById(id);
+	}
+
+	@Override
+	public List<BookingProduct> findAllBookingProducts() {
+		return bookingProductMapper.findAllBookingProducts();
 	}
 
 }
