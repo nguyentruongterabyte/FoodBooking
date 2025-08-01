@@ -3,6 +3,7 @@ package com.foodbooking.controller.impl;
 import java.time.LocalDateTime;
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -31,19 +32,12 @@ import jakarta.validation.Valid;
 @RequestMapping("api/booking-products")
 public class BookingProductControllerImpl implements BookingProductController {
 
-
-	private final BookingProductService bookingProductService;
-	private final FileStorageService fileStorageService;
+	@Autowired
+	private BookingProductService bookingProductService;
 	
+	@Autowired
+	private FileStorageService fileStorageService;
 	
-	private BookingProductControllerImpl(BookingProductService bookingProductService,
-			FileStorageService fileStorageService) {
-		super();
-		this.bookingProductService = bookingProductService;
-		this.fileStorageService = fileStorageService;
-		
-	}
-
 	/**
 	 * @param form form data from client (include image file)
 	 * @return API new booking product
@@ -121,12 +115,13 @@ public class BookingProductControllerImpl implements BookingProductController {
 			@RequestParam(required = false) Boolean isDeleted,
 			@RequestParam(defaultValue = "food") String type,
 			@RequestParam(required = false) Boolean priceDESC,
+			@RequestParam(defaultValue = "false") Boolean useSemantic,
 			@RequestParam(defaultValue = "false") Boolean includeTotal, 
 			@PathVariable Integer page,
 			@PathVariable Integer size
 			) {
 		List<BookingProduct> bookingProducts = bookingProductService
-				.findBookingProductsPage(keyword, isDeleted, type, priceDESC, (page - 1) * size, size);
+				.findBookingProductsPage(keyword, isDeleted, type, priceDESC, useSemantic, (page - 1) * size, size);
 		
 		
 		PagedResponse<BookingProduct> pagedResponse = new PagedResponse<>();

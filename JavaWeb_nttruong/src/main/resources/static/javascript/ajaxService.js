@@ -610,7 +610,8 @@ const bookingProductService = {
 			priceDESC = null,
 			includeTotal = false,
 			page = 1,
-			size = 10
+			size = 10,
+			useSemantic = false
 		}
 	) {
 		return new Promise((resolve, reject) => {
@@ -622,6 +623,7 @@ const bookingProductService = {
 					&type=${type}
 					${priceDESC === null ? '' : `&priceDESC=${priceDESC}`}
 					&includeTotal=${includeTotal}
+					&useSemantic=${useSemantic}
 					${isDeleted === null ? '' : `&isDeleted=${isDeleted}`}
 				`,
 				type: this.getPage.type,

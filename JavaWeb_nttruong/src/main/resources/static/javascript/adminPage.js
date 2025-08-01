@@ -211,8 +211,8 @@ stompClient.onConnect = (frame) => {
 		renderTodaySales();
 
 		// Re-render today order count
-		renderTodayOrdersCount({ orderStatusId: null, root: '#total-orders-counter .card-content' });
-
+		renderTodayOrdersCount({ orderStatusId: null, root: '#total-orders-counter' });
+			
 		setTimeout(function() {
 			$("#admin-alert").fadeOut();
 		}, 10000);

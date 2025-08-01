@@ -89,6 +89,14 @@ function handleOrderPrevNextPaginationClick() {
 		$('#order__pagination-nav .pagination').find('.page-item-number').removeClass('active');
 		$('#order__pagination-nav .pagination').find(`.page-item-number[data-page="${currentPage}"]`).addClass('active');
 
+		// Re-render paging
+		customRenderPaging(
+			{
+				root: '#order__pagination-nav .pagination',
+				currentPage: currentPage,
+				size: orderObject.size,
+				totalPages: orderObject.totalPages
+		});
 		// Get and render item
 		getOrders({
 			keyword: getKeywordFromSearchingInput(),
@@ -114,7 +122,15 @@ function handleOrderPrevNextPaginationClick() {
 		$('#order__pagination-nav .pagination').find('.page-item-number').removeClass('active');
 		$('#order__pagination-nav .pagination').find(`.page-item-number[data-page="${currentPage}"]`).addClass('active');
 
-
+		// Re-render paging
+		customRenderPaging(
+			{
+				root: '#order__pagination-nav .pagination',
+				currentPage: currentPage,
+				size: orderObject.size,
+				totalPages: orderObject.totalPages
+		});
+		
 		// Get and render item
 		getOrders({
 			keyword: getKeywordFromSearchingInput(),
@@ -190,6 +206,15 @@ function handleOrderPaginationItemClick() {
 		const page = Number($(this).text()); // Get item page number
 
 		orderObject.currentPage = page;
+		
+		// Re-render paging
+		customRenderPaging(
+			{
+				root: '#order__pagination-nav .pagination',
+				currentPage: page,
+				size: orderObject.size,
+				totalPages: orderObject.totalPages
+			});
 
 		getOrders(
 			{
@@ -788,4 +813,3 @@ let orderObject = {
 		}
 	]
 }
-

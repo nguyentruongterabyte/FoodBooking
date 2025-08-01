@@ -24,6 +24,7 @@ public interface BookingProductService {
 			Boolean isDeleted,
 			String type,
 			Boolean priceDESC,
+			Boolean useSemantic,
 			Integer offset,
 			Integer limit
 	);
@@ -55,4 +56,5 @@ public interface BookingProductService {
 	 * @return found booking product
 	 */
 	public BookingProduct findByBookingProductId(Long id);
+
 }

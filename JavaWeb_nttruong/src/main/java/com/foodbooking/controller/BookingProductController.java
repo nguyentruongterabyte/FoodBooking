@@ -34,6 +34,7 @@ public interface BookingProductController {
 			Boolean isDeleted,
 			String type,
 			Boolean priceDESC,
+			Boolean useSemantic,
 			Boolean includeTotal,
 			Integer page,
 			Integer size);
