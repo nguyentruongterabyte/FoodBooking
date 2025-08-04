@@ -316,7 +316,7 @@ function renderOrderInfo(data = {
 						<h4 class="item-name">${bookingProduct.name}</h4>
 						<p class="item-description">${bookingProduct.description}</p>
 						<div class="detail-fee-line">
-							<h3 class="item-price">${bookingProduct.itemPrice.toLocaleString()} đ</h3>
+							<h3 class="item-price">${Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(bookingProduct.itemPrice)}</h3>
 							<div class="item-quantity-wrapper">
 								<span class="title">Quantity: </span>
 								<span class="item-quantity">${bookingProduct.quantity}</span>
@@ -332,14 +332,14 @@ function renderOrderInfo(data = {
 	$('#order-detail-modal .booking-product-list').html(bookingProductsHTML.join(''));
 
 	// Total items price
-	$('#order-items-total-price').text(data.totalPrice.toLocaleString() + ' đ');
+	$('#order-items-total-price').text();
 
 	// Shipping fee
-	$('#shipping-fee').text(data.shippingFee.toLocaleString() + ' đ');
+	$('#shipping-fee').text(Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(data.shippingFee));
 
 	// Order total price
 	const orderTotalPrice = Number(data.totalPrice + data.shippingFee);
-	$('#order-total-price').text(orderTotalPrice.toLocaleString() + ' đ');
+	$('#order-total-price').text(Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(orderTotalPrice));
 
 	// Order status button
 	let itemStatusButtonHTML = '';
@@ -558,7 +558,7 @@ function generateOrderItemHTML(data = {
 					<h3 class="item-name">${data.bookingProducts[0].name}</h3>
 					<p class="item-description">${data.bookingProducts[0].description}</p>
 					<div class="item-price-wrapper">
-						<h3 class="item-price">${data.bookingProducts[0].itemPrice.toLocaleString()} đ</h3>
+						<h3 class="item-price">${Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(data.bookingProducts[0].itemPrice)}</h3>
 						<div class="item-quantity-wrapper">
 							<p class="title">Quanity:</p>
 							<p class="item-quantity">${data.bookingProducts[0].quantity}</p>
@@ -572,10 +572,12 @@ function generateOrderItemHTML(data = {
 			</p>
 			<div class="total-price-wrapper">
 				<h2 class="total-price">
-					${(data.bookingProducts
-			.reduce((prev, bp) => prev + bp.quantity * bp.itemPrice, 0) + data.shippingFee)
-			.toLocaleString()
-		} đ
+					${
+						Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(
+							data.bookingProducts
+										.reduce((prev, bp) => prev + bp.quantity * bp.itemPrice, 0) + data.shippingFee
+						)
+					} 
 				</h2>
 				${itemStatusButtonHTML}
 			</div>
@@ -693,7 +695,7 @@ function renderTodaySales() {
 			setTimeout(function() {
 				$('#today-sales .loader').hide();
 			}, 200);
-			$('#today-sales .card-content').text(Number(todaySales).toLocaleString() + ' đ');
+			$('#today-sales .card-content').text(Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(Number(todaySales)));
 		})
 		.catch(message => {
 			$('#today-sales .card-content').text('0 đ');

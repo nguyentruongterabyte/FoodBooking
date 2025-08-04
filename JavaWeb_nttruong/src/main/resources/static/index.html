@@ -100,6 +100,7 @@
 			<!-- Searching input  -->
 			<input data-search-type="food" autocomplete="off" placeholder="Find your favorite food..." type="text"
 				id="searching-input" />
+			<i id="remove-search-keyword" class="fa-solid fa-circle-xmark"></i>
 		</div>
 		<!-- Searching input wrapper END -->
 	</div>
@@ -151,6 +152,10 @@
 		<div class="tab-contents">
 			<!-- Food tab START -->
 			<div class="tab-content-item show" id="food-tab">
+				<div class="similar-product-wrapper">
+					<h2>Similar products</h2>
+					<div class="line"></div>
+				</div>
 				<ul class="list-view">
 					<li class="list-view-item added" data-item-id="1">
 						<div class="item-image-container">
@@ -253,7 +258,10 @@
 
 			<!-- Drink tab START -->
 			<div class="tab-content-item" id="drink-tab">
-
+				<div class="similar-product-wrapper">
+					<h2>Similar products</h2>
+					<div class="line"></div>
+				</div>
 				<!-- List view START-->
 				<ul class="list-view">
 					<li class="list-view-item">

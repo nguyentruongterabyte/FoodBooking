@@ -210,6 +210,12 @@ $(document).ready(function() {
 			$(this).siblings('.quantity-input').val(1); // reset 1
 			return;
 		}
+
+		// Render add cart button text
+		const itemPrice = Number($('#add-cart-btn').attr('data-item-price'));
+		$('#add-cart-btn')
+			.text(`Add to Basket - ${Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(itemPrice * (quantity - 1))}`);
+
 		// Set input decrease 1 unit
 		$(this).siblings('.quantity-input').val(quantity - 1);
 	});
@@ -231,6 +237,12 @@ $(document).ready(function() {
 			return;
 		}
 
+		// Render add cart button text
+		const itemPrice = Number($('#add-cart-btn').attr('data-item-price'));
+		$('#add-cart-btn')
+			.text(`Add to Basket - ${Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(itemPrice * (quantity + 1))}`);
+
+
 		// Set input increase 1 unit
 		$(this).siblings('.quantity-input').val(quantity + 1);
 	});
@@ -240,18 +252,24 @@ $(document).ready(function() {
 		// Get quantity of input
 		let quantity = Number($(this).val());
 
-
 		// Allowed less than max item per order
 		if (quantity > MAX_ORDER_PER_ITEM) {
 			quantity = MAX_ORDER_PER_ITEM;
 			$(this).val(MAX_ORDER_PER_ITEM);
+			quantity = MAX_ORDER_PER_ITEM
 		}
 
 		// Allow more than or equals 1
 		if (quantity < 1) {
 			quantity = 1;
 			$(this).val(1);
+			quantity = 1;
 		}
+
+		// Render add cart button text
+		const itemPrice = Number($('#add-cart-btn').attr('data-item-price'));
+		$('#add-cart-btn')
+			.text(`Add to Basket - ${Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(itemPrice * quantity)}`);
 	});
 
 	// Handle add to cart in detail item click
@@ -340,7 +358,7 @@ $(document).ready(function() {
 		// re-render total price of this item
 		const foundItem = carts.find(cartItem => cartItem.id === itemId);
 		const totalPriceOfItem = newQuantity * foundItem.price;
-		$(this).parents('.info-group').find('.item-total-price').text(totalPriceOfItem.toLocaleString() + " đ");
+		$(this).parents('.info-group').find('.item-total-price').text(Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(totalPriceOfItem));
 
 		// re-render cart button
 		// re-render total price of cart
@@ -382,7 +400,7 @@ $(document).ready(function() {
 		// re-render total price of this item
 		const foundItem = carts.find(cartItem => cartItem.id === itemId);
 		const totalPriceOfItem = newQuantity * foundItem.price;
-		$(this).parents('.info-group').find('.item-total-price').text(totalPriceOfItem.toLocaleString() + " đ");
+		$(this).parents('.info-group').find('.item-total-price').text(Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(totalPriceOfItem));
 
 		// re-render cart button
 		// re-render total price of cart
@@ -524,7 +542,7 @@ $(document).ready(function() {
 				totalPrice: 0,
 				shippingFee: 0
 			});
-			
+
 			// Show toast error: please perform the first order
 			showErrorToast({ text: 'Please perform the first order', headerTitle: 'Order requirement' });
 			return;
@@ -545,7 +563,12 @@ $(document).ready(function() {
 			}
 			);
 
-	})
+	});
+
+	// Handle remove search keyword button click
+	handleRemoveSearchKeywordButtonClick('#searching-input', function({ searchType }) {
+		getAndRenderTotalItems(searchType);
+	});
 });
 
 const MAX_ORDER_PER_ITEM = 3;
@@ -599,10 +622,10 @@ function renderOrderDetail(data = {
 		.removeClass('active')
 		.removeClass('in-progress')
 		.removeClass('cancelled');
-		
+
 	if (data == null)
 		return;
-	
+
 	if (data.orderStatus) {
 		switch (data.orderStatus.id) {
 			case ORDER_STATUSES.NEW:
@@ -682,9 +705,9 @@ function renderOrderDetail(data = {
 	// Render total items price
 	const totalItemsPrice = Number(data.totalPrice);
 	const shippingFee = Number(data.shippingFee);
-	$('#order-items-total-price').text(totalItemsPrice.toLocaleString() + ' đ');
-	$('#shipping-fee').text(shippingFee.toLocaleString() + ' đ');
-	$('#order-total-price').text(Number(totalItemsPrice + shippingFee).toLocaleString() + ' đ');
+	$('#order-items-total-price').text(Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(totalItemsPrice));
+	$('#shipping-fee').text(Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(shippingFee));
+	$('#order-total-price').text(Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(Number(totalItemsPrice + shippingFee)));
 
 
 	// generate item html
@@ -709,7 +732,7 @@ function renderOrderDetail(data = {
 					</p>
 				</div>
 				<div class="info-group">
-					<h3 class="item-price">${data.itemPrice.toLocaleString()} đ</h3>
+					<h3 class="item-price">${Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(data.itemPrice)}</h3>
 					<div class="item-quantity-wrapper">
 						<span class="title">Quantity: </span>
 						<span class="item-quantity">${data.quantity}</span>
@@ -928,12 +951,13 @@ function getBookingProducts(
 		page = 1,
 		size = 10,
 		includeTotal = false,
-		isDeleted = false
+		isDeleted = false,
+		useSemantic = false,
 	}
 ) {
 	$('#list-view-section .loader').show();
 	bookingProductService.getBookingProductsPage(
-		{ keyword, type, page, size, includeTotal, isDeleted, priceDESC: isPriceDESC() }
+		{ keyword, type, page, size, includeTotal, isDeleted, useSemantic, priceDESC: isPriceDESC() }
 	)
 		.then(pagedResponse => {
 			// Toggle skeleton
@@ -1003,6 +1027,9 @@ function getBookingProducts(
 function getAndRenderTotalItems(type = 'food') {
 	switch (type) {
 		case 'food': {
+			// Hide similar product wrapper
+			$('#food-tab .similar-product-wrapper').hide();
+
 			// Init food object
 			bookingProductService.getTotalItems(
 				{
@@ -1031,12 +1058,28 @@ function getAndRenderTotalItems(type = 'food') {
 						$('#food__pagination-nav .pagination').hide();
 						$('#food-tab .list-view').empty();
 						showErrorToast({ text: 'There is nothing to show!', headerTitle: 'Empty list' });
+						// Show similar products wrapper
+						$('#food-tab .similar-product-wrapper').show();
+						getBookingProducts(
+							{
+								keyword: getKeywordFromSearchingInput('#searching-input'),
+								type: 'food',
+								page: foodObject.currentPage,
+								size: foodObject.size,
+								includeTotal: false,
+								isDeleted: false,
+								useSemantic: true
+							}
+						);
 					}
 				})
 				.catch(message => showOtherToast({ text: message, headerTitle: 'Get total food items failed' }));
 			break;
 		}
 		case 'drink': {
+			// Hide similar product wrapper
+			$('#drink-tab .similar-product-wrapper').hide();
+
 			// Init drink object
 			bookingProductService.getTotalItems(
 				{
@@ -1064,6 +1107,19 @@ function getAndRenderTotalItems(type = 'food') {
 						$('#drink__pagination-nav .pagination').hide();
 						$('#drink-tab .list-view').empty();
 						showErrorToast({ text: 'There is nothing to show!', headerTitle: 'Empty list' });
+						// Show similar products wrapper
+						$('#drink-tab .similar-product-wrapper').show();
+						getBookingProducts(
+							{
+								keyword: getKeywordFromSearchingInput('#searching-input'),
+								type: 'drink',
+								page: drinkObject.currentPage,
+								size: drinkObject.size,
+								includeTotal: false,
+								isDeleted: false,
+								useSemantic: true
+							}
+						);
 					}
 				})
 				.catch(message => showOtherToast({ text: message, headerTitle: 'Get total drink items failed' }));
@@ -1099,7 +1155,7 @@ function generateCartItemHTML(data = {
 						<p class="item-description">${data.description}</p>
 					</div>
 					<div class="info-group">
-						<h3 class="item-price">${data.price.toLocaleString()} đ</h3>
+						<h3 class="item-price">${Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(data.price)}</h3>
 						<div class="cart-wrapper">
 							<div class="cart-group-btn">
 								<div class="cart-action-wrapper">
@@ -1112,7 +1168,9 @@ function generateCartItemHTML(data = {
 								</div>
 							</div>
 						</div>
-						<h3 class="item-price primary item-total-price" data-item-id="${data.id}">${totalItemPrice.toLocaleString()} đ</h3>
+						<h3 class="item-price primary item-total-price" data-item-id="${data.id}">
+							${Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(totalItemPrice)}
+						</h3>
 					</div>
 				</div>
 			</li>`;
@@ -1132,8 +1190,8 @@ function renderDetailItem(data = {
 
 	// Render button add to cart
 	const totalItemPrice = data.price * itemQuantity;
-	$('#add-cart-btn').attr('data-item-id', data.id).text(`Add to Basket - ${totalItemPrice.toLocaleString()} đ`);
-
+	$('#add-cart-btn').attr('data-item-id', data.id).text(`Add to Basket - ${Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(totalItemPrice)}`);
+	$('#add-cart-btn').attr('data-item-price', data.price);
 	// Render detailItem
 	const detailItemHtml = `
 				<!-- Detail view -->
@@ -1149,7 +1207,7 @@ function renderDetailItem(data = {
 								${data.description}
 							</p>
 						</div>
-						<h3 class="item-price">${data.price.toLocaleString()} đ</h3>
+						<h3 class="item-price">${Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(data.price)}</h3>
 					</div>
 				</div>`;
 
@@ -1187,7 +1245,7 @@ function renderListView({ data = [{
 function removeItemInCarts(itemId) {
 	// Remove item from carts
 	carts = carts.filter(cartItem => cartItem.id !== itemId);
-	showSuccessToast({headerTitle: 'Remove item from cart', text: 'Item removed from your cart'})
+	showSuccessToast({ headerTitle: 'Remove item from cart', text: 'Item removed from your cart' })
 	updateListViewItemWhenCartChanged(itemId);
 	renderCartButton();
 }
@@ -1208,7 +1266,7 @@ function renderCartButton() {
 	$('.cart-btn-wrapper .badge').text(totalItems);
 
 	// Render total price
-	$('#total-price').text(totalPrice.toLocaleString() + "đ");
+	$('#total-price').text(Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(totalPrice));
 
 }
 
@@ -1257,7 +1315,7 @@ function generateItemHTML(data = {
 				<div class="item-info">
 					<h4 class="item-name">${data.name}</h4>
 					<p class="item-description">${data.description}</p>
-					<h3 class="item-price">${data.price.toLocaleString()} đ</h3>
+					<h3 class="item-price">${Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(data.price)}</h3>
 				</div>
 				<div class="cart-wrapper">
 					<button class="add-item-btn" data-item-id="${data.id}" data-item-price="${data.price}"><i class="fa-solid fa-plus"></i></button>
@@ -1353,7 +1411,7 @@ let foodObject = {
 		{
 			id: 11,
 			name: "Cơm Đùi Gà Góc Tư Sốt Mắm Tỏi Chua Cay phơi phới",
-			description: "Đùi gà tươi góc 4 xối mỡ + sốt mắm tỏi + Cơm + dưa leo + salad + canh", 
+			description: "Đùi gà tươi góc 4 xối mỡ + sốt mắm tỏi + Cơm + dưa leo + salad + canh",
 			price: 40000,
 			imageUrl: '/assets/images/exampleFood.png',
 			type: 'food',

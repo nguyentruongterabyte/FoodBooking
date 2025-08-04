@@ -100,7 +100,7 @@ function getCartFromLocalStorage() {
 /* Render total price of cart */
 function renderTotalPriceOfCart() {
 	const totalPrice = calculateTotalPrice(carts);
-	$('#cart-total-price').text(totalPrice.toLocaleString() + " đ");
+	$('#cart-total-price').text(Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(totalPrice));
 
 	// disable place order button when total equals 0
 	if (carts.length === 0)
@@ -313,10 +313,27 @@ function handleSearchingInputOnSearch(root = "#searching-input", callback = () =
 			e.preventDefault(); // Prevent default
 
 			const keyword = $(this).val(); // Get keyword from input
+			
+			if (keyword === prevKeyword)
+				return;
+			
+			$('#remove-search-keyword').show();
+			prevKeyword = keyword;
+			
 			if (keyword)
 				callback(keyword);
 		}
+	});
+}
 
+// Handle remove search keyword button click
+function handleRemoveSearchKeywordButtonClick(root = "#searching-input", callback = () => {}) {
+	$('#remove-search-keyword').on('click', function() {
+		const searchType = $(root).attr('data-search-type');
+		const searchFor = $(root).attr('data-search-for');
+		$(root).val('');
+		$(this).hide();
+		callback({searchType, searchFor});
 	});
 }
 
@@ -332,4 +349,6 @@ function handleLimitTextInputLength({inputId = '#name', maxLength = 100}) {
 		$(this).siblings('.string-length').text(`${$(this).val().length}/${maxLength}`);
 	});
 }
+
+let prevKeyword = '';
 

@@ -320,6 +320,10 @@ header .question {
 	}
 }
 
+.similar-product-wrapper {
+	display: none;
+}
+
 /* List view END */
 /* List view section END */
 

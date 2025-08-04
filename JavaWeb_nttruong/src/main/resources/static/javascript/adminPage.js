@@ -145,7 +145,7 @@ $(document).ready(function() {
 
 
 						if (itemData) {
-							itemData = { ...itemData, orderStatus: orderStatuses.find(os => os.id = statusId) }
+							itemData = { ...itemData, orderStatus: orderStatuses.find(os => os.id === statusId) }
 							orderObject.items = orderObject.items.map(order => order.id === itemData.id ? itemData : order);
 							renderOrderInfo(itemData);
 							renderOrderListView(orderObject.items);
@@ -170,6 +170,20 @@ $(document).ready(function() {
 				break;
 			}
 
+			default:
+				alert('Invalid action!');
+		}
+	});
+	
+	// Handle remove search keyword button click
+	handleRemoveSearchKeywordButtonClick('#searching-input', function({searchType, searchFor}) {
+		switch (searchFor) {
+			case 'dashboard':
+				getAndRenderTotalOrderItems();
+				break;
+			case 'manage-item':
+				getAndRenderTotalItems(searchType);
+				break;
 			default:
 				alert('Invalid action!');
 		}
@@ -229,3 +243,5 @@ stompClient.onConnect = (frame) => {
 			);
 	});
 };
+
+

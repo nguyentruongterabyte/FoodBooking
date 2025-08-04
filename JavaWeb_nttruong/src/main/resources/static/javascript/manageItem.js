@@ -765,7 +765,7 @@ function generateItemHTML(data = {
 				</div>
 			</td>
 			<td>${data.description}</td>
-			<td>${data.price.toLocaleString()} đ</td>
+			<td>${Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(data.price)}</td>
 			<td>
 				<div class="form-check form-switch">
 					<input class="form-check-input" type="checkbox" role="switch" disabled readonly

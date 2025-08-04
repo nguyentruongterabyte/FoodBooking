@@ -226,6 +226,7 @@ header {
 .pagination-nav {
 	display: flex;
 	justify-content: center;
+	flex-wrap: wrap;
 	gap: 8px;
 
 	.total-items {
@@ -673,6 +674,7 @@ p {
 	flex-direction: column;
 	justify-content: center;
 	align-items: center;
+	border-radius: 12px;
 	background-color: white;
 	box-shadow: var(--common-box-shadow);
 
@@ -703,6 +705,15 @@ p {
 			padding-left: 20px;
 			margin-right: 20px;
 		}
+	}
+}
+
+#remove-search-keyword {
+	margin-right: 0;
+	padding: 20px;
+	display: none;
+	&:hover {
+		cursor: pointer;
 	}
 }
 

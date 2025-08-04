@@ -239,6 +239,7 @@
 			}
 
 			.item-info-wrapper {
+				flex: 1;
 				.item-name {
 					font-weight: 600;
 					font-size: 1rem;
@@ -545,6 +546,21 @@
 	}
 }
 
+@media all and (max-width: 480px) {
+	header {
+		.header-wrapper {
+			h1 {
+				display: none;
+			}
+		}
+	}
+	
+	.statistic-card {
+		.card-icon {
+			display: none;
+		}
+	}
+}
 
 /* Mobile portrait (vertical) */
 @media all and (max-width: 768px) {
