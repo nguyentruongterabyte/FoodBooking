@@ -80,6 +80,14 @@ public class OrderServiceImpl implements OrderService {
 					throw new ErrorResponse(HttpStatus.NOT_FOUND,
 							"The product with id " + bookingProduct.getBookingProductId() + " not found.");
 				int itemQuantity = bookingProduct.getQuantity(); // Item quantity
+				
+				// Check invalid quantity
+				if (itemQuantity <= 0 || itemQuantity > 3) {
+					throw new ErrorResponse(HttpStatus.BAD_REQUEST,
+							"Invalid quantity: " + itemQuantity 
+					);
+				}
+				
 				Long itemPrice = existProduct.getPrice(); // Item price
 				bookingProduct.setItemPrice(itemPrice); // Set item price
 				// Calculate total price

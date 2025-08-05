@@ -332,7 +332,7 @@ function renderOrderInfo(data = {
 	$('#order-detail-modal .booking-product-list').html(bookingProductsHTML.join(''));
 
 	// Total items price
-	$('#order-items-total-price').text();
+	$('#order-items-total-price').text(Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(data.totalPrice));
 
 	// Shipping fee
 	$('#shipping-fee').text(Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(data.shippingFee));

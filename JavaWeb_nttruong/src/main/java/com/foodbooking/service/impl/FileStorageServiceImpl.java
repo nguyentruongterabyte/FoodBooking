@@ -5,7 +5,6 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.nio.file.StandardCopyOption;
 import java.util.Objects;
 import java.util.UUID;
 
@@ -17,10 +16,11 @@ import org.springframework.core.io.UrlResource;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import com.foodbooking.dto.response.ErrorResponse;
 import com.foodbooking.service.FileStorageService;
+import com.google.cloud.storage.Bucket;
+import com.google.firebase.cloud.StorageClient;
 
 @Service
 public class FileStorageServiceImpl implements FileStorageService {
@@ -30,7 +30,8 @@ public class FileStorageServiceImpl implements FileStorageService {
 
 	private static final Long MAX_IMAGE_FILE_SIZE = (long) (5 * 1024 * 1024);
 	private static final String PREFIX_FILE_PATH = "http://localhost:8080/api/files/";
-	
+	private static final String FIREBASE_URL_PREFIX = "https://storage.googleapis.com/hatshop-bc917.appspot.com/";
+	private static final String FIREBASE_BUCKET_NAME = "hatshop-bc917.appspot.com";
 	
 	/**
 	 * Extract Filename from file path 
@@ -52,20 +53,15 @@ public class FileStorageServiceImpl implements FileStorageService {
 	@Override
 	public String saveFile(MultipartFile file) throws IOException {
 
-		// Create if folder does not exist
-		Path uploadPath = Paths.get(uploadDir);
-
-		if (!Files.exists(uploadPath)) {
-			Files.createDirectories(uploadPath);
-		}
 
 		// Create new file
 		String filename = UUID.randomUUID() + "_" + file.getOriginalFilename();
-		Path filePath = uploadPath.resolve(filename);
-
-		Files.copy(file.getInputStream(), filePath, StandardCopyOption.REPLACE_EXISTING);
-
-		return filename; // return filename
+		
+		// Upload to firebase
+		Bucket bucket = StorageClient.getInstance().bucket(FIREBASE_BUCKET_NAME);
+		bucket.create(filename, file.getBytes(), file.getContentType());
+		
+		return FIREBASE_URL_PREFIX + filename; // return filename
 	}
 
 	/**
@@ -77,6 +73,12 @@ public class FileStorageServiceImpl implements FileStorageService {
 	public Resource loadFile(String filename) {
 
 		try {
+			// If file from fire base => do not load local, client fetch by URL
+			if (filename.startsWith(FIREBASE_URL_PREFIX)) {
+				return null;
+			}
+			
+			// Local file
 			Path file = Paths.get(uploadDir).resolve(filename);
 			Resource resource = new UrlResource(file.toUri());
 			return resource.exists() ? resource : null;
@@ -110,13 +112,10 @@ public class FileStorageServiceImpl implements FileStorageService {
 			if (image.getWidth() != image.getHeight())
 				throw new ErrorResponse(HttpStatus.BAD_REQUEST, "Please upload square image.");
 
-			String filename = saveFile(imageFile);
+			String fileUrl = saveFile(imageFile);
 
-			String fileUrl = ServletUriComponentsBuilder.fromCurrentContextPath().path("/api/files/").path(filename)
-					.toUriString();
 			return fileUrl;
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			throw new ErrorResponse(HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage());
 		}
 
@@ -129,10 +128,20 @@ public class FileStorageServiceImpl implements FileStorageService {
 	 */
 	@Override
 	public Boolean deleteFile(String filePath) {
-		String filename = extractFilename(filePath);
 		try {
-			Path localFilePath = Paths.get(uploadDir).resolve(filename);
-			return Files.deleteIfExists(localFilePath);
+			
+			if (filePath.startsWith(FIREBASE_URL_PREFIX)) {
+				// Fire base
+				String filename = filePath.substring(FIREBASE_URL_PREFIX.length());
+				Bucket bucket = StorageClient.getInstance().bucket(FIREBASE_BUCKET_NAME);
+				return bucket.get(filename).delete();
+			} else {
+				// Local
+				String filename = extractFilename(filePath);
+				Path localFilePath = Paths.get(uploadDir).resolve(filename);
+				return Files.deleteIfExists(localFilePath);
+			}
+			
 		} catch (IOException e) {
 			throw new ErrorResponse(HttpStatus.INTERNAL_SERVER_ERROR, "Failed to delete file: " + e.getMessage());
 		}
