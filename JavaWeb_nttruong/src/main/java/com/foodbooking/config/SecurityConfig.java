@@ -8,20 +8,27 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.AuthenticationFailureHandler;
+// import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
+// import com.foodbooking.filter.FirebaseTokenFilter;
 import com.foodbooking.service.CustomUserDetailService;
 
 import jakarta.servlet.http.HttpServletResponse;
 
 @Configuration
+@EnableWebSecurity
 public class SecurityConfig {
 
+//	@Autowired
+//	private FirebaseTokenFilter firebaseTokenFilter;
+	
 	@Autowired
 	private CustomUserDetailService customUserDetailService;
-
+	
 	/*
 	 * @Bean UserDetailsService userDetailsService() { var encoder =
 	 * passwordEncoder(); // Create Example Users var admin =
@@ -43,19 +50,24 @@ public class SecurityConfig {
 
 				// Restricted APIs
 				.requestMatchers(HttpMethod.GET, "/admin/**").hasRole("ADMIN")
-//				.requestMatchers(HttpMethod.POST, "/api/booking-products").hasRole("ADMIN")
-//				.requestMatchers(HttpMethod.PUT, "/api/animals/**").hasRole("ADMIN")
-//				.requestMatchers(HttpMethod.PUT, "/api/animals").hasRole("ADMIN")
-
-				// Authenticated access to other API endpoints
-//				.requestMatchers("/api/**").authenticated()
 
 				// Everything else
-				.anyRequest().permitAll())
-				.formLogin(form -> form.loginPage("/login.html").loginProcessingUrl("/perform-login")
-						.defaultSuccessUrl("/admin/dashboard", true).failureHandler(failureHandler()).permitAll())
-				.userDetailsService(customUserDetailService).logout(logout -> logout.logoutUrl("/logout")
-						.invalidateHttpSession(true).deleteCookies("JSESSIONID").permitAll());
+				.anyRequest().permitAll()
+				)
+				.formLogin(form -> form
+						.loginPage("/login.html")
+						.loginProcessingUrl("/perform-login")
+						.defaultSuccessUrl("/admin/dashboard", true)
+						.failureHandler(failureHandler())
+						.permitAll())
+				.userDetailsService(customUserDetailService)
+				.logout(logout -> logout
+						.logoutUrl("/logout")
+						.invalidateHttpSession(true)
+						.deleteCookies("JSESSIONID")
+						.permitAll()
+				);
+				// .addFilterBefore(firebaseTokenFilter, UsernamePasswordAuthenticationFilter.class);
 
 		return http.build();
 	}

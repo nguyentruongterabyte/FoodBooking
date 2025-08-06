@@ -4,7 +4,7 @@
 }
 
 :root {
-	--header-height: 256px;
+	--header-height: 340px;
 	--search-box-height: 132px;
 	--tabs-section-height: 124px;
 	--list-view-items-per-row: 2;

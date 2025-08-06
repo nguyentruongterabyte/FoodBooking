@@ -82,6 +82,18 @@
 						</svg>
 						<span>Your order</span>
 					</button>
+					<div id="user-menu" style="position: relative; display: inline-block;">
+						<img id="user-avatar" src="" alt="avatar"
+							style="width: 40px; height: 40px; border-radius: 50%; cursor: pointer; display: none;">
+						<div id="user-tooltip"
+							style="display: none; position: fixed; top: var(--header-nav-height); right: 0; transform: translateX(-100%); background: white; border: 1px solid #ccc; border-radius: 8px; box-shadow: 0 0 5px rgba(0,0,0,0.2); padding: 10px; min-width: 150px; z-index: 9999999999999999;">
+							<p style="margin: 0;">👤 <span id="user-name">Tên người dùng</span></p>
+							<hr>
+							<button id="logout-btn"
+								style="width: 100%; background: #f44336; color: white; border: none; padding: 5px; border-radius: 5px; cursor: pointer;">Đăng
+								xuất</button>
+						</div>
+					</div>
 				</div>
 			</div>
 		</nav>
@@ -908,5 +920,54 @@
 	</div>
 	<!-- Skeleton Loading END -->
 </body>
+<!-- Firebase SDK -->
+<script type="module">
+	import { initializeApp } from "https://www.gstatic.com/firebasejs/12.0.0/firebase-app.js";
+	import { getAuth, onAuthStateChanged, signInWithPopup, GoogleAuthProvider, signOut } from "https://www.gstatic.com/firebasejs/12.0.0/firebase-auth.js";
 
+	const firebaseConfig = {
+		apiKey: "AIzaSyCbDPhhgDmWgXa-uQGlz_nuU6jA18bLeEk",
+		authDomain: "hatshop-bc917.firebaseapp.com",
+		projectId: "hatshop-bc917",
+		storageBucket: "hatshop-bc917.appspot.com",
+		messagingSenderId: "92221996857",
+		appId: "1:92221996857:web:b843c31bb1ed20795172e8",
+	};
+
+	const app = initializeApp(firebaseConfig);
+	const auth = getAuth(app);
+	const provider = new GoogleAuthProvider();
+
+	onAuthStateChanged(auth, async (user) => {
+		if (user) {
+			// Hiện avatar và tên
+			$("#user-avatar").attr("src", user.photoURL).show();
+			$("#user-name").text(user.displayName);
+		} else {
+			// Chưa đăng nhập thì login
+			try {
+				await signInWithPopup(auth, provider);
+			} catch (error) {
+				console.error("Đăng nhập thất bại", error);
+			}
+		}
+	});
+
+	// Toggle tooltip
+	$(document).on("click", "#user-avatar", function (e) {
+		$("#user-tooltip").toggle();
+		e.stopPropagation();
+	});
+
+	// Đóng tooltip khi click ngoài
+	$(document).on("click", function () {
+		$("#user-tooltip").hide();
+	});
+
+	// Đăng xuất
+	$(document).on("click", "#logout-btn", async function () {
+		await signOut(auth);
+		location.reload(); // hoặc điều hướng về trang login
+	});
+</script>
 </html>
