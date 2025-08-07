@@ -9,4 +9,5 @@ import com.foodbooking.entity.Account;
 public interface AccountMapper {
 	public Account findByUsername(String username);
 	public Integer updatePassword(@Param("username") String username, @Param("password") String password);
+	public void saveAccount(Account account);
 }

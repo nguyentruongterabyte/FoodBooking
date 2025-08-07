@@ -12,9 +12,9 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.AuthenticationFailureHandler;
-// import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+ import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
-// import com.foodbooking.filter.FirebaseTokenFilter;
+ import com.foodbooking.filter.FirebaseTokenFilter;
 import com.foodbooking.service.CustomUserDetailService;
 
 import jakarta.servlet.http.HttpServletResponse;
@@ -23,8 +23,8 @@ import jakarta.servlet.http.HttpServletResponse;
 @EnableWebSecurity
 public class SecurityConfig {
 
-//	@Autowired
-//	private FirebaseTokenFilter firebaseTokenFilter;
+	@Autowired
+	private FirebaseTokenFilter firebaseTokenFilter;
 	
 	@Autowired
 	private CustomUserDetailService customUserDetailService;
@@ -41,18 +41,18 @@ public class SecurityConfig {
 		http.csrf(csrf -> csrf.disable()).authorizeHttpRequests(auth -> auth
 				// Public resources
 				.requestMatchers(HttpMethod.POST, "/login.html").permitAll()
-				.requestMatchers("/", "/delivery", "/admin/login", "/login.html", "/home", "/home.html",
+				.requestMatchers("/admin/login", "/login.html",
 						"/assets/images/**", "/assets/library/**", "/css/**", "/javascript/**", "/api/files/**")
 				.permitAll()
 				.requestMatchers("/v3/api-docs/**", "/swagger-ui.html", "/swagger-ui/**", "/swagger-resources/**",
 						"/webjars/**")
 				.permitAll()
-
+				.requestMatchers(HttpMethod.POST, "/api/accounts/firebase-auth").permitAll()
 				// Restricted APIs
 				.requestMatchers(HttpMethod.GET, "/admin/**").hasRole("ADMIN")
 
 				// Everything else
-				.anyRequest().permitAll()
+				.anyRequest().authenticated()
 				)
 				.formLogin(form -> form
 						.loginPage("/login.html")
@@ -66,8 +66,8 @@ public class SecurityConfig {
 						.invalidateHttpSession(true)
 						.deleteCookies("JSESSIONID")
 						.permitAll()
-				);
-				// .addFilterBefore(firebaseTokenFilter, UsernamePasswordAuthenticationFilter.class);
+				)
+				.addFilterBefore(firebaseTokenFilter, UsernamePasswordAuthenticationFilter.class);
 
 		return http.build();
 	}

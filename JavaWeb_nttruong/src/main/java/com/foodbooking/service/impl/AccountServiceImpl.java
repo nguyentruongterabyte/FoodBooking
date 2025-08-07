@@ -45,4 +45,19 @@ public class AccountServiceImpl implements AccountService {
 		return passwordEncoder.matches(rawPassword, account.getPassword());
 	}
 
+	/**
+	 * Find account by username
+	 * 
+	 * @param username email or username
+	 * @return account
+	 */
+	@Override
+	public Account findByUsername(String username) {
+		return accountRepository.findByUsername(username);
+	}
+
+	@Override
+	public void saveAccount(Account account) {
+		accountRepository.saveAccount(account);
+	}
 }

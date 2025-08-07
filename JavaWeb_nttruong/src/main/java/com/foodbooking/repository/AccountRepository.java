@@ -5,5 +5,5 @@ import com.foodbooking.entity.Account;
 public interface AccountRepository {
 	public Account findByUsername(String username);
 	public Integer updatePassword(String username, String password);
-
+	public void saveAccount(Account account);
 }

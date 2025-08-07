@@ -1,10 +1,13 @@
 package com.foodbooking.controller;
 
 import java.security.Principal;
+import java.util.Map;
 
 import org.springframework.http.ResponseEntity;
 
 import com.foodbooking.dto.AccountDTO;
+
+import jakarta.servlet.http.HttpServletRequest;
 
 public interface AccountController {
 
@@ -16,4 +19,6 @@ public interface AccountController {
 	 * @return message
 	 */
 	public ResponseEntity<?> changePassword(AccountDTO account, Principal principal);
+	
+	public ResponseEntity<?> authenticateWithFirebase(Map<String, String> request, HttpServletRequest httpServletRequest);
 }

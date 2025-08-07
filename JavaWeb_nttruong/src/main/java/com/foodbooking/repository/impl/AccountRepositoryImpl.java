@@ -23,4 +23,9 @@ public class AccountRepositoryImpl implements AccountRepository {
 		return accountMapper.updatePassword(username, password);
 	}
 
+	@Override
+	public void saveAccount(Account account) {
+		accountMapper.saveAccount(account);
+	}
+
 }

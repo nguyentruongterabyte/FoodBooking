@@ -1,5 +1,7 @@
 package com.foodbooking.service;
 
+import com.foodbooking.entity.Account;
+
 public interface AccountService {
 	/**
 	 * Change password
@@ -14,4 +16,19 @@ public interface AccountService {
 	 * @return matches or not
 	 */
 	public Boolean checkCurrentPassword(String username, String rawPassword);
+	
+	/**
+	 * Find account by username
+	 * 
+	 * @param username email or username
+	 * @return account
+	 */
+	public Account findByUsername(String username);
+	
+	
+	/**
+	 * Save account
+	 * @param account
+	 */
+	public void saveAccount(Account account);
 }

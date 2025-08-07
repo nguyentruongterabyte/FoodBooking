@@ -944,12 +944,8 @@
 			$("#user-avatar").attr("src", user.photoURL).show();
 			$("#user-name").text(user.displayName);
 		} else {
-			// Chưa đăng nhập thì login
-			try {
-				await signInWithPopup(auth, provider);
-			} catch (error) {
-				console.error("Đăng nhập thất bại", error);
-			}
+			// Logout
+			window.location.replace('/logout');
 		}
 	});
 

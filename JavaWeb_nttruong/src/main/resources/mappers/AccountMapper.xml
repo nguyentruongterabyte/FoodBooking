@@ -24,4 +24,20 @@
 		WHERE 
 			username = #{username}
 	</update>
+	
+	<insert id="saveAccount"
+			useGeneratedKeys="true"
+			keyProperty="id"
+			parameterType="com.foodbooking.entity.Account"
+	>
+		INSERT INTO accounts (
+			username
+			, password
+			, role
+		) VALUES (
+			#{username}
+			, #{password}
+			, #{role}
+		)
+	</insert>
 </mapper>

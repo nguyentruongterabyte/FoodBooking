@@ -3,11 +3,13 @@ package com.foodbooking.config;
 import java.io.FileInputStream;
 import java.io.IOException;
 
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 import com.google.auth.oauth2.GoogleCredentials;
 import com.google.firebase.FirebaseApp;
 import com.google.firebase.FirebaseOptions;
+import com.google.firebase.auth.FirebaseAuth;
 
 import jakarta.annotation.PostConstruct;
 
@@ -29,5 +31,10 @@ public class FirebaseConfig {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+	}
+	
+	@Bean
+	FirebaseAuth firebaseAuth() {
+		return FirebaseAuth.getInstance();
 	}
 }

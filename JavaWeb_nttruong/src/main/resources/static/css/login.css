@@ -52,6 +52,9 @@ body {
 }
 
 .form {
+	display: flex;
+	flex-direction: column;
+	gap: 32px;
 	width: 539px;
 	padding: 44px;
 	margin: 0 auto;
@@ -66,7 +69,6 @@ body {
 	
 	.form-group {
 		position: relative;
-		margin: 0 0 32px;
 	}
 	
 	.control {
@@ -126,8 +128,36 @@ body {
 		font-family: monospace;
 		font-size: 16px;
 	}
+	
+	.line {
+		margin: 0;
+	}
 }
 
+.social-login {
+	color: #333;
+	display: flex;
+	flex-direction: column;
+	align-items: flex-end;
+}
+
+.social-icons {
+	display: flex;
+	align-items: center;
+	justify-content: flex-end;
+}
+
+.social-login__icon {
+	font-size: 1.2rem;
+	padding: 20px 10px;
+	color: #333;
+	text-decoration: none;	
+	text-shadow: 0px 0px 8px #7875B5;
+}
+
+.social-login__icon:hover {
+	transform: scale(1.5);	
+}
 
 /* Tablet landscape (horizontal) */
 @media all and (min-width: 769px) and (max-width: 1024px) {
